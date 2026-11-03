@@ -1,0 +1,50 @@
+@startuml
+title CU08 Acceder a clases virtuales — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Acceder a clases virtuales" as Boundary <<boundary>>
+class "Control Acceder a clases virtuales" as Control <<control>>
+Boundary --> Control
+class Seccion <<entity>> {
+  - idSeccion : Long
+  - idCurso : Long
+  - idPeriodo : Long
+  - idDocente : Long
+  - grupo : String
+  - cupoMaximo : Long
+  - salaVirtual : String
+  - estado : SeccionEstado
+}
+Control --> Seccion
+class Unidad <<entity>> {
+  - idUnidad : Long
+  - idSeccion : Long
+  - nombre : String
+  - descripcion : String
+  - orden : Long
+}
+Control --> Unidad
+class Sesion <<entity>> {
+  - idSesion : Long
+  - idUnidad : Long
+  - titulo : String
+  - orden : Long
+  - fechaInicio : LocalDateTime
+  - duracionMin : Long
+  - enlaceClase : String
+}
+Control --> Sesion
+class Matricula <<entity>> {
+  - idMatricula : Long
+  - idSeccion : Long
+  - idUsuario : Long
+  - fechaMatricula : LocalDateTime
+  - estado : MatriculaEstado
+  - notaFinal : BigDecimal
+  - fechaRetiro : LocalDateTime
+}
+Control --> Matricula
+Unidad "*" --> "1" Seccion : id_seccion
+Sesion "*" --> "1" Unidad : id_unidad
+Matricula "*" --> "1" Seccion : id_seccion
+@enduml

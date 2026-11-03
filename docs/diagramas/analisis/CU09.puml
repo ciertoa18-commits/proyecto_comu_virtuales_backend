@@ -1,0 +1,76 @@
+@startuml
+title CU09 Gestionar cursos de la comunidad — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Gestionar cursos de la comunidad" as Boundary <<boundary>>
+class "Control Gestionar cursos de la comunidad" as Control <<control>>
+Boundary --> Control
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Usuario
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Comunidad
+class PeriodoAcademico <<entity>> {
+  - idPeriodo : Long
+  - nombre : String
+  - fechaInicio : LocalDate
+  - fechaFin : LocalDate
+  - estado : PeriodoAcademicoEstado
+}
+Control --> PeriodoAcademico
+class Curso <<entity>> {
+  - idCurso : Long
+  - idComunidad : Long
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - estado : CursoEstado
+  - fechaCreacion : LocalDateTime
+}
+Control --> Curso
+class Seccion <<entity>> {
+  - idSeccion : Long
+  - idCurso : Long
+  - idPeriodo : Long
+  - idDocente : Long
+  - grupo : String
+  - cupoMaximo : Long
+  - salaVirtual : String
+  - estado : SeccionEstado
+}
+Control --> Seccion
+Comunidad "*" --> "1" Usuario : id_creador
+Curso "*" --> "1" Comunidad : id_comunidad
+Seccion "*" --> "1" Curso : id_curso
+Seccion "*" --> "1" PeriodoAcademico : id_periodo
+Seccion "*" --> "1" Usuario : id_docente
+@enduml

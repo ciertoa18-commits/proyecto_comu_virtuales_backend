@@ -1,0 +1,110 @@
+@startuml
+title CU11 Gestionar recursos educativos — Diseño
+left to right direction
+class AcademicoController {
+  + courses(Long): List
+  + resources(Long): List
+  + grades(Long): List
+  + submit(Long, EntregaDatos): EntregaTarea
+}
+class Requests <<DTO validado>>
+class AcademicoService {
+  + guardarCurso(Long, Long, CursoDatos): Curso
+  + crearSeccion(Long, SeccionDatos): Seccion
+  + guardarUnidad(Long, Long, UnidadDatos): Unidad
+  + guardarSesion(Long, Long, SesionDatos): Sesion
+  + guardarRecurso(Long, Long, RecursoDatos): Recurso
+  + matricular(Long, Long): Matricula
+  + nota(NotaDatos): Nota
+  + promedio(Long): BigDecimal
+  + cerrar(Long): void
+}
+AcademicoController --> AcademicoService
+AcademicoController ..> Requests
+class AccessService {
+  + member(Long): void
+  + moderator(Long): void
+  + teacher(Long): void
+  + writableTeacher(Long): void
+  + enrolled(Long): void
+  + owner(Long): void
+}
+AcademicoService --> AccessService
+interface ArchivoRepository <<JpaRepository>> {
+ + findById(Long): Optional<Archivo>
+ + save(Archivo): Archivo
+}
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+AcademicoService --> ArchivoRepository
+ArchivoRepository ..> Archivo
+interface UnidadRepository <<JpaRepository>> {
+ + findById(Long): Optional<Unidad>
+ + save(Unidad): Unidad
+}
+class Unidad <<entity>> {
+  - idUnidad : Long
+  - idSeccion : Long
+  - nombre : String
+  - descripcion : String
+  - orden : Long
+}
+AcademicoService --> UnidadRepository
+UnidadRepository ..> Unidad
+interface SesionRepository <<JpaRepository>> {
+ + findById(Long): Optional<Sesion>
+ + save(Sesion): Sesion
+}
+class Sesion <<entity>> {
+  - idSesion : Long
+  - idUnidad : Long
+  - titulo : String
+  - orden : Long
+  - fechaInicio : LocalDateTime
+  - duracionMin : Long
+  - enlaceClase : String
+}
+AcademicoService --> SesionRepository
+SesionRepository ..> Sesion
+interface RecursoRepository <<JpaRepository>> {
+ + findById(Long): Optional<Recurso>
+ + save(Recurso): Recurso
+}
+class Recurso <<entity>> {
+  - idRecurso : Long
+  - idUnidad : Long
+  - idSesion : Long
+  - idAutor : Long
+  - titulo : String
+  - descripcion : String
+  - tipo : RecursoTipo
+  - idIdioma : Long
+  - idArchivo : Long
+  - urlExterna : String
+  - fechaPublicacion : LocalDateTime
+  - eliminado : Boolean
+  - fechaEliminacion : LocalDateTime
+}
+AcademicoService --> RecursoRepository
+RecursoRepository ..> Recurso
+interface TareaRepository <<JpaRepository>> {
+ + findById(Long): Optional<Tarea>
+ + save(Tarea): Tarea
+}
+class Tarea <<entity>> {
+  - idRecurso : Long
+  - fechaEntrega : LocalDateTime
+  - permiteTardias : Boolean
+  - idEvaluacion : Long
+}
+AcademicoService --> TareaRepository
+TareaRepository ..> Tarea
+@enduml

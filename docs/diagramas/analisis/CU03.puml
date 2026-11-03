@@ -1,0 +1,45 @@
+@startuml
+title CU03 Buscar comunidades — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Buscar comunidades" as Boundary <<boundary>>
+class "Control Buscar comunidades" as Control <<control>>
+Boundary --> Control
+class Categoria <<entity>> {
+  - idCategoria : Long
+  - nombre : String
+  - descripcion : String
+}
+Control --> Categoria
+class Idioma <<entity>> {
+  - idIdioma : Long
+  - codigo : String
+  - nombre : String
+}
+Control --> Idioma
+class PuebloOriginario <<entity>> {
+  - idPueblo : Long
+  - nombre : String
+  - familiaLinguistica : String
+}
+Control --> PuebloOriginario
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Comunidad
+Comunidad "*" --> "1" Categoria : id_categoria
+Comunidad "*" --> "0..1" Idioma : id_idioma
+Comunidad "*" --> "0..1" PuebloOriginario : id_pueblo
+@enduml

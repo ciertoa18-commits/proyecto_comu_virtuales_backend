@@ -1,0 +1,63 @@
+@startuml
+title CU05 Crear comunidad — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Crear comunidad" as Boundary <<boundary>>
+class "Control Crear comunidad" as Control <<control>>
+Boundary --> Control
+class Categoria <<entity>> {
+  - idCategoria : Long
+  - nombre : String
+  - descripcion : String
+}
+Control --> Categoria
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Usuario
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+Control --> Archivo
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Comunidad
+Archivo "*" --> "1" Usuario : id_subido_por
+Comunidad "*" --> "1" Categoria : id_categoria
+Comunidad "*" --> "0..1" Archivo : id_imagen
+Comunidad "*" --> "1" Usuario : id_creador
+@enduml

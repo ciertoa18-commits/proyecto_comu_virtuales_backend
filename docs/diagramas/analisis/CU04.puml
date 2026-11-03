@@ -1,0 +1,64 @@
+@startuml
+title CU04 Unirse a comunidad — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Unirse a comunidad" as Boundary <<boundary>>
+class "Control Unirse a comunidad" as Control <<control>>
+Boundary --> Control
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Comunidad
+class MiembroComunidad <<entity>> {
+  - idMiembro : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - rolComunidad : MiembroComunidadRolComunidad
+  - estado : MiembroComunidadEstado
+  - fechaIngreso : LocalDateTime
+  - fechaSalida : LocalDateTime
+}
+Control --> MiembroComunidad
+class SolicitudIngreso <<entity>> {
+  - idSolicitud : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - estado : SolicitudIngresoEstado
+  - mensaje : String
+  - fechaSolicitud : LocalDateTime
+  - idRevisor : Long
+  - fechaRespuesta : LocalDateTime
+  - motivoRechazo : String
+}
+Control --> SolicitudIngreso
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+Control --> Notificacion
+MiembroComunidad "*" --> "1" Comunidad : id_comunidad
+SolicitudIngreso "*" --> "1" Comunidad : id_comunidad
+Notificacion "*" --> "0..1" Comunidad : id_comunidad
+@enduml

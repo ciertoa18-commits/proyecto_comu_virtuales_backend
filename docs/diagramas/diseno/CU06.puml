@@ -1,0 +1,124 @@
+@startuml
+title CU06 Gestionar miembros — Diseño
+left to right direction
+class ComunidadController {
+  + list(filtros): Page
+  + join(Long): MiembroComunidad
+  + resolve(Long, Resolucion): SolicitudIngreso
+}
+class Requests <<DTO validado>>
+interface ComunidadService {
+  + buscar(filtros): Page<Comunidad>
+  + guardar(Long, ComunidadDatos): Comunidad
+  + unirse(Long): MiembroComunidad
+  + solicitar(Long, Solicitud): SolicitudIngreso
+  + resolver(Long, Resolucion): SolicitudIngreso
+}
+class ComunidadServiceImpl {
+  + buscar(filtros): Page<Comunidad>
+  + guardar(Long, ComunidadDatos): Comunidad
+  + unirse(Long): MiembroComunidad
+  + solicitar(Long, Solicitud): SolicitudIngreso
+  + resolver(Long, Resolucion): SolicitudIngreso
+  + salir(Long): void
+  + expulsar(Long, Long): void
+}
+ComunidadServiceImpl ..|> ComunidadService
+ComunidadController --> ComunidadService
+ComunidadController ..> Requests
+class AccessService {
+  + member(Long): void
+  + moderator(Long): void
+  + teacher(Long): void
+  + writableTeacher(Long): void
+  + enrolled(Long): void
+  + owner(Long): void
+}
+ComunidadServiceImpl --> AccessService
+interface RolRepository <<JpaRepository>> {
+ + findById(Long): Optional<Rol>
+ + save(Rol): Rol
+}
+class Rol <<entity>> {
+  - idRol : Long
+  - codigo : RolCodigo
+  - nombre : String
+}
+ComunidadServiceImpl --> RolRepository
+RolRepository ..> Rol
+interface UsuarioRepository <<JpaRepository>> {
+ + findById(Long): Optional<Usuario>
+ + save(Usuario): Usuario
+}
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+ComunidadServiceImpl --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface MiembroComunidadRepository <<JpaRepository>> {
+ + findById(Long): Optional<MiembroComunidad>
+ + save(MiembroComunidad): MiembroComunidad
+}
+class MiembroComunidad <<entity>> {
+  - idMiembro : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - rolComunidad : MiembroComunidadRolComunidad
+  - estado : MiembroComunidadEstado
+  - fechaIngreso : LocalDateTime
+  - fechaSalida : LocalDateTime
+}
+ComunidadServiceImpl --> MiembroComunidadRepository
+MiembroComunidadRepository ..> MiembroComunidad
+interface SolicitudIngresoRepository <<JpaRepository>> {
+ + findById(Long): Optional<SolicitudIngreso>
+ + save(SolicitudIngreso): SolicitudIngreso
+}
+class SolicitudIngreso <<entity>> {
+  - idSolicitud : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - estado : SolicitudIngresoEstado
+  - mensaje : String
+  - fechaSolicitud : LocalDateTime
+  - idRevisor : Long
+  - fechaRespuesta : LocalDateTime
+  - motivoRechazo : String
+}
+ComunidadServiceImpl --> SolicitudIngresoRepository
+SolicitudIngresoRepository ..> SolicitudIngreso
+interface NotificacionRepository <<JpaRepository>> {
+ + findById(Long): Optional<Notificacion>
+ + save(Notificacion): Notificacion
+}
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+ComunidadServiceImpl --> NotificacionRepository
+NotificacionRepository ..> Notificacion
+@enduml

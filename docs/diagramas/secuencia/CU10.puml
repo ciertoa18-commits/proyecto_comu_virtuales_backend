@@ -1,0 +1,28 @@
+@startuml
+title CU10 Obtener recursos
+autonumber
+actor Cliente
+control AcademicoController as Controller
+control AcademicoService as Service
+database Oracle
+Cliente -> Controller : GET /recursos/{id}/descarga
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : recurso(id)
+Service -> RecursoRepository : findById(id), eliminado=0
+Service -> UnidadRepository : findById(idUnidad)
+Service -> AccessService : enrolled(idSeccion)
+AccessService -> SeccionRepository : validar curso y comunidad activos
+AccessService -> MatriculaRepository : validar matrícula del usuario
+Service --> Controller : recurso autorizado
+Controller --> Cliente : ruta /archivos/{id}/descarga
+Cliente -> ArchivoController : GET descarga con JWT
+ArchivoController -> ArchivoService : permitido(idArchivo)
+ArchivoService -> AccessService : verificar acceso al archivo
+alt almacenamiento S3
+ ArchivoService -> StorageGateway : signedUrl(key), 5 minutos
+ ArchivoController --> Cliente : 302 + URL prefirmada
+else almacenamiento local
+ ArchivoService -> StorageGateway : read(key)
+ ArchivoController --> Cliente : 200 + binario
+end
+@enduml

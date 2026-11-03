@@ -1,0 +1,45 @@
+@startuml
+title CU01 Ingresar a la plataforma — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Ingresar a la plataforma" as Boundary <<boundary>>
+class "Control Ingresar a la plataforma" as Control <<control>>
+Boundary --> Control
+class Rol <<entity>> {
+  - idRol : Long
+  - codigo : RolCodigo
+  - nombre : String
+}
+Control --> Rol
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Usuario
+class Auditoria <<entity>> {
+  - idAuditoria : Long
+  - tabla : String
+  - idRegistro : Long
+  - accion : AuditoriaAccion
+  - idUsuario : Long
+  - fecha : LocalDateTime
+  - valoresAntes : String
+  - valoresDespues : String
+}
+Control --> Auditoria
+Usuario "*" --> "1" Rol : id_rol
+Auditoria "*" --> "0..1" Usuario : id_usuario
+@enduml

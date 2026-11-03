@@ -1,0 +1,97 @@
+@startuml
+title CU07 Gestionar publicaciones educativas — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Gestionar publicaciones educativas" as Boundary <<boundary>>
+class "Control Gestionar publicaciones educativas" as Control <<control>>
+Boundary --> Control
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Usuario
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+Control --> Archivo
+class Publicacion <<entity>> {
+  - idPublicacion : Long
+  - idComunidad : Long
+  - idSeccion : Long
+  - idAutor : Long
+  - titulo : String
+  - contenido : String
+  - estado : PublicacionEstado
+  - idModerador : Long
+  - fechaModeracion : LocalDateTime
+  - fechaPublicacion : LocalDateTime
+  - fechaEdicion : LocalDateTime
+  - eliminado : Boolean
+}
+Control --> Publicacion
+class PublicacionArchivo <<entity>> {
+  - idPublicacion : Long
+  - idArchivo : Long
+  - orden : Long
+}
+Control --> PublicacionArchivo
+class Comentario <<entity>> {
+  - idComentario : Long
+  - idPublicacion : Long
+  - idRecurso : Long
+  - idComentarioPadre : Long
+  - idAutor : Long
+  - contenido : String
+  - fechaComentario : LocalDateTime
+  - fechaEdicion : LocalDateTime
+  - eliminado : Boolean
+  - idEliminadoPor : Long
+}
+Control --> Comentario
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+Control --> Notificacion
+Archivo "*" --> "1" Usuario : id_subido_por
+Publicacion "*" --> "1" Usuario : id_autor
+Publicacion "*" --> "0..1" Usuario : id_moderador
+PublicacionArchivo "*" --> "1" Publicacion : id_publicacion
+PublicacionArchivo "*" --> "1" Archivo : id_archivo
+Comentario "*" --> "0..1" Publicacion : id_publicacion
+Comentario "*" --> "0..1" Comentario : id_comentario_padre
+Comentario "*" --> "1" Usuario : id_autor
+Comentario "*" --> "0..1" Usuario : id_eliminado_por
+Notificacion "*" --> "1" Usuario : id_destinatario
+Notificacion "*" --> "0..1" Usuario : id_emisor
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+title CU03 Buscar comunidades
+autonumber
+actor Cliente
+control ComunidadController as Controller
+control ComunidadServiceImpl as Service
+database Oracle
+Cliente -> Controller : GET /comunidades?q=&categoria=&idioma=
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : buscar(q, categoria, idioma, page, size)
+Service -> ComunidadRepository : findAll(Specification, PageRequest)
+ComunidadRepository -> Oracle : WHERE estado=ACTIVA + filtros
+Oracle --> ComunidadRepository : resultados y total
+ComunidadRepository --> Service : Page<Comunidad>
+Service --> Controller : página filtrada
+Controller --> Cliente : 200 + content y page
+@enduml

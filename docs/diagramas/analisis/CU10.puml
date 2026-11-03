@@ -1,0 +1,68 @@
+@startuml
+title CU10 Obtener recursos — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Obtener recursos" as Boundary <<boundary>>
+class "Control Obtener recursos" as Control <<control>>
+Boundary --> Control
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+Control --> Archivo
+class Seccion <<entity>> {
+  - idSeccion : Long
+  - idCurso : Long
+  - idPeriodo : Long
+  - idDocente : Long
+  - grupo : String
+  - cupoMaximo : Long
+  - salaVirtual : String
+  - estado : SeccionEstado
+}
+Control --> Seccion
+class Unidad <<entity>> {
+  - idUnidad : Long
+  - idSeccion : Long
+  - nombre : String
+  - descripcion : String
+  - orden : Long
+}
+Control --> Unidad
+class Recurso <<entity>> {
+  - idRecurso : Long
+  - idUnidad : Long
+  - idSesion : Long
+  - idAutor : Long
+  - titulo : String
+  - descripcion : String
+  - tipo : RecursoTipo
+  - idIdioma : Long
+  - idArchivo : Long
+  - urlExterna : String
+  - fechaPublicacion : LocalDateTime
+  - eliminado : Boolean
+  - fechaEliminacion : LocalDateTime
+}
+Control --> Recurso
+class Matricula <<entity>> {
+  - idMatricula : Long
+  - idSeccion : Long
+  - idUsuario : Long
+  - fechaMatricula : LocalDateTime
+  - estado : MatriculaEstado
+  - notaFinal : BigDecimal
+  - fechaRetiro : LocalDateTime
+}
+Control --> Matricula
+Unidad "*" --> "1" Seccion : id_seccion
+Recurso "*" --> "1" Unidad : id_unidad
+Recurso "*" --> "0..1" Archivo : id_archivo
+Matricula "*" --> "1" Seccion : id_seccion
+@enduml

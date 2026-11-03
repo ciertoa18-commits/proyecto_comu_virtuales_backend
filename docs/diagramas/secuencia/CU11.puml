@@ -1,0 +1,26 @@
+@startuml
+title CU11 Gestionar recursos educativos
+autonumber
+actor Cliente
+control AcademicoController as Controller
+control AcademicoService as Service
+database Oracle
+Cliente -> Controller : POST /unidades/{id}/recursos
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : guardarRecurso(unidad, null, RecursoDatos)
+Service -> UnidadRepository : findById(unidad)
+Service -> AccessService : writableTeacher(sección)
+AccessService -> SeccionRepository : SELECT FOR UPDATE; titular, estado y membresía
+Service -> SesionRepository : validar sesión de la misma unidad
+opt documento o video
+ Service -> AccessService : ownFile(idArchivo), validar formato
+end
+Service -> RecursoRepository : save(recurso no eliminado)
+opt tipo TAREA
+ Service -> TareaRepository : save(PK compartida, plazo, tardías)
+end
+Service -> NotificationService : broadcast(NUEVO_RECURSO)
+Service -> Oracle : COMMIT
+Service --> Controller : Recurso
+Controller --> Cliente : 200
+@enduml

@@ -1,0 +1,121 @@
+@startuml
+title CU09 Gestionar cursos de la comunidad — Diseño
+left to right direction
+class AcademicoController {
+  + courses(Long): List
+  + resources(Long): List
+  + grades(Long): List
+  + submit(Long, EntregaDatos): EntregaTarea
+}
+class Requests <<DTO validado>>
+class AcademicoService {
+  + guardarCurso(Long, Long, CursoDatos): Curso
+  + crearSeccion(Long, SeccionDatos): Seccion
+  + guardarUnidad(Long, Long, UnidadDatos): Unidad
+  + guardarSesion(Long, Long, SesionDatos): Sesion
+  + guardarRecurso(Long, Long, RecursoDatos): Recurso
+  + matricular(Long, Long): Matricula
+  + nota(NotaDatos): Nota
+  + promedio(Long): BigDecimal
+  + cerrar(Long): void
+}
+AcademicoController --> AcademicoService
+AcademicoController ..> Requests
+class AccessService {
+  + member(Long): void
+  + moderator(Long): void
+  + teacher(Long): void
+  + writableTeacher(Long): void
+  + enrolled(Long): void
+  + owner(Long): void
+}
+AcademicoService --> AccessService
+interface UsuarioRepository <<JpaRepository>> {
+ + findById(Long): Optional<Usuario>
+ + save(Usuario): Usuario
+}
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+AcademicoService --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface ComunidadRepository <<JpaRepository>> {
+ + findById(Long): Optional<Comunidad>
+ + save(Comunidad): Comunidad
+}
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+AcademicoService --> ComunidadRepository
+ComunidadRepository ..> Comunidad
+interface PeriodoAcademicoRepository <<JpaRepository>> {
+ + findById(Long): Optional<PeriodoAcademico>
+ + save(PeriodoAcademico): PeriodoAcademico
+}
+class PeriodoAcademico <<entity>> {
+  - idPeriodo : Long
+  - nombre : String
+  - fechaInicio : LocalDate
+  - fechaFin : LocalDate
+  - estado : PeriodoAcademicoEstado
+}
+AcademicoService --> PeriodoAcademicoRepository
+PeriodoAcademicoRepository ..> PeriodoAcademico
+interface CursoRepository <<JpaRepository>> {
+ + findById(Long): Optional<Curso>
+ + save(Curso): Curso
+}
+class Curso <<entity>> {
+  - idCurso : Long
+  - idComunidad : Long
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - estado : CursoEstado
+  - fechaCreacion : LocalDateTime
+}
+AcademicoService --> CursoRepository
+CursoRepository ..> Curso
+interface SeccionRepository <<JpaRepository>> {
+ + findById(Long): Optional<Seccion>
+ + save(Seccion): Seccion
+}
+class Seccion <<entity>> {
+  - idSeccion : Long
+  - idCurso : Long
+  - idPeriodo : Long
+  - idDocente : Long
+  - grupo : String
+  - cupoMaximo : Long
+  - salaVirtual : String
+  - estado : SeccionEstado
+}
+AcademicoService --> SeccionRepository
+SeccionRepository ..> Seccion
+@enduml

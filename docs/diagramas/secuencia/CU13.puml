@@ -1,0 +1,26 @@
+@startuml
+title CU13 Proteger cuenta de usuario
+autonumber
+actor Cliente
+control PerfilController as Controller
+control PerfilService as Service
+database Oracle
+Cliente -> Controller : PUT /me/password
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : password(actual, nueva)
+Service -> UsuarioRepository : bloquearPorCorreo(Actor.correo)
+Service -> BCrypt : matches(actual, hash)
+alt contraseña actual incorrecta
+ Service --> Controller : regla de negocio
+ Controller --> Cliente : 422
+else contraseña válida y nueva de 12 caracteres / máximo 72 bytes
+ Service -> BCrypt : encode(nueva), salt aleatorio
+ BCrypt --> Service : hash BCrypt
+ Service -> UsuarioRepository : actualizar solo passwordHash y fecha
+ Service -> AuditService : registrar cambio sin almacenar credenciales
+ Service -> Oracle : COMMIT
+ Service --> Controller : operación completada
+ Controller --> Cliente : 204
+end
+note over UsuarioRepository : El bloqueo al quinto login fallido se detalla en CU01
+@enduml

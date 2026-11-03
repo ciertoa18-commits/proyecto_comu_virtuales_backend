@@ -1,0 +1,19 @@
+@startuml
+title CU09 Gestionar cursos
+autonumber
+actor Cliente
+control AcademicoController as Controller
+control AcademicoService as Service
+database Oracle
+Cliente -> Controller : POST /comunidades/{id}/cursos
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : guardarCurso(comunidad, null, CursoDatos)
+Service -> SpringSecurity : exigir ROLE_ADMIN
+Service -> AccessService : comunidad(id) activa
+Service -> TextPolicy : validar código, nombre y descripción
+Service -> CursoRepository : save(ACTIVO, fecha)
+CursoRepository -> Oracle : INSERT CURSO
+Service -> Oracle : COMMIT
+Service --> Controller : Curso
+Controller --> Cliente : 200
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+title CU13 Proteger cuenta de usuario — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Proteger cuenta de usuario" as Boundary <<boundary>>
+class "Control Proteger cuenta de usuario" as Control <<control>>
+Boundary --> Control
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Usuario
+class Auditoria <<entity>> {
+  - idAuditoria : Long
+  - tabla : String
+  - idRegistro : Long
+  - accion : AuditoriaAccion
+  - idUsuario : Long
+  - fecha : LocalDateTime
+  - valoresAntes : String
+  - valoresDespues : String
+}
+Control --> Auditoria
+Auditoria "*" --> "0..1" Usuario : id_usuario
+@enduml

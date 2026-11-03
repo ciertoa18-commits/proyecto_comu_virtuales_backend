@@ -1,0 +1,77 @@
+@startuml
+title CU02 Gestionar perfil de usuario — Diseño
+left to right direction
+class PerfilController {
+  + me(): Perfil
+  + update(Perfil): Usuario
+  + photo(MultipartFile): Usuario
+}
+class Requests <<DTO validado>>
+class PerfilService {
+  + me(): Usuario
+  + update(Perfil): Usuario
+  + foto(Long): Usuario
+  + password(Password): void
+}
+PerfilController --> PerfilService
+PerfilController ..> Requests
+class AccessService {
+  + member(Long): void
+  + moderator(Long): void
+  + teacher(Long): void
+  + writableTeacher(Long): void
+  + enrolled(Long): void
+  + owner(Long): void
+}
+PerfilService --> AccessService
+interface IdiomaRepository <<JpaRepository>> {
+ + findById(Long): Optional<Idioma>
+ + save(Idioma): Idioma
+}
+class Idioma <<entity>> {
+  - idIdioma : Long
+  - codigo : String
+  - nombre : String
+}
+PerfilService --> IdiomaRepository
+IdiomaRepository ..> Idioma
+interface UsuarioRepository <<JpaRepository>> {
+ + findById(Long): Optional<Usuario>
+ + save(Usuario): Usuario
+}
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+PerfilService --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface ArchivoRepository <<JpaRepository>> {
+ + findById(Long): Optional<Archivo>
+ + save(Archivo): Archivo
+}
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+PerfilService --> ArchivoRepository
+ArchivoRepository ..> Archivo
+@enduml

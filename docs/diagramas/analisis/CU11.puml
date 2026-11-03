@@ -1,0 +1,65 @@
+@startuml
+title CU11 Gestionar recursos educativos — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Gestionar recursos educativos" as Boundary <<boundary>>
+class "Control Gestionar recursos educativos" as Control <<control>>
+Boundary --> Control
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+Control --> Archivo
+class Unidad <<entity>> {
+  - idUnidad : Long
+  - idSeccion : Long
+  - nombre : String
+  - descripcion : String
+  - orden : Long
+}
+Control --> Unidad
+class Sesion <<entity>> {
+  - idSesion : Long
+  - idUnidad : Long
+  - titulo : String
+  - orden : Long
+  - fechaInicio : LocalDateTime
+  - duracionMin : Long
+  - enlaceClase : String
+}
+Control --> Sesion
+class Recurso <<entity>> {
+  - idRecurso : Long
+  - idUnidad : Long
+  - idSesion : Long
+  - idAutor : Long
+  - titulo : String
+  - descripcion : String
+  - tipo : RecursoTipo
+  - idIdioma : Long
+  - idArchivo : Long
+  - urlExterna : String
+  - fechaPublicacion : LocalDateTime
+  - eliminado : Boolean
+  - fechaEliminacion : LocalDateTime
+}
+Control --> Recurso
+class Tarea <<entity>> {
+  - idRecurso : Long
+  - fechaEntrega : LocalDateTime
+  - permiteTardias : Boolean
+  - idEvaluacion : Long
+}
+Control --> Tarea
+Sesion "*" --> "1" Unidad : id_unidad
+Recurso "*" --> "1" Unidad : id_unidad
+Recurso "*" --> "0..1" Sesion : id_sesion
+Recurso "*" --> "0..1" Archivo : id_archivo
+Tarea "*" --> "1" Recurso : id_recurso
+@enduml

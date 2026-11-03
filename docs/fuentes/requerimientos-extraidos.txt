@@ -1,0 +1,119 @@
+﻿
+sheet3.xml
+  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Empresa: | PerúEduca – Comunidades Virtuales |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Giro de negocio: | Servicios digitales / colaboración educativa |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  |  |  |  |  |  |  |  |  |  | ATRIBUTO DE CALIDAD |  |  |  |  |  |  |  |  |  | 
+Proceso de Negocio  | Actividad del Negocio | Responsable del
+ Negocio | Código_RF | Requerimientos Funcionales
+El sistema debe + verbo en infinitivo + objeto + condición (si aplica) | Casos de uso - Sistema
+verbo en infinitivo + objeto | Actores
+Usuarios del sistema | RN | ALCANCE | MoSCoW | Iteración # o 
+Prioridad | Responsable
+(Estudiante) | Completo | Correcto | Independiente | Factible | Necesario | Priorizado | No ambiguo | Único | Verificable | ATRIBUTO DE CALIDAD | 
+Gestión de Acceso y Perfil | El usuario se identifica ante la institución para ingresar a su entorno personalizado. | Alumno, Docente, Administrador | RF01 | El sistema permitirá ingresar credenciales del usuario. | CU01_Ingresar a la plataforma | Alumno, Docente, Administrador |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2.0 |  | 
+ |  |  | RF02 | El sistema permitirá validar credenciales mediante autenticación institucional. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF03 | El sistema permitirá cerrar sesión de forma segura. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF04 | El sistema permitirá restringir accesos no autorizados. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | El usuario configura y actualiza su identidad digital y medios de contacto. | Alumno, Docente, Administrador | RF05 | El sistema permitirá visualizar la información del perfil de usuario. | CU02_Gestionar perfil de usuario | Alumno, Docente, Administrador |  | SI | Must Have  |  | Alex Cierto |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF06 | El sistema permitirá editar los datos personales del usuario. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF07 | El sistema permitirá cambiar la foto de perfil. |  |  |  | SI | Should Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Gestión de Comunidades | El usuario evalúa y selecciona espacios de aprendizaje que coincidan con sus intereses. | Alumno, Docente | RF08 | El sistema permitirá mostrar las comunidades disponibles. | CU03_Buscar comunidades | Alumno, Docente |  | SI | Must Have  |  | Antuanet Reynoso | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF09 | El sistema permitirá visualizar comunidades públicas y privadas. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF10 | El sistema permitirá mostrar categorías de comunidades. |  |  |  | SI | Should Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF11 | El sistema permitirá buscar comunidades por palabra clave. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF12 | El sistema permitirá mostrar otras comunidades recomendadas al usuario. |  |  |  | SI | Could Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ | El usuario solicita su admisión a un grupo específico y los encargados validan su perfil. | Alumno, Docente | RF13 | El sistema permitirá solicitar el ingreso a una comunidad privada. | CU04_Unirse a comunidad | Alumno, Docente |  | SI | Must Have  |  | Antuanet Reynoso | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF14 | El sistema permitirá mostrar el botón unirse si la comunidad es pública. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF15 | El sistema permitirá abandonar una comunidad. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF16 | El sistema permitira generar una notificacion (al admin) cada que se solicite el ingreso a una comunidad. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | El admin crea y estructura una comunidad de aprendizaje. | Administrador | RF17 | El sistema permitirá crear una comunidad educativa. | CU05_Crear comunidad | Administrador |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF18 | El sistema permitirá subir una imagen representativa. |  |  |  | SI | Should Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF19 | El sistema permitirá editar la información de la comunidad. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF20 | El sistema permitirá eliminar una comunidad. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | El administrador supervisa los miembros y sus roles. | Administrador, Docente | RF21 | El sistema permitirá mostrar el listado de miembros. | CU06_Gestionar miembros | Docente, Administrador |  | SI | Must Have  |  | Nestor Moran | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF22 | El sistema permitirá aprobar/rechazar solicitudes de ingreso. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF23 | El sistema permitirá visualizar roles de los miembros. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF24 | El sistema permitirá expulsar miembros de la comunidad. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+Gestión de Contenido e Interacción | El docente elabora y publica material o anuncios orientados al desarrollo de las clases. | Docente | RF25 | El sistema permitirá crear publicaciones educativas. | CU07_Gestionar publicaciones educativas | Docente, Alumno |  | SI | Must Have  |  | Abigail Mendoza | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF26 | El sistema permitirá editar publicaciones propias. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF27 | El sistema permitirá eliminar publicaciones propias. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF28 | El sistema permitirá adjuntar archivos a las publicaciones. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF29 | El sistema permitirá al docente eliminar comentarios. |  |  |  | SI | Should Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF30 | El sistema permitirá adjuntar videos a las publicaciones. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF31 | El sistema notificará cuando se agregue una publicacion |  |  |  | SI | Should Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ | Los usuarios comentan y responden a las publicaciones educativas. | Alumno, Docente | RF32 | El sistema permitirá visualizar comentarios en las publicaciones. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF33 | El sistema permitirá comentar publicaciones educativas. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF34 | El sistema permitirá responder comentarios de publicaciones. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF35 | El sistema permitirá generar una notificación cuando se publique un nuevo comentario. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | El docente comparte los enlaces de las clases virtuales y los alumnos acceden a ellas. | Docente, Alumno | RF36 | El sistema permitirá al docente publicar el enlace de una clase virtual. | CU08_Acceder a clases virtuales |  |  | SI | Must Have  |  | Abigail Mendoza | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ |  |  | RF37 | El sistema permitirá a los alumnos consultar las clases programadas y abrir el enlace para unirse. |  |  |  | SI | Must Have  |  |  | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |  | 
+ | El administrador crea, estructura y gestiona los cursos dentro de las comunidades de aprendizaje. | Administrador | RF38 | El sistema permitirá al Administrador crear cursos dentro de una comunidad específica. | CU09_Gestionar cursos de la comunidad | Administrador |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF39 | El sistema permitirá registrar los datos del curso (nombre, descripción). |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF40 | El sistema permitirá al Administrador editar o eliminar cualquier curso existente. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF41 | El sistema permitirá a los usuarios visualizar la lista de cursos asignados en su comunidad. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Los alumnos obtiene documentos para estudiar de forma autónoma. | Alumno | RF42 | El sistema permitirá descargar documentos compartidos. | CU10_Obtener recursos | Alumno |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF43 | El sistema permitirá visualizar el historial de recursos disponibles. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF44 | El sistema permitirá visualizar el nombre, tipo de formato y fecha de publicación de un recurso. |  |  |  | SI | Should Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Gestionar las unidades de aprendizaje y los recursos educativos de los cursos de la comunidad | Docente | RF45 | El sistema permitirá al docente crear unidades de aprendizaje asociadas a un curso de la comunidad. | CU11_Gestionar recursos educativos | Docente |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF46 | El sistema permitirá al docente registrar recursos educativos en una unidad, indicando su nombre, tipo y ubicación o archivo. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF47 | El sistema permitirá al docente consultar las unidades y los recursos que ha registrado en los cursos de la comunidad. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF48 | El sistema permitirá al docente editar la información de las unidades y los recursos que ha registrado |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF49 | El sistema permitirá al docente eliminar unidades y recursos que ha registrado, respetando las relaciones entre ellos. |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Comunicación y avisos | La organización distribuye recordatorios para mantener al tanto a los usuarios. | Alumno, Docente, Administrador | RF50 | El sistema permitirá generar notificaciones sobre actividades relevantes. | CU12_Gestionar notificaciones | Alumno, Docente, Administrador |  | SI | Must Have  |  | Alex Cierto |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF51 | El sistema permitirá mostrar las notificaciones recientes al usuario. |  |  |  | SI | Must Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF52 | El sistema permitirá marcar notificaciones como leídas. |  |  |  | SI | Should Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Seguridad | El sistema resguarda las credenciales de los usuarios y controla los intentos de acceso. | Alumno, Docente, Administrador | RF53 | El sistema permitirá encriptar la contraseña del usuario antes de guardarla en la base de datos para proteger su identidad. | CU13_Proteger cuenta de usuario | Alumno, Docente, Administrador |  | SI | Should Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF54 | El sistema permitirá registrar un intento fallido cada vez que el usuario ingrese credenciales incorrectas. |  |  |  | SI | Should Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | RF55 | El sistema permitirá  bloquear el acceso temporalmente al usuario si supera los 5 intentos fallidos consecutivos. |  |  |  | SI | Should Have  |  |  |  |  |  |  |  |  |  |  |  |  | 
+
+sheet4.xml
+ |  |  |  |  |  | TRAZABILIDAD |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | REGLAS DE NEGOCIO |  | TIPO | ALCANCE |  | REGLAS DE NEGOCIO |  | RESTRICCIÓN |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN01 | Dominio Institucional: Solo se permite el registro y acceso a usuarios con correos terminados en @minedu.gob.pe o @perueduca.pe. | Organizacionales | SI |  | RN01 | Restringe el acceso solo a correos con dominio @minedu o @perueduca. | RES01 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN02 | Moderación Previa: En comunidades "Oficiales", las publicaciones deben ser aprobadas por un moderador antes de ser visibles. | Organizacionales | SI |  | RN02 | Obliga a que el contenido sea aprobado por un moderador antes de publicarse. | RN02 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN03 | Integridad de Archivos: Todo recurso pedagógico subido debe pesar menos de 50MB y estar estrictamente en formato PDF, MP4 o DOCX. | Técnicas | SI |  | RN03 | Controla el tamaño y el formato permitido de los archivos cargados. | RN03 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN04 | Privacidad de Grupos: Las comunidades de tipo "Cerradas" requieren obligatoriamente que el Administrador valide y apruebe la Solicitud de Acceso. | Organizacionales | SI |  | RN04 | Define el flujo de aprobación obligatorio para entrar a comunidades cerradas. | RN04 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN05 | Solo los usuarios con rol Docente podrán crear publicaciones educativas en la sección de gestión de contenido. | Organizacionales | SI |  | RN05 | Restringe la creación de publicaciones únicamente al rol del Docente. | RN05 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN06 | Un docente solo podrá editar o modificar las publicaciones multimedia de las cuales sea el autor original. | Organizacionales | SI |  | RN06 | Controla los permisos de edición basándose en la autoría de la publicación. | RN06 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN07 | Toda publicación educativa deberá contener obligatoriamente un título o un contenido descriptivo antes de guardarse o publicarse. | Organizacionales | SI |  | RN07 | Obliga a ingresar un título o descripción antes de permitir la publicación. | RN07 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN08 | Los archivos subidos a la plataforma deben cumplir estrictamente con los formatos admitidos por el sistema. | Técnicas | SI |  | RN08 | Controla el formato permitido específicamente para archivos de video cargados. | RN08 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN09 | Toda publicación educativa debe registrar y estampar de forma automática su fecha y hora de publicación en el sistema. | Técnicas | SI |  | RN09 | Define el registro automático de metadatos temporales de las publicaciones. | RN09 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN10 | Las publicaciones o contenidos pedagógicos eliminados dejarán de ser visibles de manera inmediata para todos los usuarios. | Organizacionales | SI |  | RN10 | Controla la visibilidad inmediata de los elementos eliminados del muro. | RN10 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN11 | Solo los usuarios autenticados podrán visualizar comentarios de publicaciones. | Organizacionales | SI |  | RN11 | Restringe la visualización de comentarios a usuarios autenticados. | RN11 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN12 | Solo los usuarios autenticados podrán publicar comentarios o respuestas. | Organizacionales | SI |  | RN12 | Restringe la publicación de comentarios o respuestas a usuarios autenticados. | RN12 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN13 | Todo comentario o respuesta deberá estar asociado a una publicación existente. | Organizacionales | SI |  | RN13 | Vincula cada comentario o respuesta a una publicación existente. | RN13 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN14 | El sistema identificará y mostrará el nombre y rol del autor de cada comentario o respuesta. | Técnicas | SI |  | RN14 | Identifica al autor de cada comentario o respuesta. | RN14 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN15 | No se permitirá enviar comentarios o respuestas vacíos. | Organizacionales | SI |  | RN15 | Bloquea el envío de comentarios o respuestas vacíos. | RN15 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN16 | Las respuestas deberán mantenerse visualmente vinculadas al comentario principal. | Técnicas | SI |  | RN16 | Vincula las respuestas con el comentario principal. | RN16 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN17 | Los comentarios o respuestas eliminados dejarán de ser visibles para los usuarios. | Organizacionales | SI |  | RN17 | Controla la visibilidad de los comentarios y respuestas eliminados. | RN17 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN18 | Los comentarios y respuestas deberán cumplir las normas de convivencia y filtros de lenguaje. | Organizacionales | SI |  | RN18 | Aplica las normas de convivencia a comentarios y respuestas. | RN18 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN19 | El usuario debe estar previamente autenticado en la plataforma para poder buscar o explorar comunidades. | Organizacionales | SI |  | RN19 | Restringe la búsqueda de comunidades a usuarios que hayan iniciado sesión. | RN19 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN20 | El sistema solo mostrará e indexará comunidades que se encuentren en estado activo. | Organizacionales | SI |  | RN20 | Controla el filtro de visualización en las búsquedas excluyendo comunidades inactivas. | RN20 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN21 | Todas las comunidades creadas dentro de la plataforma deben estar obligatoriamente clasificadas en una categoría específica. | Organizacionales | SI |  | RN21 | Obliga a clasificar por categorías estructuradas cada comunidad nueva. | RN21 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN22 | Las comunidades configuradas como "privadas" requerirán obligatoriamente la aprobación de un administrador o creador para que un nuevo usuario pueda ingresar. | Organizacionales | SI |  | RN22 | Define el flujo de aprobación obligatoria para el acceso a comunidades privadas. | RN22 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN23 | Cualquier usuario miembro tiene el derecho de abandonar una comunidad de forma voluntaria en el momento que lo desee. | Organizacionales | SI |  | RN23 | Asegura la libertad del usuario para desafiliarse de cualquier comunidad. | RN23 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN24 | Solo los usuarios autenticados dentro del sistema podrán acceder y consultar los recursos educativos cargados. | Organizacionales | SI |  | RN24 | Restringe la lectura y descarga de archivos exclusivamente a usuarios logueados. | RN24 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN25 | Todos los recursos educativos multimedia o documentos deben estar estrictamente asociados a un curso o comunidad activa. | Organizacionales | SI |  | RN25 | Garantiza la integridad vinculando los archivos compartidos a un entorno activo. | RN25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | RN26 | Los usuarios comunes de la plataforma podrán descargar únicamente aquellos recursos que estén disponibles en sus comunidades inscritas. | Organizacionales | SI |  | RN26 | Controla los permisos de descarga según la membresía del alumno en la comunidad. | RN26 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+
+sheet9.xml
+MATRIZ DE TRAZABILIDAD |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Información General: |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Cód. Proy. |  | PCV-2025 (PERUEDUCA Comunidades Virtuales) |  | Fecha creación: |  |  |  |  | Responable: |  | Mendoza, Moran, Reynoso, Cierto, Osorio |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Nombre: |  | PerúEduca – Comunidades Virtuales |  | Fecha última
+actualización: |  |  | 46176.0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  | REQUERIMIENTOS FUNCIONALES |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+N° | Código_CUS | CASOS DE USO | Uso | RF01 | RF02 | RF03 | RF04 | RF05 | RF06 | RF07 | RF08 | RF09 | RF10 | RF11 | RF12 | RF13 | RF14 | RF15 | RF16 | RF17 | RF18 | RF19 | RF20 | RF21 | RF22 | RF23 | RF24 | RF25 | RF26 | RF27 | RF28 | RF29 | RF30 | RF31 | RF32 | RF33 | RF34 | RF35 | RF36 | RF37 | RF38 | RF39 | RF40 | RF41 | RF42 | RF43 | RF44 | RF45 | RF46 | RF47 | RF48 | RF49 | RF50 | RF51 | RF52 | RF53 | RF54 | RF55
+1.0 | CUS01 | Ingresar a la plataforma | 5 | X | X | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+2.0 | CUS02 | Buscar comunidades | 5 |  |  |  |  |  | X | X | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+3.0 | CUS03 | Unirse a comunidad | 6 |  |  |  |  |  |  |  |  |  |  | X | X | X | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+4.0 | CUS04 | Crear comunidad | 5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+5.0 | CUS05 | Gestionar miembros | 5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+6.0 | CUS06 | Compartir publicaciones educativas | 6 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+7.0 | CUS07 | Participar en debates y comentarios | 3 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+8.0 | CUS08 | Gestionar eventos académicos | 6 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X | X | X | X |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+9.0 | CUS09 | Gestionar recursos educativos | 4 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X | X |  |  |  |  |  |  |  |  |  | 
+10.0 | CUS10 | Gestionar mensajería | 4 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X | X |  |  |  |  |  | 
+11.0 | CUS11 | Gestionar notificaciones | 3 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X |  |  | 
+12.0 | CUS12 | Gestionar perfil de usuario | 3 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | X | X | X

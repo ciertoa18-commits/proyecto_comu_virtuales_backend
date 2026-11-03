@@ -1,0 +1,422 @@
+@startuml
+title Diagrama general de clases de análisis
+hide empty methods
+skinparam linetype ortho
+class Rol <<entity>> {
+  - idRol : Long
+  - codigo : RolCodigo
+  - nombre : String
+}
+class Categoria <<entity>> {
+  - idCategoria : Long
+  - nombre : String
+  - descripcion : String
+}
+class Idioma <<entity>> {
+  - idIdioma : Long
+  - codigo : String
+  - nombre : String
+}
+class PuebloOriginario <<entity>> {
+  - idPueblo : Long
+  - nombre : String
+  - familiaLinguistica : String
+}
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+class MiembroComunidad <<entity>> {
+  - idMiembro : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - rolComunidad : MiembroComunidadRolComunidad
+  - estado : MiembroComunidadEstado
+  - fechaIngreso : LocalDateTime
+  - fechaSalida : LocalDateTime
+}
+class SolicitudIngreso <<entity>> {
+  - idSolicitud : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - estado : SolicitudIngresoEstado
+  - mensaje : String
+  - fechaSolicitud : LocalDateTime
+  - idRevisor : Long
+  - fechaRespuesta : LocalDateTime
+  - motivoRechazo : String
+}
+class PeriodoAcademico <<entity>> {
+  - idPeriodo : Long
+  - nombre : String
+  - fechaInicio : LocalDate
+  - fechaFin : LocalDate
+  - estado : PeriodoAcademicoEstado
+}
+class Curso <<entity>> {
+  - idCurso : Long
+  - idComunidad : Long
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - estado : CursoEstado
+  - fechaCreacion : LocalDateTime
+}
+class Seccion <<entity>> {
+  - idSeccion : Long
+  - idCurso : Long
+  - idPeriodo : Long
+  - idDocente : Long
+  - grupo : String
+  - cupoMaximo : Long
+  - salaVirtual : String
+  - estado : SeccionEstado
+}
+class Unidad <<entity>> {
+  - idUnidad : Long
+  - idSeccion : Long
+  - nombre : String
+  - descripcion : String
+  - orden : Long
+}
+class Sesion <<entity>> {
+  - idSesion : Long
+  - idUnidad : Long
+  - titulo : String
+  - orden : Long
+  - fechaInicio : LocalDateTime
+  - duracionMin : Long
+  - enlaceClase : String
+}
+class Recurso <<entity>> {
+  - idRecurso : Long
+  - idUnidad : Long
+  - idSesion : Long
+  - idAutor : Long
+  - titulo : String
+  - descripcion : String
+  - tipo : RecursoTipo
+  - idIdioma : Long
+  - idArchivo : Long
+  - urlExterna : String
+  - fechaPublicacion : LocalDateTime
+  - eliminado : Boolean
+  - fechaEliminacion : LocalDateTime
+}
+class Evento <<entity>> {
+  - idEvento : Long
+  - idComunidad : Long
+  - idSeccion : Long
+  - idCreador : Long
+  - titulo : String
+  - descripcion : String
+  - fechaInicio : LocalDateTime
+  - fechaFin : LocalDateTime
+  - enlace : String
+}
+class Matricula <<entity>> {
+  - idMatricula : Long
+  - idSeccion : Long
+  - idUsuario : Long
+  - fechaMatricula : LocalDateTime
+  - estado : MatriculaEstado
+  - notaFinal : BigDecimal
+  - fechaRetiro : LocalDateTime
+}
+class Evaluacion <<entity>> {
+  - idEvaluacion : Long
+  - idSeccion : Long
+  - idUnidad : Long
+  - nombre : String
+  - tipo : EvaluacionTipo
+  - peso : BigDecimal
+  - fecha : LocalDateTime
+}
+class Tarea <<entity>> {
+  - idRecurso : Long
+  - fechaEntrega : LocalDateTime
+  - permiteTardias : Boolean
+  - idEvaluacion : Long
+}
+class EntregaTarea <<entity>> {
+  - idEntrega : Long
+  - idRecurso : Long
+  - idMatricula : Long
+  - idArchivo : Long
+  - comentario : String
+  - fechaEntrega : LocalDateTime
+  - estado : EntregaTareaEstado
+}
+class Nota <<entity>> {
+  - idNota : Long
+  - idMatricula : Long
+  - idEvaluacion : Long
+  - calificacion : BigDecimal
+  - comentarioDocente : String
+  - idRegistradoPor : Long
+  - fechaRegistro : LocalDateTime
+  - fechaModificacion : LocalDateTime
+}
+class Asistencia <<entity>> {
+  - idAsistencia : Long
+  - idSesion : Long
+  - idMatricula : Long
+  - estado : AsistenciaEstado
+  - observacion : String
+  - idRegistradoPor : Long
+  - fechaRegistro : LocalDateTime
+}
+class Publicacion <<entity>> {
+  - idPublicacion : Long
+  - idComunidad : Long
+  - idSeccion : Long
+  - idAutor : Long
+  - titulo : String
+  - contenido : String
+  - estado : PublicacionEstado
+  - idModerador : Long
+  - fechaModeracion : LocalDateTime
+  - fechaPublicacion : LocalDateTime
+  - fechaEdicion : LocalDateTime
+  - eliminado : Boolean
+}
+class PublicacionArchivo <<entity>> {
+  - idPublicacion : Long
+  - idArchivo : Long
+  - orden : Long
+}
+class Comentario <<entity>> {
+  - idComentario : Long
+  - idPublicacion : Long
+  - idRecurso : Long
+  - idComentarioPadre : Long
+  - idAutor : Long
+  - contenido : String
+  - fechaComentario : LocalDateTime
+  - fechaEdicion : LocalDateTime
+  - eliminado : Boolean
+  - idEliminadoPor : Long
+}
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+class Mensaje <<entity>> {
+  - idMensaje : Long
+  - idEmisor : Long
+  - idReceptor : Long
+  - contenido : String
+  - leido : Boolean
+  - fechaEnvio : LocalDateTime
+  - eliminado : Boolean
+}
+class Auditoria <<entity>> {
+  - idAuditoria : Long
+  - tabla : String
+  - idRegistro : Long
+  - accion : AuditoriaAccion
+  - idUsuario : Long
+  - fecha : LocalDateTime
+  - valoresAntes : String
+  - valoresDespues : String
+}
+Usuario "*" --> "1" Rol : id_rol
+Usuario "*" --> "0..1" Idioma : id_idioma_pref
+Archivo "*" --> "1" Usuario : id_subido_por
+Comunidad "*" --> "1" Categoria : id_categoria
+Comunidad "*" --> "0..1" Idioma : id_idioma
+Comunidad "*" --> "0..1" PuebloOriginario : id_pueblo
+Comunidad "*" --> "0..1" Archivo : id_imagen
+Comunidad "*" --> "1" Usuario : id_creador
+MiembroComunidad "*" --> "1" Comunidad : id_comunidad
+MiembroComunidad "*" --> "1" Usuario : id_usuario
+SolicitudIngreso "*" --> "1" Comunidad : id_comunidad
+SolicitudIngreso "*" --> "1" Usuario : id_usuario
+SolicitudIngreso "*" --> "0..1" Usuario : id_revisor
+Curso "*" --> "1" Comunidad : id_comunidad
+Seccion "*" --> "1" Curso : id_curso
+Seccion "*" --> "1" PeriodoAcademico : id_periodo
+Seccion "*" --> "1" Usuario : id_docente
+Unidad "*" --> "1" Seccion : id_seccion
+Sesion "*" --> "1" Unidad : id_unidad
+Recurso "*" --> "1" Unidad : id_unidad
+Recurso "*" --> "0..1" Sesion : id_sesion
+Recurso "*" --> "1" Usuario : id_autor
+Recurso "*" --> "0..1" Idioma : id_idioma
+Recurso "*" --> "0..1" Archivo : id_archivo
+Evento "*" --> "1" Comunidad : id_comunidad
+Evento "*" --> "0..1" Seccion : id_seccion
+Evento "*" --> "1" Usuario : id_creador
+Matricula "*" --> "1" Seccion : id_seccion
+Matricula "*" --> "1" Usuario : id_usuario
+Evaluacion "*" --> "1" Seccion : id_seccion
+Evaluacion "*" --> "0..1" Unidad : id_unidad
+Tarea "*" --> "1" Recurso : id_recurso
+Tarea "*" --> "0..1" Evaluacion : id_evaluacion
+EntregaTarea "*" --> "1" Tarea : id_recurso
+EntregaTarea "*" --> "1" Matricula : id_matricula
+EntregaTarea "*" --> "0..1" Archivo : id_archivo
+Nota "*" --> "1" Matricula : id_matricula
+Nota "*" --> "1" Evaluacion : id_evaluacion
+Nota "*" --> "1" Usuario : id_registrado_por
+Asistencia "*" --> "1" Sesion : id_sesion
+Asistencia "*" --> "1" Matricula : id_matricula
+Asistencia "*" --> "1" Usuario : id_registrado_por
+Publicacion "*" --> "1" Comunidad : id_comunidad
+Publicacion "*" --> "0..1" Seccion : id_seccion
+Publicacion "*" --> "1" Usuario : id_autor
+Publicacion "*" --> "0..1" Usuario : id_moderador
+PublicacionArchivo "*" --> "1" Publicacion : id_publicacion
+PublicacionArchivo "*" --> "1" Archivo : id_archivo
+Comentario "*" --> "0..1" Publicacion : id_publicacion
+Comentario "*" --> "0..1" Recurso : id_recurso
+Comentario "*" --> "0..1" Comentario : id_comentario_padre
+Comentario "*" --> "1" Usuario : id_autor
+Comentario "*" --> "0..1" Usuario : id_eliminado_por
+Notificacion "*" --> "1" Usuario : id_destinatario
+Notificacion "*" --> "0..1" Usuario : id_emisor
+Notificacion "*" --> "0..1" Comunidad : id_comunidad
+Mensaje "*" --> "1" Usuario : id_emisor
+Mensaje "*" --> "1" Usuario : id_receptor
+Auditoria "*" --> "0..1" Usuario : id_usuario
+class InterfazIngresar <<boundary>>
+class ControlIngresar <<control>>
+InterfazIngresar --> ControlIngresar
+ControlIngresar --> Usuario
+ControlIngresar --> Rol
+ControlIngresar --> Auditoria
+class InterfazPerfil <<boundary>>
+class ControlPerfil <<control>>
+InterfazPerfil --> ControlPerfil
+ControlPerfil --> Usuario
+ControlPerfil --> Archivo
+ControlPerfil --> Idioma
+class InterfazBuscar <<boundary>>
+class ControlBuscar <<control>>
+InterfazBuscar --> ControlBuscar
+ControlBuscar --> Comunidad
+ControlBuscar --> Categoria
+ControlBuscar --> Idioma
+ControlBuscar --> PuebloOriginario
+class InterfazUnirse <<boundary>>
+class ControlUnirse <<control>>
+InterfazUnirse --> ControlUnirse
+ControlUnirse --> Comunidad
+ControlUnirse --> MiembroComunidad
+ControlUnirse --> SolicitudIngreso
+ControlUnirse --> Notificacion
+class InterfazComunidad <<boundary>>
+class ControlComunidad <<control>>
+InterfazComunidad --> ControlComunidad
+ControlComunidad --> Comunidad
+ControlComunidad --> Categoria
+ControlComunidad --> Archivo
+ControlComunidad --> Usuario
+class InterfazMiembros <<boundary>>
+class ControlMiembros <<control>>
+InterfazMiembros --> ControlMiembros
+ControlMiembros --> MiembroComunidad
+ControlMiembros --> SolicitudIngreso
+ControlMiembros --> Usuario
+ControlMiembros --> Rol
+ControlMiembros --> Notificacion
+class InterfazPublicaciones <<boundary>>
+class ControlPublicaciones <<control>>
+InterfazPublicaciones --> ControlPublicaciones
+ControlPublicaciones --> Publicacion
+ControlPublicaciones --> PublicacionArchivo
+ControlPublicaciones --> Archivo
+ControlPublicaciones --> Comentario
+ControlPublicaciones --> Usuario
+ControlPublicaciones --> Notificacion
+class InterfazClases <<boundary>>
+class ControlClases <<control>>
+InterfazClases --> ControlClases
+ControlClases --> Sesion
+ControlClases --> Unidad
+ControlClases --> Seccion
+ControlClases --> Matricula
+class InterfazCursos <<boundary>>
+class ControlCursos <<control>>
+InterfazCursos --> ControlCursos
+ControlCursos --> Curso
+ControlCursos --> Comunidad
+ControlCursos --> Seccion
+ControlCursos --> PeriodoAcademico
+ControlCursos --> Usuario
+class InterfazObtenerRecursos <<boundary>>
+class ControlObtenerRecursos <<control>>
+InterfazObtenerRecursos --> ControlObtenerRecursos
+ControlObtenerRecursos --> Recurso
+ControlObtenerRecursos --> Unidad
+ControlObtenerRecursos --> Seccion
+ControlObtenerRecursos --> Matricula
+ControlObtenerRecursos --> Archivo
+class InterfazGestionarRecursos <<boundary>>
+class ControlGestionarRecursos <<control>>
+InterfazGestionarRecursos --> ControlGestionarRecursos
+ControlGestionarRecursos --> Unidad
+ControlGestionarRecursos --> Sesion
+ControlGestionarRecursos --> Recurso
+ControlGestionarRecursos --> Archivo
+ControlGestionarRecursos --> Tarea
+class InterfazNotificaciones <<boundary>>
+class ControlNotificaciones <<control>>
+InterfazNotificaciones --> ControlNotificaciones
+ControlNotificaciones --> Notificacion
+ControlNotificaciones --> Usuario
+class InterfazProtegerCuenta <<boundary>>
+class ControlProtegerCuenta <<control>>
+InterfazProtegerCuenta --> ControlProtegerCuenta
+ControlProtegerCuenta --> Usuario
+ControlProtegerCuenta --> Auditoria
+Usuario "*" --> "0..1" Archivo : id_foto_perfil
+@enduml

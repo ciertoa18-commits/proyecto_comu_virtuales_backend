@@ -1,0 +1,329 @@
+@startuml
+title Modelo relacional — 28 tablas Oracle
+hide methods
+entity ROL {
+ * id_rol : NUMBER (IDENTITY)
+ codigo : VARCHAR2(20)
+ nombre : VARCHAR2(50)
+}
+entity CATEGORIA {
+ * id_categoria : NUMBER (IDENTITY)
+ nombre : VARCHAR2(100)
+ descripcion : VARCHAR2(500)
+}
+entity IDIOMA {
+ * id_idioma : NUMBER (IDENTITY)
+ codigo : VARCHAR2(10)
+ nombre : VARCHAR2(60)
+}
+entity PUEBLO_ORIGINARIO {
+ * id_pueblo : NUMBER (IDENTITY)
+ nombre : VARCHAR2(100)
+ familia_linguistica : VARCHAR2(100)
+}
+entity USUARIO {
+ * id_usuario : NUMBER (IDENTITY)
+ id_rol : NUMBER <<FK>>
+ correo : VARCHAR2(150)
+ nombres : VARCHAR2(100)
+ apellidos : VARCHAR2(100)
+ especialidad : VARCHAR2(100)
+ keycloak_sub : VARCHAR2(64)
+ password_hash : VARCHAR2(255)
+ intentos_fallidos : NUMBER(2)
+ bloqueado_hasta : TIMESTAMP
+ id_foto_perfil : NUMBER
+ id_idioma_pref : NUMBER <<FK>>
+ estado : VARCHAR2(10)
+ fecha_registro : TIMESTAMP
+ fecha_actualizacion : TIMESTAMP
+}
+entity ARCHIVO {
+ * id_archivo : NUMBER (IDENTITY)
+ id_subido_por : NUMBER <<FK>>
+ nombre_original : VARCHAR2(255)
+ extension : VARCHAR2(10)
+ tipo_mime : VARCHAR2(100)
+ tamano_bytes : NUMBER
+ ruta_almacenamiento : VARCHAR2(500)
+ fecha_subida : TIMESTAMP
+}
+entity COMUNIDAD {
+ * id_comunidad : NUMBER (IDENTITY)
+ nombre : VARCHAR2(150)
+ descripcion : VARCHAR2(1000)
+ id_categoria : NUMBER <<FK>>
+ id_idioma : NUMBER <<FK>>
+ id_pueblo : NUMBER <<FK>>
+ visibilidad : VARCHAR2(10)
+ moderacion_previa : NUMBER(1)
+ estado : VARCHAR2(10)
+ id_imagen : NUMBER <<FK>>
+ id_creador : NUMBER <<FK>>
+ fecha_creacion : TIMESTAMP
+ fecha_actualizacion : TIMESTAMP
+}
+entity MIEMBRO_COMUNIDAD {
+ * id_miembro : NUMBER (IDENTITY)
+ id_comunidad : NUMBER <<FK>>
+ id_usuario : NUMBER <<FK>>
+ rol_comunidad : VARCHAR2(15)
+ estado : VARCHAR2(10)
+ fecha_ingreso : TIMESTAMP
+ fecha_salida : TIMESTAMP
+}
+entity SOLICITUD_INGRESO {
+ * id_solicitud : NUMBER (IDENTITY)
+ id_comunidad : NUMBER <<FK>>
+ id_usuario : NUMBER <<FK>>
+ estado : VARCHAR2(10)
+ mensaje : VARCHAR2(500)
+ fecha_solicitud : TIMESTAMP
+ id_revisor : NUMBER <<FK>>
+ fecha_respuesta : TIMESTAMP
+ motivo_rechazo : VARCHAR2(500)
+}
+entity PERIODO_ACADEMICO {
+ * id_periodo : NUMBER (IDENTITY)
+ nombre : VARCHAR2(20)
+ fecha_inicio : DATE
+ fecha_fin : DATE
+ estado : VARCHAR2(12)
+}
+entity CURSO {
+ * id_curso : NUMBER (IDENTITY)
+ id_comunidad : NUMBER <<FK>>
+ codigo : VARCHAR2(20)
+ nombre : VARCHAR2(150)
+ descripcion : VARCHAR2(1000)
+ estado : VARCHAR2(10)
+ fecha_creacion : TIMESTAMP
+}
+entity SECCION {
+ * id_seccion : NUMBER (IDENTITY)
+ id_curso : NUMBER <<FK>>
+ id_periodo : NUMBER <<FK>>
+ id_docente : NUMBER <<FK>>
+ grupo : VARCHAR2(10)
+ cupo_maximo : NUMBER(4)
+ sala_virtual : VARCHAR2(500)
+ estado : VARCHAR2(10)
+}
+entity UNIDAD {
+ * id_unidad : NUMBER (IDENTITY)
+ id_seccion : NUMBER <<FK>>
+ nombre : VARCHAR2(150)
+ descripcion : VARCHAR2(1000)
+ orden : NUMBER(3)
+}
+entity SESION {
+ * id_sesion : NUMBER (IDENTITY)
+ id_unidad : NUMBER <<FK>>
+ titulo : VARCHAR2(200)
+ orden : NUMBER(3)
+ fecha_inicio : TIMESTAMP
+ duracion_min : NUMBER(4)
+ enlace_clase : VARCHAR2(500)
+}
+entity RECURSO {
+ * id_recurso : NUMBER (IDENTITY)
+ id_unidad : NUMBER <<FK>>
+ id_sesion : NUMBER <<FK>>
+ id_autor : NUMBER <<FK>>
+ titulo : VARCHAR2(200)
+ descripcion : VARCHAR2(1000)
+ tipo : VARCHAR2(10)
+ id_idioma : NUMBER <<FK>>
+ id_archivo : NUMBER <<FK>>
+ url_externa : VARCHAR2(500)
+ fecha_publicacion : TIMESTAMP
+ eliminado : NUMBER(1)
+ fecha_eliminacion : TIMESTAMP
+}
+entity EVENTO {
+ * id_evento : NUMBER (IDENTITY)
+ id_comunidad : NUMBER <<FK>>
+ id_seccion : NUMBER <<FK>>
+ id_creador : NUMBER <<FK>>
+ titulo : VARCHAR2(200)
+ descripcion : VARCHAR2(1000)
+ fecha_inicio : TIMESTAMP
+ fecha_fin : TIMESTAMP
+ enlace : VARCHAR2(500)
+}
+entity MATRICULA {
+ * id_matricula : NUMBER (IDENTITY)
+ id_seccion : NUMBER <<FK>>
+ id_usuario : NUMBER <<FK>>
+ fecha_matricula : TIMESTAMP
+ estado : VARCHAR2(12)
+ nota_final : NUMBER(4,2)
+ fecha_retiro : TIMESTAMP
+}
+entity EVALUACION {
+ * id_evaluacion : NUMBER (IDENTITY)
+ id_seccion : NUMBER <<FK>>
+ id_unidad : NUMBER <<FK>>
+ nombre : VARCHAR2(100)
+ tipo : VARCHAR2(15)
+ peso : NUMBER(5,2)
+ fecha : TIMESTAMP
+}
+entity TAREA {
+ * id_recurso : NUMBER <<FK>>
+ fecha_entrega : TIMESTAMP
+ permite_tardias : NUMBER(1)
+ id_evaluacion : NUMBER <<FK>>
+}
+entity ENTREGA_TAREA {
+ * id_entrega : NUMBER (IDENTITY)
+ id_recurso : NUMBER <<FK>>
+ id_matricula : NUMBER <<FK>>
+ id_archivo : NUMBER <<FK>>
+ comentario : VARCHAR2(1000)
+ fecha_entrega : TIMESTAMP
+ estado : VARCHAR2(10)
+}
+entity NOTA {
+ * id_nota : NUMBER (IDENTITY)
+ id_matricula : NUMBER <<FK>>
+ id_evaluacion : NUMBER <<FK>>
+ calificacion : NUMBER(4,2)
+ comentario_docente : VARCHAR2(1000)
+ id_registrado_por : NUMBER <<FK>>
+ fecha_registro : TIMESTAMP
+ fecha_modificacion : TIMESTAMP
+}
+entity ASISTENCIA {
+ * id_asistencia : NUMBER (IDENTITY)
+ id_sesion : NUMBER <<FK>>
+ id_matricula : NUMBER <<FK>>
+ estado : VARCHAR2(12)
+ observacion : VARCHAR2(300)
+ id_registrado_por : NUMBER <<FK>>
+ fecha_registro : TIMESTAMP
+}
+entity PUBLICACION {
+ * id_publicacion : NUMBER (IDENTITY)
+ id_comunidad : NUMBER <<FK>>
+ id_seccion : NUMBER <<FK>>
+ id_autor : NUMBER <<FK>>
+ titulo : VARCHAR2(200)
+ contenido : CLOB
+ estado : VARCHAR2(10)
+ id_moderador : NUMBER <<FK>>
+ fecha_moderacion : TIMESTAMP
+ fecha_publicacion : TIMESTAMP
+ fecha_edicion : TIMESTAMP
+ eliminado : NUMBER(1)
+}
+entity PUBLICACION_ARCHIVO {
+ * id_publicacion : NUMBER <<FK>>
+ * id_archivo : NUMBER <<FK>>
+ orden : NUMBER(2)
+}
+entity COMENTARIO {
+ * id_comentario : NUMBER (IDENTITY)
+ id_publicacion : NUMBER <<FK>>
+ id_recurso : NUMBER <<FK>>
+ id_comentario_padre : NUMBER <<FK>>
+ id_autor : NUMBER <<FK>>
+ contenido : VARCHAR2(2000)
+ fecha_comentario : TIMESTAMP
+ fecha_edicion : TIMESTAMP
+ eliminado : NUMBER(1)
+ id_eliminado_por : NUMBER <<FK>>
+}
+entity NOTIFICACION {
+ * id_notificacion : NUMBER (IDENTITY)
+ id_destinatario : NUMBER <<FK>>
+ id_emisor : NUMBER <<FK>>
+ id_comunidad : NUMBER <<FK>>
+ tipo : VARCHAR2(30)
+ titulo : VARCHAR2(200)
+ contenido : VARCHAR2(500)
+ entidad_tipo : VARCHAR2(30)
+ entidad_id : NUMBER
+ leida : NUMBER(1)
+ fecha_creacion : TIMESTAMP
+ fecha_lectura : TIMESTAMP
+}
+entity MENSAJE {
+ * id_mensaje : NUMBER (IDENTITY)
+ id_emisor : NUMBER <<FK>>
+ id_receptor : NUMBER <<FK>>
+ contenido : VARCHAR2(4000)
+ leido : NUMBER(1)
+ fecha_envio : TIMESTAMP
+ eliminado : NUMBER(1)
+}
+entity AUDITORIA {
+ * id_auditoria : NUMBER (IDENTITY)
+ tabla : VARCHAR2(30)
+ id_registro : NUMBER
+ accion : VARCHAR2(10)
+ id_usuario : NUMBER <<FK>>
+ fecha : TIMESTAMP
+ valores_antes : CLOB
+ valores_despues : CLOB
+}
+USUARIO }o--|| ROL : id_rol
+USUARIO }o--|| IDIOMA : id_idioma_pref
+ARCHIVO }o--|| USUARIO : id_subido_por
+COMUNIDAD }o--|| CATEGORIA : id_categoria
+COMUNIDAD }o--|| IDIOMA : id_idioma
+COMUNIDAD }o--|| PUEBLO_ORIGINARIO : id_pueblo
+COMUNIDAD }o--|| ARCHIVO : id_imagen
+COMUNIDAD }o--|| USUARIO : id_creador
+MIEMBRO_COMUNIDAD }o--|| COMUNIDAD : id_comunidad
+MIEMBRO_COMUNIDAD }o--|| USUARIO : id_usuario
+SOLICITUD_INGRESO }o--|| COMUNIDAD : id_comunidad
+SOLICITUD_INGRESO }o--|| USUARIO : id_usuario
+SOLICITUD_INGRESO }o--|| USUARIO : id_revisor
+CURSO }o--|| COMUNIDAD : id_comunidad
+SECCION }o--|| CURSO : id_curso
+SECCION }o--|| PERIODO_ACADEMICO : id_periodo
+SECCION }o--|| USUARIO : id_docente
+UNIDAD }o--|| SECCION : id_seccion
+SESION }o--|| UNIDAD : id_unidad
+RECURSO }o--|| UNIDAD : id_unidad
+RECURSO }o--|| SESION : id_sesion
+RECURSO }o--|| USUARIO : id_autor
+RECURSO }o--|| IDIOMA : id_idioma
+RECURSO }o--|| ARCHIVO : id_archivo
+EVENTO }o--|| COMUNIDAD : id_comunidad
+EVENTO }o--|| SECCION : id_seccion
+EVENTO }o--|| USUARIO : id_creador
+MATRICULA }o--|| SECCION : id_seccion
+MATRICULA }o--|| USUARIO : id_usuario
+EVALUACION }o--|| SECCION : id_seccion
+EVALUACION }o--|| UNIDAD : id_unidad
+TAREA }o--|| RECURSO : id_recurso
+TAREA }o--|| EVALUACION : id_evaluacion
+ENTREGA_TAREA }o--|| TAREA : id_recurso
+ENTREGA_TAREA }o--|| MATRICULA : id_matricula
+ENTREGA_TAREA }o--|| ARCHIVO : id_archivo
+NOTA }o--|| MATRICULA : id_matricula
+NOTA }o--|| EVALUACION : id_evaluacion
+NOTA }o--|| USUARIO : id_registrado_por
+ASISTENCIA }o--|| SESION : id_sesion
+ASISTENCIA }o--|| MATRICULA : id_matricula
+ASISTENCIA }o--|| USUARIO : id_registrado_por
+PUBLICACION }o--|| COMUNIDAD : id_comunidad
+PUBLICACION }o--|| SECCION : id_seccion
+PUBLICACION }o--|| USUARIO : id_autor
+PUBLICACION }o--|| USUARIO : id_moderador
+PUBLICACION_ARCHIVO }o--|| PUBLICACION : id_publicacion
+PUBLICACION_ARCHIVO }o--|| ARCHIVO : id_archivo
+COMENTARIO }o--|| PUBLICACION : id_publicacion
+COMENTARIO }o--|| RECURSO : id_recurso
+COMENTARIO }o--|| COMENTARIO : id_comentario_padre
+COMENTARIO }o--|| USUARIO : id_autor
+COMENTARIO }o--|| USUARIO : id_eliminado_por
+NOTIFICACION }o--|| USUARIO : id_destinatario
+NOTIFICACION }o--|| USUARIO : id_emisor
+NOTIFICACION }o--|| COMUNIDAD : id_comunidad
+MENSAJE }o--|| USUARIO : id_emisor
+MENSAJE }o--|| USUARIO : id_receptor
+AUDITORIA }o--|| USUARIO : id_usuario
+@enduml

@@ -1,0 +1,111 @@
+@startuml
+title CU04 Unirse a comunidad — Diseño
+left to right direction
+class ComunidadController {
+  + list(filtros): Page
+  + join(Long): MiembroComunidad
+  + resolve(Long, Resolucion): SolicitudIngreso
+}
+class Requests <<DTO validado>>
+interface ComunidadService {
+  + buscar(filtros): Page<Comunidad>
+  + guardar(Long, ComunidadDatos): Comunidad
+  + unirse(Long): MiembroComunidad
+  + solicitar(Long, Solicitud): SolicitudIngreso
+  + resolver(Long, Resolucion): SolicitudIngreso
+}
+class ComunidadServiceImpl {
+  + buscar(filtros): Page<Comunidad>
+  + guardar(Long, ComunidadDatos): Comunidad
+  + unirse(Long): MiembroComunidad
+  + solicitar(Long, Solicitud): SolicitudIngreso
+  + resolver(Long, Resolucion): SolicitudIngreso
+  + salir(Long): void
+  + expulsar(Long, Long): void
+}
+ComunidadServiceImpl ..|> ComunidadService
+ComunidadController --> ComunidadService
+ComunidadController ..> Requests
+class AccessService {
+  + member(Long): void
+  + moderator(Long): void
+  + teacher(Long): void
+  + writableTeacher(Long): void
+  + enrolled(Long): void
+  + owner(Long): void
+}
+ComunidadServiceImpl --> AccessService
+interface ComunidadRepository <<JpaRepository>> {
+ + findById(Long): Optional<Comunidad>
+ + save(Comunidad): Comunidad
+}
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+ComunidadServiceImpl --> ComunidadRepository
+ComunidadRepository ..> Comunidad
+interface MiembroComunidadRepository <<JpaRepository>> {
+ + findById(Long): Optional<MiembroComunidad>
+ + save(MiembroComunidad): MiembroComunidad
+}
+class MiembroComunidad <<entity>> {
+  - idMiembro : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - rolComunidad : MiembroComunidadRolComunidad
+  - estado : MiembroComunidadEstado
+  - fechaIngreso : LocalDateTime
+  - fechaSalida : LocalDateTime
+}
+ComunidadServiceImpl --> MiembroComunidadRepository
+MiembroComunidadRepository ..> MiembroComunidad
+interface SolicitudIngresoRepository <<JpaRepository>> {
+ + findById(Long): Optional<SolicitudIngreso>
+ + save(SolicitudIngreso): SolicitudIngreso
+}
+class SolicitudIngreso <<entity>> {
+  - idSolicitud : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - estado : SolicitudIngresoEstado
+  - mensaje : String
+  - fechaSolicitud : LocalDateTime
+  - idRevisor : Long
+  - fechaRespuesta : LocalDateTime
+  - motivoRechazo : String
+}
+ComunidadServiceImpl --> SolicitudIngresoRepository
+SolicitudIngresoRepository ..> SolicitudIngreso
+interface NotificacionRepository <<JpaRepository>> {
+ + findById(Long): Optional<Notificacion>
+ + save(Notificacion): Notificacion
+}
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+ComunidadServiceImpl --> NotificacionRepository
+NotificacionRepository ..> Notificacion
+@enduml

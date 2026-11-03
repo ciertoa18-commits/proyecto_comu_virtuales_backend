@@ -1,0 +1,68 @@
+@startuml
+title CU13 Proteger cuenta de usuario — Diseño
+left to right direction
+class AuthController {
+  + login(Login): ResponseEntity
+  + logout(String): void
+}
+class Requests <<DTO validado>>
+interface AuthService {
+  + login(Login): LoginResult
+  + logout(String): void
+}
+class AuthServiceImpl {
+  + login(Login): LoginResult
+  + actor(String): Actor
+  + logout(String): void
+  + validateSession(String, Claims): void
+}
+AuthServiceImpl ..|> AuthService
+AuthController --> AuthService
+AuthController ..> Requests
+interface UsuarioRepository <<JpaRepository>> {
+ + findById(Long): Optional<Usuario>
+ + save(Usuario): Usuario
+}
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+AuthServiceImpl --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface AuditoriaRepository <<JpaRepository>> {
+ + findById(Long): Optional<Auditoria>
+ + save(Auditoria): Auditoria
+}
+class Auditoria <<entity>> {
+  - idAuditoria : Long
+  - tabla : String
+  - idRegistro : Long
+  - accion : AuditoriaAccion
+  - idUsuario : Long
+  - fecha : LocalDateTime
+  - valoresAntes : String
+  - valoresDespues : String
+}
+AuthServiceImpl --> AuditoriaRepository
+AuditoriaRepository ..> Auditoria
+class JwtService {
+ + issue(String): String
+ + parse(String): Claims
+}
+class PasswordEncoder <<BCrypt>>
+AuthServiceImpl --> JwtService
+AuthServiceImpl --> PasswordEncoder
+@enduml

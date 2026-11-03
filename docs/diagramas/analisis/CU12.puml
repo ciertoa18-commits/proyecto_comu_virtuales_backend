@@ -1,0 +1,43 @@
+@startuml
+title CU12 Gestionar notificaciones — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Gestionar notificaciones" as Boundary <<boundary>>
+class "Control Gestionar notificaciones" as Control <<control>>
+Boundary --> Control
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Usuario
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+Control --> Notificacion
+Notificacion "*" --> "1" Usuario : id_destinatario
+Notificacion "*" --> "0..1" Usuario : id_emisor
+@enduml

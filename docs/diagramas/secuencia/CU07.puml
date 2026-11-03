@@ -1,0 +1,30 @@
+@startuml
+title CU07 Gestionar publicaciones educativas
+autonumber
+actor Cliente
+control PublicacionController as Controller
+control PublicacionServiceImpl as Service
+database Oracle
+Cliente -> Controller : POST /comunidades/{id}/publicaciones
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : guardar(comunidad, null, PublicacionDatos)
+Service -> SpringSecurity : exigir DOCENTE o ADMIN
+Service -> AccessService : member(comunidad)
+Service -> TextPolicy : exigir título o contenido, texto plano
+loop cada adjunto
+ Service -> AccessService : ownFile(idArchivo)
+end
+Service -> ComunidadRepository : consultar moderacionPrevia
+alt moderación previa
+ Service -> PublicacionRepository : save(estado=PENDIENTE)
+else publicación directa
+ Service -> PublicacionRepository : save(estado=APROBADA)
+ Service -> NotificationService : broadcast(NUEVA_PUBLICACION)
+end
+Service -> PublicacionArchivoRepository : guardar adjuntos y orden
+Service -> AuditService : registrar operación
+Service -> Oracle : COMMIT
+Service --> Controller : publicación
+Controller -> PublicacionMapper : agregar autor, rol y adjuntos
+Controller --> Cliente : 201 + PublicacionVista
+@enduml

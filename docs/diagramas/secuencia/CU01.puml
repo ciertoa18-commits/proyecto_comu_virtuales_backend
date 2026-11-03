@@ -1,0 +1,31 @@
+@startuml
+title CU01 Ingresar a la plataforma
+autonumber
+actor Cliente
+control AuthController as Controller
+control AuthServiceImpl as Service
+database Oracle
+Cliente -> Controller : POST /auth/login
+note over Controller : Login público; no requiere JWT
+Controller -> Service : login(Login)
+Service -> UsuarioRepository : bloquearPorCorreo(correo normalizado)
+UsuarioRepository -> Oracle : SELECT usuario FOR UPDATE
+Oracle --> Service : usuario y estado de bloqueo
+alt inactivo o bloqueado
+ Service --> Controller : LoginResult(false)
+ Controller --> Cliente : 401 genérico
+else contraseña incorrecta
+ Service -> BCrypt : matches(password, hash)
+ Service -> UsuarioRepository : incrementar intentos / bloquear al quinto
+ Service -> Oracle : COMMIT incluso en fallo de login
+ Service --> Controller : LoginResult(false)
+ Controller --> Cliente : 401 genérico
+else credenciales válidas
+ Service -> BCrypt : matches(password, hash)
+ Service -> UsuarioRepository : reiniciar intentos y bloqueo
+ Service -> JwtService : issue(correo), expira en 1 hora
+ JwtService --> Service : token firmado
+ Service --> Controller : LoginResult(token, id, rol)
+ Controller --> Cliente : 200 + JWT
+end
+@enduml

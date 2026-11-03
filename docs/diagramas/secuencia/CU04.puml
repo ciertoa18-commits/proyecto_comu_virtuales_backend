@@ -1,0 +1,25 @@
+@startuml
+title CU04 Unirse a comunidad
+autonumber
+actor Cliente
+control ComunidadController as Controller
+control ComunidadServiceImpl as Service
+database Oracle
+Cliente -> Controller : POST /comunidades/{id}/unirse o /solicitudes
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : unirse(id) / solicitar(id, Solicitud)
+Service -> ComunidadRepository : bloquear(id)
+Service -> Oracle : SELECT comunidad FOR UPDATE
+Service -> MiembroComunidadRepository : comprobar estado del usuario
+alt comunidad pública
+ Service -> MiembroComunidadRepository : crear o reactivar miembro
+else comunidad privada
+ Service -> SolicitudIngresoRepository : comprobar solicitud pendiente
+ Service -> SolicitudIngresoRepository : save(PENDIENTE)
+ Service -> NotificationService : solicitud(comunidad, id)
+ note right of NotificationService : Solo inserta si los triggers no están activos
+end
+Service -> Oracle : COMMIT
+Service --> Controller : membresía o solicitud
+Controller --> Cliente : 200 / 201
+@enduml

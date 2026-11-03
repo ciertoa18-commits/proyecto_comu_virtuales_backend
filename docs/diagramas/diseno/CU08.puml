@@ -1,0 +1,92 @@
+@startuml
+title CU08 Acceder a clases virtuales — Diseño
+left to right direction
+class AcademicoController {
+  + courses(Long): List
+  + resources(Long): List
+  + grades(Long): List
+  + submit(Long, EntregaDatos): EntregaTarea
+}
+class Requests <<DTO validado>>
+class AcademicoService {
+  + guardarCurso(Long, Long, CursoDatos): Curso
+  + crearSeccion(Long, SeccionDatos): Seccion
+  + guardarUnidad(Long, Long, UnidadDatos): Unidad
+  + guardarSesion(Long, Long, SesionDatos): Sesion
+  + guardarRecurso(Long, Long, RecursoDatos): Recurso
+  + matricular(Long, Long): Matricula
+  + nota(NotaDatos): Nota
+  + promedio(Long): BigDecimal
+  + cerrar(Long): void
+}
+AcademicoController --> AcademicoService
+AcademicoController ..> Requests
+class AccessService {
+  + member(Long): void
+  + moderator(Long): void
+  + teacher(Long): void
+  + writableTeacher(Long): void
+  + enrolled(Long): void
+  + owner(Long): void
+}
+AcademicoService --> AccessService
+interface SeccionRepository <<JpaRepository>> {
+ + findById(Long): Optional<Seccion>
+ + save(Seccion): Seccion
+}
+class Seccion <<entity>> {
+  - idSeccion : Long
+  - idCurso : Long
+  - idPeriodo : Long
+  - idDocente : Long
+  - grupo : String
+  - cupoMaximo : Long
+  - salaVirtual : String
+  - estado : SeccionEstado
+}
+AcademicoService --> SeccionRepository
+SeccionRepository ..> Seccion
+interface UnidadRepository <<JpaRepository>> {
+ + findById(Long): Optional<Unidad>
+ + save(Unidad): Unidad
+}
+class Unidad <<entity>> {
+  - idUnidad : Long
+  - idSeccion : Long
+  - nombre : String
+  - descripcion : String
+  - orden : Long
+}
+AcademicoService --> UnidadRepository
+UnidadRepository ..> Unidad
+interface SesionRepository <<JpaRepository>> {
+ + findById(Long): Optional<Sesion>
+ + save(Sesion): Sesion
+}
+class Sesion <<entity>> {
+  - idSesion : Long
+  - idUnidad : Long
+  - titulo : String
+  - orden : Long
+  - fechaInicio : LocalDateTime
+  - duracionMin : Long
+  - enlaceClase : String
+}
+AcademicoService --> SesionRepository
+SesionRepository ..> Sesion
+interface MatriculaRepository <<JpaRepository>> {
+ + findById(Long): Optional<Matricula>
+ + save(Matricula): Matricula
+}
+class Matricula <<entity>> {
+  - idMatricula : Long
+  - idSeccion : Long
+  - idUsuario : Long
+  - fechaMatricula : LocalDateTime
+  - estado : MatriculaEstado
+  - notaFinal : BigDecimal
+  - fechaRetiro : LocalDateTime
+}
+AcademicoService --> MatriculaRepository
+MatriculaRepository ..> Matricula
+@enduml

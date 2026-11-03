@@ -1,0 +1,597 @@
+@startuml
+title Diagrama general de clases de diseño
+hide empty methods
+skinparam linetype ortho
+class Rol <<entity>> {
+  - idRol : Long
+  - codigo : RolCodigo
+  - nombre : String
+}
+class Categoria <<entity>> {
+  - idCategoria : Long
+  - nombre : String
+  - descripcion : String
+}
+class Idioma <<entity>> {
+  - idIdioma : Long
+  - codigo : String
+  - nombre : String
+}
+class PuebloOriginario <<entity>> {
+  - idPueblo : Long
+  - nombre : String
+  - familiaLinguistica : String
+}
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+class Archivo <<entity>> {
+  - idArchivo : Long
+  - idSubidoPor : Long
+  - nombreOriginal : String
+  - extension : String
+  - tipoMime : String
+  - tamanoBytes : Long
+  - rutaAlmacenamiento : String
+  - fechaSubida : LocalDateTime
+}
+class Comunidad <<entity>> {
+  - idComunidad : Long
+  - nombre : String
+  - descripcion : String
+  - idCategoria : Long
+  - idIdioma : Long
+  - idPueblo : Long
+  - visibilidad : ComunidadVisibilidad
+  - moderacionPrevia : Boolean
+  - estado : ComunidadEstado
+  - idImagen : Long
+  - idCreador : Long
+  - fechaCreacion : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+class MiembroComunidad <<entity>> {
+  - idMiembro : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - rolComunidad : MiembroComunidadRolComunidad
+  - estado : MiembroComunidadEstado
+  - fechaIngreso : LocalDateTime
+  - fechaSalida : LocalDateTime
+}
+class SolicitudIngreso <<entity>> {
+  - idSolicitud : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - estado : SolicitudIngresoEstado
+  - mensaje : String
+  - fechaSolicitud : LocalDateTime
+  - idRevisor : Long
+  - fechaRespuesta : LocalDateTime
+  - motivoRechazo : String
+}
+class PeriodoAcademico <<entity>> {
+  - idPeriodo : Long
+  - nombre : String
+  - fechaInicio : LocalDate
+  - fechaFin : LocalDate
+  - estado : PeriodoAcademicoEstado
+}
+class Curso <<entity>> {
+  - idCurso : Long
+  - idComunidad : Long
+  - codigo : String
+  - nombre : String
+  - descripcion : String
+  - estado : CursoEstado
+  - fechaCreacion : LocalDateTime
+}
+class Seccion <<entity>> {
+  - idSeccion : Long
+  - idCurso : Long
+  - idPeriodo : Long
+  - idDocente : Long
+  - grupo : String
+  - cupoMaximo : Long
+  - salaVirtual : String
+  - estado : SeccionEstado
+}
+class Unidad <<entity>> {
+  - idUnidad : Long
+  - idSeccion : Long
+  - nombre : String
+  - descripcion : String
+  - orden : Long
+}
+class Sesion <<entity>> {
+  - idSesion : Long
+  - idUnidad : Long
+  - titulo : String
+  - orden : Long
+  - fechaInicio : LocalDateTime
+  - duracionMin : Long
+  - enlaceClase : String
+}
+class Recurso <<entity>> {
+  - idRecurso : Long
+  - idUnidad : Long
+  - idSesion : Long
+  - idAutor : Long
+  - titulo : String
+  - descripcion : String
+  - tipo : RecursoTipo
+  - idIdioma : Long
+  - idArchivo : Long
+  - urlExterna : String
+  - fechaPublicacion : LocalDateTime
+  - eliminado : Boolean
+  - fechaEliminacion : LocalDateTime
+}
+class Evento <<entity>> {
+  - idEvento : Long
+  - idComunidad : Long
+  - idSeccion : Long
+  - idCreador : Long
+  - titulo : String
+  - descripcion : String
+  - fechaInicio : LocalDateTime
+  - fechaFin : LocalDateTime
+  - enlace : String
+}
+class Matricula <<entity>> {
+  - idMatricula : Long
+  - idSeccion : Long
+  - idUsuario : Long
+  - fechaMatricula : LocalDateTime
+  - estado : MatriculaEstado
+  - notaFinal : BigDecimal
+  - fechaRetiro : LocalDateTime
+}
+class Evaluacion <<entity>> {
+  - idEvaluacion : Long
+  - idSeccion : Long
+  - idUnidad : Long
+  - nombre : String
+  - tipo : EvaluacionTipo
+  - peso : BigDecimal
+  - fecha : LocalDateTime
+}
+class Tarea <<entity>> {
+  - idRecurso : Long
+  - fechaEntrega : LocalDateTime
+  - permiteTardias : Boolean
+  - idEvaluacion : Long
+}
+class EntregaTarea <<entity>> {
+  - idEntrega : Long
+  - idRecurso : Long
+  - idMatricula : Long
+  - idArchivo : Long
+  - comentario : String
+  - fechaEntrega : LocalDateTime
+  - estado : EntregaTareaEstado
+}
+class Nota <<entity>> {
+  - idNota : Long
+  - idMatricula : Long
+  - idEvaluacion : Long
+  - calificacion : BigDecimal
+  - comentarioDocente : String
+  - idRegistradoPor : Long
+  - fechaRegistro : LocalDateTime
+  - fechaModificacion : LocalDateTime
+}
+class Asistencia <<entity>> {
+  - idAsistencia : Long
+  - idSesion : Long
+  - idMatricula : Long
+  - estado : AsistenciaEstado
+  - observacion : String
+  - idRegistradoPor : Long
+  - fechaRegistro : LocalDateTime
+}
+class Publicacion <<entity>> {
+  - idPublicacion : Long
+  - idComunidad : Long
+  - idSeccion : Long
+  - idAutor : Long
+  - titulo : String
+  - contenido : String
+  - estado : PublicacionEstado
+  - idModerador : Long
+  - fechaModeracion : LocalDateTime
+  - fechaPublicacion : LocalDateTime
+  - fechaEdicion : LocalDateTime
+  - eliminado : Boolean
+}
+class PublicacionArchivo <<entity>> {
+  - idPublicacion : Long
+  - idArchivo : Long
+  - orden : Long
+}
+class Comentario <<entity>> {
+  - idComentario : Long
+  - idPublicacion : Long
+  - idRecurso : Long
+  - idComentarioPadre : Long
+  - idAutor : Long
+  - contenido : String
+  - fechaComentario : LocalDateTime
+  - fechaEdicion : LocalDateTime
+  - eliminado : Boolean
+  - idEliminadoPor : Long
+}
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+class Mensaje <<entity>> {
+  - idMensaje : Long
+  - idEmisor : Long
+  - idReceptor : Long
+  - contenido : String
+  - leido : Boolean
+  - fechaEnvio : LocalDateTime
+  - eliminado : Boolean
+}
+class Auditoria <<entity>> {
+  - idAuditoria : Long
+  - tabla : String
+  - idRegistro : Long
+  - accion : AuditoriaAccion
+  - idUsuario : Long
+  - fecha : LocalDateTime
+  - valoresAntes : String
+  - valoresDespues : String
+}
+Usuario "*" --> "1" Rol : id_rol
+Usuario "*" --> "0..1" Idioma : id_idioma_pref
+Archivo "*" --> "1" Usuario : id_subido_por
+Comunidad "*" --> "1" Categoria : id_categoria
+Comunidad "*" --> "0..1" Idioma : id_idioma
+Comunidad "*" --> "0..1" PuebloOriginario : id_pueblo
+Comunidad "*" --> "0..1" Archivo : id_imagen
+Comunidad "*" --> "1" Usuario : id_creador
+MiembroComunidad "*" --> "1" Comunidad : id_comunidad
+MiembroComunidad "*" --> "1" Usuario : id_usuario
+SolicitudIngreso "*" --> "1" Comunidad : id_comunidad
+SolicitudIngreso "*" --> "1" Usuario : id_usuario
+SolicitudIngreso "*" --> "0..1" Usuario : id_revisor
+Curso "*" --> "1" Comunidad : id_comunidad
+Seccion "*" --> "1" Curso : id_curso
+Seccion "*" --> "1" PeriodoAcademico : id_periodo
+Seccion "*" --> "1" Usuario : id_docente
+Unidad "*" --> "1" Seccion : id_seccion
+Sesion "*" --> "1" Unidad : id_unidad
+Recurso "*" --> "1" Unidad : id_unidad
+Recurso "*" --> "0..1" Sesion : id_sesion
+Recurso "*" --> "1" Usuario : id_autor
+Recurso "*" --> "0..1" Idioma : id_idioma
+Recurso "*" --> "0..1" Archivo : id_archivo
+Evento "*" --> "1" Comunidad : id_comunidad
+Evento "*" --> "0..1" Seccion : id_seccion
+Evento "*" --> "1" Usuario : id_creador
+Matricula "*" --> "1" Seccion : id_seccion
+Matricula "*" --> "1" Usuario : id_usuario
+Evaluacion "*" --> "1" Seccion : id_seccion
+Evaluacion "*" --> "0..1" Unidad : id_unidad
+Tarea "*" --> "1" Recurso : id_recurso
+Tarea "*" --> "0..1" Evaluacion : id_evaluacion
+EntregaTarea "*" --> "1" Tarea : id_recurso
+EntregaTarea "*" --> "1" Matricula : id_matricula
+EntregaTarea "*" --> "0..1" Archivo : id_archivo
+Nota "*" --> "1" Matricula : id_matricula
+Nota "*" --> "1" Evaluacion : id_evaluacion
+Nota "*" --> "1" Usuario : id_registrado_por
+Asistencia "*" --> "1" Sesion : id_sesion
+Asistencia "*" --> "1" Matricula : id_matricula
+Asistencia "*" --> "1" Usuario : id_registrado_por
+Publicacion "*" --> "1" Comunidad : id_comunidad
+Publicacion "*" --> "0..1" Seccion : id_seccion
+Publicacion "*" --> "1" Usuario : id_autor
+Publicacion "*" --> "0..1" Usuario : id_moderador
+PublicacionArchivo "*" --> "1" Publicacion : id_publicacion
+PublicacionArchivo "*" --> "1" Archivo : id_archivo
+Comentario "*" --> "0..1" Publicacion : id_publicacion
+Comentario "*" --> "0..1" Recurso : id_recurso
+Comentario "*" --> "0..1" Comentario : id_comentario_padre
+Comentario "*" --> "1" Usuario : id_autor
+Comentario "*" --> "0..1" Usuario : id_eliminado_por
+Notificacion "*" --> "1" Usuario : id_destinatario
+Notificacion "*" --> "0..1" Usuario : id_emisor
+Notificacion "*" --> "0..1" Comunidad : id_comunidad
+Mensaje "*" --> "1" Usuario : id_emisor
+Mensaje "*" --> "1" Usuario : id_receptor
+Auditoria "*" --> "0..1" Usuario : id_usuario
+class AuthController {
+  + login(Login): ResponseEntity
+  + logout(String): void
+}
+class AuthServiceImpl {
+  + login(Login): LoginResult
+  + actor(String): Actor
+  + logout(String): void
+  + validateSession(String, Claims): void
+}
+AuthController --> AuthServiceImpl
+interface UsuarioRepository
+AuthServiceImpl --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface RolRepository
+AuthServiceImpl --> RolRepository
+RolRepository ..> Rol
+interface AuditoriaRepository
+AuthServiceImpl --> AuditoriaRepository
+AuditoriaRepository ..> Auditoria
+class PerfilController {
+  + me(): Perfil
+  + update(Perfil): Usuario
+  + photo(MultipartFile): Usuario
+}
+class PerfilService {
+  + me(): Usuario
+  + update(Perfil): Usuario
+  + foto(Long): Usuario
+  + password(Password): void
+}
+PerfilController --> PerfilService
+interface UsuarioRepository
+PerfilService --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface ArchivoRepository
+PerfilService --> ArchivoRepository
+ArchivoRepository ..> Archivo
+interface IdiomaRepository
+PerfilService --> IdiomaRepository
+IdiomaRepository ..> Idioma
+class ComunidadController {
+  + list(filtros): Page
+  + join(Long): MiembroComunidad
+  + resolve(Long, Resolucion): SolicitudIngreso
+}
+class ComunidadServiceImpl {
+  + buscar(filtros): Page<Comunidad>
+  + guardar(Long, ComunidadDatos): Comunidad
+  + unirse(Long): MiembroComunidad
+  + solicitar(Long, Solicitud): SolicitudIngreso
+  + resolver(Long, Resolucion): SolicitudIngreso
+  + salir(Long): void
+  + expulsar(Long, Long): void
+}
+ComunidadController --> ComunidadServiceImpl
+interface ComunidadRepository
+ComunidadServiceImpl --> ComunidadRepository
+ComunidadRepository ..> Comunidad
+interface CategoriaRepository
+ComunidadServiceImpl --> CategoriaRepository
+CategoriaRepository ..> Categoria
+interface IdiomaRepository
+ComunidadServiceImpl --> IdiomaRepository
+IdiomaRepository ..> Idioma
+interface PuebloOriginarioRepository
+ComunidadServiceImpl --> PuebloOriginarioRepository
+PuebloOriginarioRepository ..> PuebloOriginario
+class ComunidadController
+class ComunidadServiceImpl
+ComunidadController --> ComunidadServiceImpl
+interface ComunidadRepository
+ComunidadServiceImpl --> ComunidadRepository
+ComunidadRepository ..> Comunidad
+interface MiembroComunidadRepository
+ComunidadServiceImpl --> MiembroComunidadRepository
+MiembroComunidadRepository ..> MiembroComunidad
+interface SolicitudIngresoRepository
+ComunidadServiceImpl --> SolicitudIngresoRepository
+SolicitudIngresoRepository ..> SolicitudIngreso
+interface NotificacionRepository
+ComunidadServiceImpl --> NotificacionRepository
+NotificacionRepository ..> Notificacion
+class ComunidadController
+class ComunidadServiceImpl
+ComunidadController --> ComunidadServiceImpl
+interface ComunidadRepository
+ComunidadServiceImpl --> ComunidadRepository
+ComunidadRepository ..> Comunidad
+interface CategoriaRepository
+ComunidadServiceImpl --> CategoriaRepository
+CategoriaRepository ..> Categoria
+interface ArchivoRepository
+ComunidadServiceImpl --> ArchivoRepository
+ArchivoRepository ..> Archivo
+interface UsuarioRepository
+ComunidadServiceImpl --> UsuarioRepository
+UsuarioRepository ..> Usuario
+class ComunidadController
+class ComunidadServiceImpl
+ComunidadController --> ComunidadServiceImpl
+interface MiembroComunidadRepository
+ComunidadServiceImpl --> MiembroComunidadRepository
+MiembroComunidadRepository ..> MiembroComunidad
+interface SolicitudIngresoRepository
+ComunidadServiceImpl --> SolicitudIngresoRepository
+SolicitudIngresoRepository ..> SolicitudIngreso
+interface UsuarioRepository
+ComunidadServiceImpl --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface RolRepository
+ComunidadServiceImpl --> RolRepository
+RolRepository ..> Rol
+interface NotificacionRepository
+ComunidadServiceImpl --> NotificacionRepository
+NotificacionRepository ..> Notificacion
+class PublicacionController {
+  + wall(Long): Page
+  + create(Long, PublicacionDatos): PublicacionVista
+  + comment(Long, ComentarioDatos): ComentarioVista
+}
+class PublicacionServiceImpl {
+  + visible(Long): Publicacion
+  + guardar(Long, Long, PublicacionDatos): Publicacion
+  + moderar(Long, Moderacion): Publicacion
+  + comentar(Long, ComentarioDatos): Comentario
+  + eliminar(Long): void
+}
+PublicacionController --> PublicacionServiceImpl
+interface PublicacionRepository
+PublicacionServiceImpl --> PublicacionRepository
+PublicacionRepository ..> Publicacion
+interface PublicacionArchivoRepository
+PublicacionServiceImpl --> PublicacionArchivoRepository
+PublicacionArchivoRepository ..> PublicacionArchivo
+interface ArchivoRepository
+PublicacionServiceImpl --> ArchivoRepository
+ArchivoRepository ..> Archivo
+interface ComentarioRepository
+PublicacionServiceImpl --> ComentarioRepository
+ComentarioRepository ..> Comentario
+interface UsuarioRepository
+PublicacionServiceImpl --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface NotificacionRepository
+PublicacionServiceImpl --> NotificacionRepository
+NotificacionRepository ..> Notificacion
+class AcademicoController {
+  + courses(Long): List
+  + resources(Long): List
+  + grades(Long): List
+  + submit(Long, EntregaDatos): EntregaTarea
+}
+class AcademicoService {
+  + guardarCurso(Long, Long, CursoDatos): Curso
+  + crearSeccion(Long, SeccionDatos): Seccion
+  + guardarUnidad(Long, Long, UnidadDatos): Unidad
+  + guardarSesion(Long, Long, SesionDatos): Sesion
+  + guardarRecurso(Long, Long, RecursoDatos): Recurso
+  + matricular(Long, Long): Matricula
+  + nota(NotaDatos): Nota
+  + promedio(Long): BigDecimal
+  + cerrar(Long): void
+}
+AcademicoController --> AcademicoService
+interface SesionRepository
+AcademicoService --> SesionRepository
+SesionRepository ..> Sesion
+interface UnidadRepository
+AcademicoService --> UnidadRepository
+UnidadRepository ..> Unidad
+interface SeccionRepository
+AcademicoService --> SeccionRepository
+SeccionRepository ..> Seccion
+interface MatriculaRepository
+AcademicoService --> MatriculaRepository
+MatriculaRepository ..> Matricula
+class AcademicoController
+class AcademicoService
+AcademicoController --> AcademicoService
+interface CursoRepository
+AcademicoService --> CursoRepository
+CursoRepository ..> Curso
+interface ComunidadRepository
+AcademicoService --> ComunidadRepository
+ComunidadRepository ..> Comunidad
+interface SeccionRepository
+AcademicoService --> SeccionRepository
+SeccionRepository ..> Seccion
+interface PeriodoAcademicoRepository
+AcademicoService --> PeriodoAcademicoRepository
+PeriodoAcademicoRepository ..> PeriodoAcademico
+interface UsuarioRepository
+AcademicoService --> UsuarioRepository
+UsuarioRepository ..> Usuario
+class AcademicoController
+class AcademicoService
+AcademicoController --> AcademicoService
+interface RecursoRepository
+AcademicoService --> RecursoRepository
+RecursoRepository ..> Recurso
+interface UnidadRepository
+AcademicoService --> UnidadRepository
+UnidadRepository ..> Unidad
+interface SeccionRepository
+AcademicoService --> SeccionRepository
+SeccionRepository ..> Seccion
+interface MatriculaRepository
+AcademicoService --> MatriculaRepository
+MatriculaRepository ..> Matricula
+interface ArchivoRepository
+AcademicoService --> ArchivoRepository
+ArchivoRepository ..> Archivo
+class AcademicoController
+class AcademicoService
+AcademicoController --> AcademicoService
+interface UnidadRepository
+AcademicoService --> UnidadRepository
+UnidadRepository ..> Unidad
+interface SesionRepository
+AcademicoService --> SesionRepository
+SesionRepository ..> Sesion
+interface RecursoRepository
+AcademicoService --> RecursoRepository
+RecursoRepository ..> Recurso
+interface ArchivoRepository
+AcademicoService --> ArchivoRepository
+ArchivoRepository ..> Archivo
+interface TareaRepository
+AcademicoService --> TareaRepository
+TareaRepository ..> Tarea
+class ComunicacionController {
+  + notifications(int, int): Page
+  + read(Long): void
+  + send(MensajeDatos): Mensaje
+}
+class NotificationService {
+  + send(destino, tipo, entidad): void
+  + broadcast(comunidad, tipo, entidad): void
+  + list(int, int): Page<Notificacion>
+  + read(Long): void
+  + readAll(): void
+}
+ComunicacionController --> NotificationService
+interface NotificacionRepository
+NotificationService --> NotificacionRepository
+NotificacionRepository ..> Notificacion
+interface UsuarioRepository
+NotificationService --> UsuarioRepository
+UsuarioRepository ..> Usuario
+class AuthController
+class AuthServiceImpl
+AuthController --> AuthServiceImpl
+interface UsuarioRepository
+AuthServiceImpl --> UsuarioRepository
+UsuarioRepository ..> Usuario
+interface AuditoriaRepository
+AuthServiceImpl --> AuditoriaRepository
+AuditoriaRepository ..> Auditoria
+Usuario "*" --> "0..1" Archivo : id_foto_perfil
+class JwtService {
+ + issue(String): String
+ + parse(String): Claims
+}
+class PasswordEncoder <<BCrypt>>
+AuthServiceImpl --> JwtService
+AuthServiceImpl --> PasswordEncoder
+@enduml

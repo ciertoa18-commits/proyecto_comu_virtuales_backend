@@ -1,0 +1,75 @@
+@startuml
+title CU06 Gestionar miembros — Análisis
+left to right direction
+skinparam classAttributeIconSize 0
+class "Interfaz Gestionar miembros" as Boundary <<boundary>>
+class "Control Gestionar miembros" as Control <<control>>
+Boundary --> Control
+class Rol <<entity>> {
+  - idRol : Long
+  - codigo : RolCodigo
+  - nombre : String
+}
+Control --> Rol
+class Usuario <<entity>> {
+  - idUsuario : Long
+  - idRol : Long
+  - correo : String
+  - nombres : String
+  - apellidos : String
+  - especialidad : String
+  - keycloakSub : String
+  - passwordHash : String
+  - intentosFallidos : Long
+  - bloqueadoHasta : LocalDateTime
+  - idFotoPerfil : Long
+  - idIdiomaPref : Long
+  - estado : UsuarioEstado
+  - fechaRegistro : LocalDateTime
+  - fechaActualizacion : LocalDateTime
+}
+Control --> Usuario
+class MiembroComunidad <<entity>> {
+  - idMiembro : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - rolComunidad : MiembroComunidadRolComunidad
+  - estado : MiembroComunidadEstado
+  - fechaIngreso : LocalDateTime
+  - fechaSalida : LocalDateTime
+}
+Control --> MiembroComunidad
+class SolicitudIngreso <<entity>> {
+  - idSolicitud : Long
+  - idComunidad : Long
+  - idUsuario : Long
+  - estado : SolicitudIngresoEstado
+  - mensaje : String
+  - fechaSolicitud : LocalDateTime
+  - idRevisor : Long
+  - fechaRespuesta : LocalDateTime
+  - motivoRechazo : String
+}
+Control --> SolicitudIngreso
+class Notificacion <<entity>> {
+  - idNotificacion : Long
+  - idDestinatario : Long
+  - idEmisor : Long
+  - idComunidad : Long
+  - tipo : NotificacionTipo
+  - titulo : String
+  - contenido : String
+  - entidadTipo : String
+  - entidadId : Long
+  - leida : Boolean
+  - fechaCreacion : LocalDateTime
+  - fechaLectura : LocalDateTime
+}
+Control --> Notificacion
+Usuario "*" --> "1" Rol : id_rol
+MiembroComunidad "*" --> "1" Usuario : id_usuario
+SolicitudIngreso "*" --> "1" Usuario : id_usuario
+SolicitudIngreso "*" --> "0..1" Usuario : id_revisor
+Notificacion "*" --> "1" Usuario : id_destinatario
+Notificacion "*" --> "0..1" Usuario : id_emisor
+@enduml

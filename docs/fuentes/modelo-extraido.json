@@ -1,0 +1,2029 @@
+[
+  {
+    "name": "ROL",
+    "class": "Rol",
+    "cols": [
+      {
+        "name": "id_rol",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "codigo",
+        "type": "VARCHAR2(20)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(50)",
+        "required": true,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_rol"
+    ],
+    "fks": [],
+    "enums": {
+      "codigo": [
+        "ESTUDIANTE",
+        "DOCENTE",
+        "ADMIN"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_rol | NUMBER (IDENTITY) | NO | PK autogenerada |\n| codigo | VARCHAR2(20) | NO |  |\n| nombre | VARCHAR2(50) | NO |  |\n\n- **PK:** id_rol\n- **Únicos:** (codigo)\n- **Checks:** `(codigo IN ('ESTUDIANTE','DOCENTE','ADMIN'))`\n\n"
+  },
+  {
+    "name": "CATEGORIA",
+    "class": "Categoria",
+    "cols": [
+      {
+        "name": "id_categoria",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(100)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "descripcion",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_categoria"
+    ],
+    "fks": [],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_categoria | NUMBER (IDENTITY) | NO | PK autogenerada |\n| nombre | VARCHAR2(100) | NO |  |\n| descripcion | VARCHAR2(500) | sí |  |\n\n- **PK:** id_categoria\n- **Únicos:** (nombre)\n\n"
+  },
+  {
+    "name": "IDIOMA",
+    "class": "Idioma",
+    "cols": [
+      {
+        "name": "id_idioma",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "codigo",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "ej. 'es', 'qu', 'cni' (asháninka) |"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(60)",
+        "required": true,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_idioma"
+    ],
+    "fks": [],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_idioma | NUMBER (IDENTITY) | NO | PK autogenerada |\n| codigo | VARCHAR2(10) | NO | ej. 'es', 'qu', 'cni' (asháninka) |\n| nombre | VARCHAR2(60) | NO |  |\n\n- **PK:** id_idioma\n- **Únicos:** (codigo)\n\n"
+  },
+  {
+    "name": "PUEBLO_ORIGINARIO",
+    "class": "PuebloOriginario",
+    "cols": [
+      {
+        "name": "id_pueblo",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(100)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "familia_linguistica",
+        "type": "VARCHAR2(100)",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_pueblo"
+    ],
+    "fks": [],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_pueblo | NUMBER (IDENTITY) | NO | PK autogenerada |\n| nombre | VARCHAR2(100) | NO |  |\n| familia_linguistica | VARCHAR2(100) | sí |  |\n\n- **PK:** id_pueblo\n- **Únicos:** (nombre)\n\n"
+  },
+  {
+    "name": "USUARIO",
+    "class": "Usuario",
+    "cols": [
+      {
+        "name": "id_usuario",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_rol",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "correo",
+        "type": "VARCHAR2(150)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "nombres",
+        "type": "VARCHAR2(100)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "apellidos",
+        "type": "VARCHAR2(100)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "especialidad",
+        "type": "VARCHAR2(100)",
+        "required": false,
+        "notes": "solo docentes |"
+      },
+      {
+        "name": "keycloak_sub",
+        "type": "VARCHAR2(64)",
+        "required": false,
+        "notes": "id del usuario en el SSO (RES10) |"
+      },
+      {
+        "name": "password_hash",
+        "type": "VARCHAR2(255)",
+        "required": false,
+        "notes": "solo si no usa SSO (RF53, RES16) |"
+      },
+      {
+        "name": "intentos_fallidos",
+        "type": "NUMBER(2)",
+        "required": true,
+        "notes": "default 0; RF54 |"
+      },
+      {
+        "name": "bloqueado_hasta",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "RF55 |"
+      },
+      {
+        "name": "id_foto_perfil",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "FK a archivo (se agrega al final) |"
+      },
+      {
+        "name": "id_idioma_pref",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'ACTIVO' |"
+      },
+      {
+        "name": "fecha_registro",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "fecha_actualizacion",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_usuario"
+    ],
+    "fks": [
+      {
+        "col": "id_rol",
+        "table": "ROL",
+        "target": "id_rol"
+      },
+      {
+        "col": "id_idioma_pref",
+        "table": "IDIOMA",
+        "target": "id_idioma"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "ACTIVO",
+        "INACTIVO"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_usuario | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_rol | NUMBER | NO |  |\n| correo | VARCHAR2(150) | NO |  |\n| nombres | VARCHAR2(100) | NO |  |\n| apellidos | VARCHAR2(100) | NO |  |\n| especialidad | VARCHAR2(100) | sí | solo docentes |\n| keycloak_sub | VARCHAR2(64) | sí | id del usuario en el SSO (RES10) |\n| password_hash | VARCHAR2(255) | sí | solo si no usa SSO (RF53, RES16) |\n| intentos_fallidos | NUMBER(2) | NO | default 0; RF54 |\n| bloqueado_hasta | TIMESTAMP | sí | RF55 |\n| id_foto_perfil | NUMBER | sí | FK a archivo (se agrega al final) |\n| id_idioma_pref | NUMBER | sí |  |\n| estado | VARCHAR2(10) | NO | default 'ACTIVO' |\n| fecha_registro | TIMESTAMP | NO | default SYSTIMESTAMP |\n| fecha_actualizacion | TIMESTAMP | sí |  |\n\n- **PK:** id_usuario\n- **Únicos:** (correo); (keycloak_sub)\n- **FK:** id_rol → ROL.id_rol; id_idioma_pref → IDIOMA.id_idioma\n- **Checks:** `(REGEXP_LIKE(correo, '^[^@ ]+@(minedu\\.gob\\.pe|perueduca\\.pe)$'))` · `(correo = LOWER(correo))` · `(keycloak_sub IS NOT NULL OR password_hash IS NOT NULL)` · `(intentos_fallidos >= 0)` · `(estado IN ('ACTIVO','INACTIVO'))`\n\n"
+  },
+  {
+    "name": "ARCHIVO",
+    "class": "Archivo",
+    "cols": [
+      {
+        "name": "id_archivo",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_subido_por",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "nombre_original",
+        "type": "VARCHAR2(255)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "extension",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "tipo_mime",
+        "type": "VARCHAR2(100)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "tamano_bytes",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "ruta_almacenamiento",
+        "type": "VARCHAR2(500)",
+        "required": true,
+        "notes": "ruta o key en el storage, no el binario |"
+      },
+      {
+        "name": "fecha_subida",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      }
+    ],
+    "pk": [
+      "id_archivo"
+    ],
+    "fks": [
+      {
+        "col": "id_subido_por",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_archivo | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_subido_por | NUMBER | NO |  |\n| nombre_original | VARCHAR2(255) | NO |  |\n| extension | VARCHAR2(10) | NO |  |\n| tipo_mime | VARCHAR2(100) | NO |  |\n| tamano_bytes | NUMBER | NO |  |\n| ruta_almacenamiento | VARCHAR2(500) | NO | ruta o key en el storage, no el binario |\n| fecha_subida | TIMESTAMP | NO | default SYSTIMESTAMP |\n\n- **PK:** id_archivo\n- **FK:** id_subido_por → USUARIO.id_usuario\n- **Checks:** `( (LOWER(extension) IN ('pdf','mp4','docx') AND tamano_bytes <= 52428800) OR (LOWER(extension) IN ('jpg','jpeg','png') AND tamano_bytes <= 2097152) )` · `(tamano_bytes > 0)`\n\n"
+  },
+  {
+    "name": "COMUNIDAD",
+    "class": "Comunidad",
+    "cols": [
+      {
+        "name": "id_comunidad",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(150)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "descripcion",
+        "type": "VARCHAR2(1000)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_categoria",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "RN21 |"
+      },
+      {
+        "name": "id_idioma",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_pueblo",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "visibilidad",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'PUBLICA'; RF09, RN04, RN22 |"
+      },
+      {
+        "name": "moderacion_previa",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0; RN02 (comunidad \"oficial\") |"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'ACTIVA'; RN20 |"
+      },
+      {
+        "name": "id_imagen",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "RF18 |"
+      },
+      {
+        "name": "id_creador",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_creacion",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "fecha_actualizacion",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_comunidad"
+    ],
+    "fks": [
+      {
+        "col": "id_categoria",
+        "table": "CATEGORIA",
+        "target": "id_categoria"
+      },
+      {
+        "col": "id_idioma",
+        "table": "IDIOMA",
+        "target": "id_idioma"
+      },
+      {
+        "col": "id_pueblo",
+        "table": "PUEBLO_ORIGINARIO",
+        "target": "id_pueblo"
+      },
+      {
+        "col": "id_imagen",
+        "table": "ARCHIVO",
+        "target": "id_archivo"
+      },
+      {
+        "col": "id_creador",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "visibilidad": [
+        "PUBLICA",
+        "PRIVADA"
+      ],
+      "estado": [
+        "ACTIVA",
+        "INACTIVA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_comunidad | NUMBER (IDENTITY) | NO | PK autogenerada |\n| nombre | VARCHAR2(150) | NO |  |\n| descripcion | VARCHAR2(1000) | sí |  |\n| id_categoria | NUMBER | NO | RN21 |\n| id_idioma | NUMBER | sí |  |\n| id_pueblo | NUMBER | sí |  |\n| visibilidad | VARCHAR2(10) | NO | default 'PUBLICA'; RF09, RN04, RN22 |\n| moderacion_previa | NUMBER(1) | NO | default 0; RN02 (comunidad \"oficial\") |\n| estado | VARCHAR2(10) | NO | default 'ACTIVA'; RN20 |\n| id_imagen | NUMBER | sí | RF18 |\n| id_creador | NUMBER | NO |  |\n| fecha_creacion | TIMESTAMP | NO | default SYSTIMESTAMP |\n| fecha_actualizacion | TIMESTAMP | sí |  |\n\n- **PK:** id_comunidad\n- **Únicos:** (nombre)\n- **FK:** id_categoria → CATEGORIA.id_categoria; id_idioma → IDIOMA.id_idioma; id_pueblo → PUEBLO_ORIGINARIO.id_pueblo; id_imagen → ARCHIVO.id_archivo; id_creador → USUARIO.id_usuario\n- **Checks:** `(visibilidad IN ('PUBLICA','PRIVADA'))` · `(moderacion_previa IN (0,1))` · `(estado IN ('ACTIVA','INACTIVA'))`\n\n"
+  },
+  {
+    "name": "MIEMBRO_COMUNIDAD",
+    "class": "MiembroComunidad",
+    "cols": [
+      {
+        "name": "id_miembro",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_comunidad",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_usuario",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "rol_comunidad",
+        "type": "VARCHAR2(15)",
+        "required": true,
+        "notes": "default 'MIEMBRO' |"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'ACTIVO' |"
+      },
+      {
+        "name": "fecha_ingreso",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "fecha_salida",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_miembro"
+    ],
+    "fks": [
+      {
+        "col": "id_comunidad",
+        "table": "COMUNIDAD",
+        "target": "id_comunidad"
+      },
+      {
+        "col": "id_usuario",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "rol_comunidad": [
+        "MIEMBRO",
+        "MODERADOR",
+        "ADMINISTRADOR"
+      ],
+      "estado": [
+        "ACTIVO",
+        "RETIRADO",
+        "EXPULSADO"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_miembro | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_comunidad | NUMBER | NO |  |\n| id_usuario | NUMBER | NO |  |\n| rol_comunidad | VARCHAR2(15) | NO | default 'MIEMBRO' |\n| estado | VARCHAR2(10) | NO | default 'ACTIVO' |\n| fecha_ingreso | TIMESTAMP | NO | default SYSTIMESTAMP |\n| fecha_salida | TIMESTAMP | sí |  |\n\n- **PK:** id_miembro\n- **Únicos:** (id_comunidad, id_usuario)\n- **FK:** id_comunidad → COMUNIDAD.id_comunidad; id_usuario → USUARIO.id_usuario\n- **Checks:** `(rol_comunidad IN ('MIEMBRO','MODERADOR','ADMINISTRADOR'))` · `(estado IN ('ACTIVO','RETIRADO','EXPULSADO'))` · `((estado = 'ACTIVO' AND fecha_salida IS NULL) OR (estado <> 'ACTIVO' AND fecha_salida IS NOT NULL))`\n\n"
+  },
+  {
+    "name": "SOLICITUD_INGRESO",
+    "class": "SolicitudIngreso",
+    "cols": [
+      {
+        "name": "id_solicitud",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_comunidad",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_usuario",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "alumno O docente |"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'PENDIENTE' |"
+      },
+      {
+        "name": "mensaje",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_solicitud",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "id_revisor",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "vacío mientras está pendiente |"
+      },
+      {
+        "name": "fecha_respuesta",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "motivo_rechazo",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_solicitud"
+    ],
+    "fks": [
+      {
+        "col": "id_comunidad",
+        "table": "COMUNIDAD",
+        "target": "id_comunidad"
+      },
+      {
+        "col": "id_usuario",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      },
+      {
+        "col": "id_revisor",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "PENDIENTE",
+        "APROBADA",
+        "RECHAZADA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_solicitud | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_comunidad | NUMBER | NO |  |\n| id_usuario | NUMBER | NO | alumno O docente |\n| estado | VARCHAR2(10) | NO | default 'PENDIENTE' |\n| mensaje | VARCHAR2(500) | sí |  |\n| fecha_solicitud | TIMESTAMP | NO | default SYSTIMESTAMP |\n| id_revisor | NUMBER | sí | vacío mientras está pendiente |\n| fecha_respuesta | TIMESTAMP | sí |  |\n| motivo_rechazo | VARCHAR2(500) | sí |  |\n\n- **PK:** id_solicitud\n- **FK:** id_comunidad → COMUNIDAD.id_comunidad; id_usuario → USUARIO.id_usuario; id_revisor → USUARIO.id_usuario\n- **Checks:** `(estado IN ('PENDIENTE','APROBADA','RECHAZADA'))` · `( (estado = 'PENDIENTE' AND id_revisor IS NULL AND fecha_respuesta IS NULL) OR (estado <> 'PENDIENTE' AND id_revisor IS NOT NULL AND fecha_respuesta IS NOT NULL))`\n\n"
+  },
+  {
+    "name": "PERIODO_ACADEMICO",
+    "class": "PeriodoAcademico",
+    "cols": [
+      {
+        "name": "id_periodo",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(20)",
+        "required": true,
+        "notes": "ej. '2026-I' |"
+      },
+      {
+        "name": "fecha_inicio",
+        "type": "DATE",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_fin",
+        "type": "DATE",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(12)",
+        "required": true,
+        "notes": "default 'PLANIFICADO' |"
+      }
+    ],
+    "pk": [
+      "id_periodo"
+    ],
+    "fks": [],
+    "enums": {
+      "estado": [
+        "PLANIFICADO",
+        "ABIERTO",
+        "CERRADO"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_periodo | NUMBER (IDENTITY) | NO | PK autogenerada |\n| nombre | VARCHAR2(20) | NO | ej. '2026-I' |\n| fecha_inicio | DATE | NO |  |\n| fecha_fin | DATE | NO |  |\n| estado | VARCHAR2(12) | NO | default 'PLANIFICADO' |\n\n- **PK:** id_periodo\n- **Únicos:** (nombre)\n- **Checks:** `(fecha_fin > fecha_inicio)` · `(estado IN ('PLANIFICADO','ABIERTO','CERRADO'))`\n\n"
+  },
+  {
+    "name": "CURSO",
+    "class": "Curso",
+    "cols": [
+      {
+        "name": "id_curso",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_comunidad",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "codigo",
+        "type": "VARCHAR2(20)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(150)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "descripcion",
+        "type": "VARCHAR2(1000)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'ACTIVO' |"
+      },
+      {
+        "name": "fecha_creacion",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      }
+    ],
+    "pk": [
+      "id_curso"
+    ],
+    "fks": [
+      {
+        "col": "id_comunidad",
+        "table": "COMUNIDAD",
+        "target": "id_comunidad"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "ACTIVO",
+        "INACTIVO"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_curso | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_comunidad | NUMBER | NO |  |\n| codigo | VARCHAR2(20) | NO |  |\n| nombre | VARCHAR2(150) | NO |  |\n| descripcion | VARCHAR2(1000) | sí |  |\n| estado | VARCHAR2(10) | NO | default 'ACTIVO' |\n| fecha_creacion | TIMESTAMP | NO | default SYSTIMESTAMP |\n\n- **PK:** id_curso\n- **Únicos:** (id_comunidad, codigo)\n- **FK:** id_comunidad → COMUNIDAD.id_comunidad\n- **Checks:** `(estado IN ('ACTIVO','INACTIVO'))`\n\n"
+  },
+  {
+    "name": "SECCION",
+    "class": "Seccion",
+    "cols": [
+      {
+        "name": "id_seccion",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_curso",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_periodo",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_docente",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "docente titular |"
+      },
+      {
+        "name": "grupo",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "'A', 'B', ... |"
+      },
+      {
+        "name": "cupo_maximo",
+        "type": "NUMBER(4)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "sala_virtual",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "enlace fijo por defecto (RF36) |"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'ABIERTA' |"
+      }
+    ],
+    "pk": [
+      "id_seccion"
+    ],
+    "fks": [
+      {
+        "col": "id_curso",
+        "table": "CURSO",
+        "target": "id_curso"
+      },
+      {
+        "col": "id_periodo",
+        "table": "PERIODO_ACADEMICO",
+        "target": "id_periodo"
+      },
+      {
+        "col": "id_docente",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "ABIERTA",
+        "EN_CURSO",
+        "CERRADA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_seccion | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_curso | NUMBER | NO |  |\n| id_periodo | NUMBER | NO |  |\n| id_docente | NUMBER | NO | docente titular |\n| grupo | VARCHAR2(10) | NO | 'A', 'B', ... |\n| cupo_maximo | NUMBER(4) | sí |  |\n| sala_virtual | VARCHAR2(500) | sí | enlace fijo por defecto (RF36) |\n| estado | VARCHAR2(10) | NO | default 'ABIERTA' |\n\n- **PK:** id_seccion\n- **Únicos:** (id_curso, id_periodo, grupo)\n- **FK:** id_curso → CURSO.id_curso; id_periodo → PERIODO_ACADEMICO.id_periodo; id_docente → USUARIO.id_usuario\n- **Checks:** `(cupo_maximo IS NULL OR cupo_maximo > 0)` · `(estado IN ('ABIERTA','EN_CURSO','CERRADA'))`\n\n"
+  },
+  {
+    "name": "UNIDAD",
+    "class": "Unidad",
+    "cols": [
+      {
+        "name": "id_unidad",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_seccion",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(150)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "descripcion",
+        "type": "VARCHAR2(1000)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "orden",
+        "type": "NUMBER(3)",
+        "required": true,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_unidad"
+    ],
+    "fks": [
+      {
+        "col": "id_seccion",
+        "table": "SECCION",
+        "target": "id_seccion"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_unidad | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_seccion | NUMBER | NO |  |\n| nombre | VARCHAR2(150) | NO |  |\n| descripcion | VARCHAR2(1000) | sí |  |\n| orden | NUMBER(3) | NO |  |\n\n- **PK:** id_unidad\n- **Únicos:** (id_seccion, orden)\n- **FK:** id_seccion → SECCION.id_seccion\n\n"
+  },
+  {
+    "name": "SESION",
+    "class": "Sesion",
+    "cols": [
+      {
+        "name": "id_sesion",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_unidad",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "titulo",
+        "type": "VARCHAR2(200)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "orden",
+        "type": "NUMBER(3)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_inicio",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "duracion_min",
+        "type": "NUMBER(4)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "enlace_clase",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "si es NULL se usa seccion.sala_virtual |"
+      }
+    ],
+    "pk": [
+      "id_sesion"
+    ],
+    "fks": [
+      {
+        "col": "id_unidad",
+        "table": "UNIDAD",
+        "target": "id_unidad"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_sesion | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_unidad | NUMBER | NO |  |\n| titulo | VARCHAR2(200) | NO |  |\n| orden | NUMBER(3) | NO |  |\n| fecha_inicio | TIMESTAMP | sí |  |\n| duracion_min | NUMBER(4) | sí |  |\n| enlace_clase | VARCHAR2(500) | sí | si es NULL se usa seccion.sala_virtual |\n\n- **PK:** id_sesion\n- **Únicos:** (id_unidad, orden)\n- **FK:** id_unidad → UNIDAD.id_unidad\n- **Checks:** `(duracion_min IS NULL OR duracion_min > 0)`\n\n"
+  },
+  {
+    "name": "RECURSO",
+    "class": "Recurso",
+    "cols": [
+      {
+        "name": "id_recurso",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_unidad",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_sesion",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "opcional: recurso de una sesión concreta |"
+      },
+      {
+        "name": "id_autor",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "titulo",
+        "type": "VARCHAR2(200)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "descripcion",
+        "type": "VARCHAR2(1000)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "tipo",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_idioma",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "idioma del recurso |"
+      },
+      {
+        "name": "id_archivo",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "url_externa",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_publicacion",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "eliminado",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0 |"
+      },
+      {
+        "name": "fecha_eliminacion",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_recurso"
+    ],
+    "fks": [
+      {
+        "col": "id_unidad",
+        "table": "UNIDAD",
+        "target": "id_unidad"
+      },
+      {
+        "col": "id_sesion",
+        "table": "SESION",
+        "target": "id_sesion"
+      },
+      {
+        "col": "id_autor",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      },
+      {
+        "col": "id_idioma",
+        "table": "IDIOMA",
+        "target": "id_idioma"
+      },
+      {
+        "col": "id_archivo",
+        "table": "ARCHIVO",
+        "target": "id_archivo"
+      }
+    ],
+    "enums": {
+      "tipo": [
+        "DOCUMENTO",
+        "VIDEO",
+        "ENLACE",
+        "TAREA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_recurso | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_unidad | NUMBER | NO |  |\n| id_sesion | NUMBER | sí | opcional: recurso de una sesión concreta |\n| id_autor | NUMBER | NO |  |\n| titulo | VARCHAR2(200) | NO |  |\n| descripcion | VARCHAR2(1000) | sí |  |\n| tipo | VARCHAR2(10) | NO |  |\n| id_idioma | NUMBER | sí | idioma del recurso |\n| id_archivo | NUMBER | sí |  |\n| url_externa | VARCHAR2(500) | sí |  |\n| fecha_publicacion | TIMESTAMP | NO | default SYSTIMESTAMP |\n| eliminado | NUMBER(1) | NO | default 0 |\n| fecha_eliminacion | TIMESTAMP | sí |  |\n\n- **PK:** id_recurso\n- **FK:** id_unidad → UNIDAD.id_unidad; id_sesion → SESION.id_sesion; id_autor → USUARIO.id_usuario; id_idioma → IDIOMA.id_idioma; id_archivo → ARCHIVO.id_archivo\n- **Checks:** `(tipo IN ('DOCUMENTO','VIDEO','ENLACE','TAREA'))` · `( (tipo IN ('DOCUMENTO','VIDEO') AND id_archivo IS NOT NULL) OR (tipo = 'ENLACE' AND url_externa IS NOT NULL) OR (tipo = 'TAREA'))` · `(eliminado IN (0,1))`\n\n"
+  },
+  {
+    "name": "EVENTO",
+    "class": "Evento",
+    "cols": [
+      {
+        "name": "id_evento",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_comunidad",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_seccion",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_creador",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "titulo",
+        "type": "VARCHAR2(200)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "descripcion",
+        "type": "VARCHAR2(1000)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_inicio",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_fin",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "enlace",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_evento"
+    ],
+    "fks": [
+      {
+        "col": "id_comunidad",
+        "table": "COMUNIDAD",
+        "target": "id_comunidad"
+      },
+      {
+        "col": "id_seccion",
+        "table": "SECCION",
+        "target": "id_seccion"
+      },
+      {
+        "col": "id_creador",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_evento | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_comunidad | NUMBER | NO |  |\n| id_seccion | NUMBER | sí |  |\n| id_creador | NUMBER | NO |  |\n| titulo | VARCHAR2(200) | NO |  |\n| descripcion | VARCHAR2(1000) | sí |  |\n| fecha_inicio | TIMESTAMP | NO |  |\n| fecha_fin | TIMESTAMP | sí |  |\n| enlace | VARCHAR2(500) | sí |  |\n\n- **PK:** id_evento\n- **FK:** id_comunidad → COMUNIDAD.id_comunidad; id_seccion → SECCION.id_seccion; id_creador → USUARIO.id_usuario\n- **Checks:** `(fecha_fin IS NULL OR fecha_fin >= fecha_inicio)`\n\n"
+  },
+  {
+    "name": "MATRICULA",
+    "class": "Matricula",
+    "cols": [
+      {
+        "name": "id_matricula",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_seccion",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_usuario",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "estudiante |"
+      },
+      {
+        "name": "fecha_matricula",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(12)",
+        "required": true,
+        "notes": "default 'MATRICULADO' |"
+      },
+      {
+        "name": "nota_final",
+        "type": "NUMBER(4,2)",
+        "required": false,
+        "notes": "se calcula al cerrar la sección |"
+      },
+      {
+        "name": "fecha_retiro",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_matricula"
+    ],
+    "fks": [
+      {
+        "col": "id_seccion",
+        "table": "SECCION",
+        "target": "id_seccion"
+      },
+      {
+        "col": "id_usuario",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "MATRICULADO",
+        "RETIRADO",
+        "APROBADO",
+        "DESAPROBADO"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_matricula | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_seccion | NUMBER | NO |  |\n| id_usuario | NUMBER | NO | estudiante |\n| fecha_matricula | TIMESTAMP | NO | default SYSTIMESTAMP |\n| estado | VARCHAR2(12) | NO | default 'MATRICULADO' |\n| nota_final | NUMBER(4,2) | sí | se calcula al cerrar la sección |\n| fecha_retiro | TIMESTAMP | sí |  |\n\n- **PK:** id_matricula\n- **Únicos:** (id_seccion, id_usuario)\n- **FK:** id_seccion → SECCION.id_seccion; id_usuario → USUARIO.id_usuario\n- **Checks:** `(estado IN ('MATRICULADO','RETIRADO','APROBADO','DESAPROBADO'))` · `(nota_final IS NULL OR nota_final BETWEEN 0 AND 20)` · `((estado = 'RETIRADO' AND fecha_retiro IS NOT NULL) OR (estado <> 'RETIRADO' AND fecha_retiro IS NULL))`\n\n"
+  },
+  {
+    "name": "EVALUACION",
+    "class": "Evaluacion",
+    "cols": [
+      {
+        "name": "id_evaluacion",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_seccion",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_unidad",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "nombre",
+        "type": "VARCHAR2(100)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "tipo",
+        "type": "VARCHAR2(15)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "peso",
+        "type": "NUMBER(5,2)",
+        "required": true,
+        "notes": "% de la nota final |"
+      },
+      {
+        "name": "fecha",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_evaluacion"
+    ],
+    "fks": [
+      {
+        "col": "id_seccion",
+        "table": "SECCION",
+        "target": "id_seccion"
+      },
+      {
+        "col": "id_unidad",
+        "table": "UNIDAD",
+        "target": "id_unidad"
+      }
+    ],
+    "enums": {
+      "tipo": [
+        "PRACTICA",
+        "TAREA",
+        "EXAMEN",
+        "PROYECTO",
+        "PARTICIPACION"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_evaluacion | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_seccion | NUMBER | NO |  |\n| id_unidad | NUMBER | sí |  |\n| nombre | VARCHAR2(100) | NO |  |\n| tipo | VARCHAR2(15) | NO |  |\n| peso | NUMBER(5,2) | NO | % de la nota final |\n| fecha | TIMESTAMP | sí |  |\n\n- **PK:** id_evaluacion\n- **Únicos:** (id_seccion, nombre)\n- **FK:** id_seccion → SECCION.id_seccion; id_unidad → UNIDAD.id_unidad\n- **Checks:** `(tipo IN ('PRACTICA','TAREA','EXAMEN','PROYECTO','PARTICIPACION'))` · `(peso > 0 AND peso <= 100)`\n\n"
+  },
+  {
+    "name": "TAREA",
+    "class": "Tarea",
+    "cols": [
+      {
+        "name": "id_recurso",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_entrega",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "permite_tardias",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0 |"
+      },
+      {
+        "name": "id_evaluacion",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "si la tarea se califica |"
+      }
+    ],
+    "pk": [
+      "id_recurso"
+    ],
+    "fks": [
+      {
+        "col": "id_recurso",
+        "table": "RECURSO",
+        "target": "id_recurso"
+      },
+      {
+        "col": "id_evaluacion",
+        "table": "EVALUACION",
+        "target": "id_evaluacion"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_recurso | NUMBER | NO |  |\n| fecha_entrega | TIMESTAMP | NO |  |\n| permite_tardias | NUMBER(1) | NO | default 0 |\n| id_evaluacion | NUMBER | sí | si la tarea se califica |\n\n- **PK:** id_recurso\n- **Únicos:** (id_evaluacion)\n- **FK:** id_recurso → RECURSO.id_recurso; id_evaluacion → EVALUACION.id_evaluacion\n- **Checks:** `(permite_tardias IN (0,1))`\n\n"
+  },
+  {
+    "name": "ENTREGA_TAREA",
+    "class": "EntregaTarea",
+    "cols": [
+      {
+        "name": "id_entrega",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_recurso",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "la tarea |"
+      },
+      {
+        "name": "id_matricula",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "el alumno en esa sección |"
+      },
+      {
+        "name": "id_archivo",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "comentario",
+        "type": "VARCHAR2(1000)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_entrega",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'ENTREGADA' |"
+      }
+    ],
+    "pk": [
+      "id_entrega"
+    ],
+    "fks": [
+      {
+        "col": "id_recurso",
+        "table": "TAREA",
+        "target": "id_recurso"
+      },
+      {
+        "col": "id_matricula",
+        "table": "MATRICULA",
+        "target": "id_matricula"
+      },
+      {
+        "col": "id_archivo",
+        "table": "ARCHIVO",
+        "target": "id_archivo"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "ENTREGADA",
+        "TARDIA",
+        "CALIFICADA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_entrega | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_recurso | NUMBER | NO | la tarea |\n| id_matricula | NUMBER | NO | el alumno en esa sección |\n| id_archivo | NUMBER | sí |  |\n| comentario | VARCHAR2(1000) | sí |  |\n| fecha_entrega | TIMESTAMP | NO | default SYSTIMESTAMP |\n| estado | VARCHAR2(10) | NO | default 'ENTREGADA' |\n\n- **PK:** id_entrega\n- **Únicos:** (id_recurso, id_matricula)\n- **FK:** id_recurso → TAREA.id_recurso; id_matricula → MATRICULA.id_matricula; id_archivo → ARCHIVO.id_archivo\n- **Checks:** `(id_archivo IS NOT NULL OR comentario IS NOT NULL)` · `(estado IN ('ENTREGADA','TARDIA','CALIFICADA'))`\n\n"
+  },
+  {
+    "name": "NOTA",
+    "class": "Nota",
+    "cols": [
+      {
+        "name": "id_nota",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_matricula",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_evaluacion",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "calificacion",
+        "type": "NUMBER(4,2)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "comentario_docente",
+        "type": "VARCHAR2(1000)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_registrado_por",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "docente |"
+      },
+      {
+        "name": "fecha_registro",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "fecha_modificacion",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_nota"
+    ],
+    "fks": [
+      {
+        "col": "id_matricula",
+        "table": "MATRICULA",
+        "target": "id_matricula"
+      },
+      {
+        "col": "id_evaluacion",
+        "table": "EVALUACION",
+        "target": "id_evaluacion"
+      },
+      {
+        "col": "id_registrado_por",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_nota | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_matricula | NUMBER | NO |  |\n| id_evaluacion | NUMBER | NO |  |\n| calificacion | NUMBER(4,2) | NO |  |\n| comentario_docente | VARCHAR2(1000) | sí |  |\n| id_registrado_por | NUMBER | NO | docente |\n| fecha_registro | TIMESTAMP | NO | default SYSTIMESTAMP |\n| fecha_modificacion | TIMESTAMP | sí |  |\n\n- **PK:** id_nota\n- **Únicos:** (id_matricula, id_evaluacion)\n- **FK:** id_matricula → MATRICULA.id_matricula; id_evaluacion → EVALUACION.id_evaluacion; id_registrado_por → USUARIO.id_usuario\n- **Checks:** `(calificacion BETWEEN 0 AND 20)`\n\n"
+  },
+  {
+    "name": "ASISTENCIA",
+    "class": "Asistencia",
+    "cols": [
+      {
+        "name": "id_asistencia",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_sesion",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_matricula",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(12)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "observacion",
+        "type": "VARCHAR2(300)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_registrado_por",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_registro",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      }
+    ],
+    "pk": [
+      "id_asistencia"
+    ],
+    "fks": [
+      {
+        "col": "id_sesion",
+        "table": "SESION",
+        "target": "id_sesion"
+      },
+      {
+        "col": "id_matricula",
+        "table": "MATRICULA",
+        "target": "id_matricula"
+      },
+      {
+        "col": "id_registrado_por",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "PRESENTE",
+        "TARDANZA",
+        "FALTA",
+        "JUSTIFICADA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_asistencia | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_sesion | NUMBER | NO |  |\n| id_matricula | NUMBER | NO |  |\n| estado | VARCHAR2(12) | NO |  |\n| observacion | VARCHAR2(300) | sí |  |\n| id_registrado_por | NUMBER | NO |  |\n| fecha_registro | TIMESTAMP | NO | default SYSTIMESTAMP |\n\n- **PK:** id_asistencia\n- **Únicos:** (id_sesion, id_matricula)\n- **FK:** id_sesion → SESION.id_sesion; id_matricula → MATRICULA.id_matricula; id_registrado_por → USUARIO.id_usuario\n- **Checks:** `(estado IN ('PRESENTE','TARDANZA','FALTA','JUSTIFICADA'))`\n\n"
+  },
+  {
+    "name": "PUBLICACION",
+    "class": "Publicacion",
+    "cols": [
+      {
+        "name": "id_publicacion",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_comunidad",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_seccion",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "opcional: publicación de una sección |"
+      },
+      {
+        "name": "id_autor",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "titulo",
+        "type": "VARCHAR2(200)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "contenido",
+        "type": "CLOB",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "estado",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "default 'APROBADA' |"
+      },
+      {
+        "name": "id_moderador",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_moderacion",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_publicacion",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP; RN09 |"
+      },
+      {
+        "name": "fecha_edicion",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "eliminado",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0; RN10 |"
+      }
+    ],
+    "pk": [
+      "id_publicacion"
+    ],
+    "fks": [
+      {
+        "col": "id_comunidad",
+        "table": "COMUNIDAD",
+        "target": "id_comunidad"
+      },
+      {
+        "col": "id_seccion",
+        "table": "SECCION",
+        "target": "id_seccion"
+      },
+      {
+        "col": "id_autor",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      },
+      {
+        "col": "id_moderador",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "estado": [
+        "PENDIENTE",
+        "APROBADA",
+        "RECHAZADA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_publicacion | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_comunidad | NUMBER | NO |  |\n| id_seccion | NUMBER | sí | opcional: publicación de una sección |\n| id_autor | NUMBER | NO |  |\n| titulo | VARCHAR2(200) | sí |  |\n| contenido | CLOB | sí |  |\n| estado | VARCHAR2(10) | NO | default 'APROBADA' |\n| id_moderador | NUMBER | sí |  |\n| fecha_moderacion | TIMESTAMP | sí |  |\n| fecha_publicacion | TIMESTAMP | NO | default SYSTIMESTAMP; RN09 |\n| fecha_edicion | TIMESTAMP | sí |  |\n| eliminado | NUMBER(1) | NO | default 0; RN10 |\n\n- **PK:** id_publicacion\n- **FK:** id_comunidad → COMUNIDAD.id_comunidad; id_seccion → SECCION.id_seccion; id_autor → USUARIO.id_usuario; id_moderador → USUARIO.id_usuario\n- **Checks:** `(titulo IS NOT NULL OR contenido IS NOT NULL)` · `(estado IN ('PENDIENTE','APROBADA','RECHAZADA'))` · `(eliminado IN (0,1))`\n\n"
+  },
+  {
+    "name": "PUBLICACION_ARCHIVO",
+    "class": "PublicacionArchivo",
+    "cols": [
+      {
+        "name": "id_publicacion",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_archivo",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "orden",
+        "type": "NUMBER(2)",
+        "required": true,
+        "notes": "default 1 |"
+      }
+    ],
+    "pk": [
+      "id_publicacion",
+      "id_archivo"
+    ],
+    "fks": [
+      {
+        "col": "id_publicacion",
+        "table": "PUBLICACION",
+        "target": "id_publicacion"
+      },
+      {
+        "col": "id_archivo",
+        "table": "ARCHIVO",
+        "target": "id_archivo"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_publicacion | NUMBER | NO |  |\n| id_archivo | NUMBER | NO |  |\n| orden | NUMBER(2) | NO | default 1 |\n\n- **PK:** id_publicacion, id_archivo\n- **FK:** id_publicacion → PUBLICACION.id_publicacion; id_archivo → ARCHIVO.id_archivo\n\n"
+  },
+  {
+    "name": "COMENTARIO",
+    "class": "Comentario",
+    "cols": [
+      {
+        "name": "id_comentario",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_publicacion",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_recurso",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_comentario_padre",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "id_autor",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "contenido",
+        "type": "VARCHAR2(2000)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "fecha_comentario",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "fecha_edicion",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "eliminado",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0 |"
+      },
+      {
+        "name": "id_eliminado_por",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "RF29: el docente puede eliminar |"
+      }
+    ],
+    "pk": [
+      "id_comentario"
+    ],
+    "fks": [
+      {
+        "col": "id_publicacion",
+        "table": "PUBLICACION",
+        "target": "id_publicacion"
+      },
+      {
+        "col": "id_recurso",
+        "table": "RECURSO",
+        "target": "id_recurso"
+      },
+      {
+        "col": "id_comentario_padre",
+        "table": "COMENTARIO",
+        "target": "id_comentario"
+      },
+      {
+        "col": "id_autor",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      },
+      {
+        "col": "id_eliminado_por",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_comentario | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_publicacion | NUMBER | sí |  |\n| id_recurso | NUMBER | sí |  |\n| id_comentario_padre | NUMBER | sí |  |\n| id_autor | NUMBER | NO |  |\n| contenido | VARCHAR2(2000) | NO |  |\n| fecha_comentario | TIMESTAMP | NO | default SYSTIMESTAMP |\n| fecha_edicion | TIMESTAMP | sí |  |\n| eliminado | NUMBER(1) | NO | default 0 |\n| id_eliminado_por | NUMBER | sí | RF29: el docente puede eliminar |\n\n- **PK:** id_comentario\n- **FK:** id_publicacion → PUBLICACION.id_publicacion; id_recurso → RECURSO.id_recurso; id_comentario_padre → COMENTARIO.id_comentario; id_autor → USUARIO.id_usuario; id_eliminado_por → USUARIO.id_usuario\n- **Checks:** `( (id_publicacion IS NOT NULL AND id_recurso IS NULL) OR (id_publicacion IS NULL AND id_recurso IS NOT NULL))` · `(TRIM(contenido) IS NOT NULL)` · `(eliminado IN (0,1))`\n\n"
+  },
+  {
+    "name": "NOTIFICACION",
+    "class": "Notificacion",
+    "cols": [
+      {
+        "name": "id_notificacion",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_destinatario",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "receptor |"
+      },
+      {
+        "name": "id_emisor",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "NULL = generada por el sistema |"
+      },
+      {
+        "name": "id_comunidad",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "tipo",
+        "type": "VARCHAR2(30)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "titulo",
+        "type": "VARCHAR2(200)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "contenido",
+        "type": "VARCHAR2(500)",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "entidad_tipo",
+        "type": "VARCHAR2(30)",
+        "required": false,
+        "notes": "'PUBLICACION','COMENTARIO','SOLICITUD',... |"
+      },
+      {
+        "name": "entidad_id",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "id del objeto para abrirlo desde la notificación |"
+      },
+      {
+        "name": "leida",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0 |"
+      },
+      {
+        "name": "fecha_creacion",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "fecha_lectura",
+        "type": "TIMESTAMP",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_notificacion"
+    ],
+    "fks": [
+      {
+        "col": "id_destinatario",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      },
+      {
+        "col": "id_emisor",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      },
+      {
+        "col": "id_comunidad",
+        "table": "COMUNIDAD",
+        "target": "id_comunidad"
+      }
+    ],
+    "enums": {
+      "tipo": [
+        "SOLICITUD_INGRESO",
+        "SOLICITUD_RESPUESTA",
+        "NUEVA_PUBLICACION",
+        "NUEVO_COMENTARIO",
+        "NUEVO_RECURSO",
+        "EVENTO",
+        "MENSAJE",
+        "SISTEMA"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_notificacion | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_destinatario | NUMBER | NO | receptor |\n| id_emisor | NUMBER | sí | NULL = generada por el sistema |\n| id_comunidad | NUMBER | sí |  |\n| tipo | VARCHAR2(30) | NO |  |\n| titulo | VARCHAR2(200) | NO |  |\n| contenido | VARCHAR2(500) | sí |  |\n| entidad_tipo | VARCHAR2(30) | sí | 'PUBLICACION','COMENTARIO','SOLICITUD',... |\n| entidad_id | NUMBER | sí | id del objeto para abrirlo desde la notificación |\n| leida | NUMBER(1) | NO | default 0 |\n| fecha_creacion | TIMESTAMP | NO | default SYSTIMESTAMP |\n| fecha_lectura | TIMESTAMP | sí |  |\n\n- **PK:** id_notificacion\n- **FK:** id_destinatario → USUARIO.id_usuario; id_emisor → USUARIO.id_usuario; id_comunidad → COMUNIDAD.id_comunidad\n- **Checks:** `(tipo IN ('SOLICITUD_INGRESO','SOLICITUD_RESPUESTA', 'NUEVA_PUBLICACION','NUEVO_COMENTARIO','NUEVO_RECURSO','EVENTO','MENSAJE','SISTEMA'))` · `((leida = 0 AND fecha_lectura IS NULL) OR (leida = 1 AND fecha_lectura IS NOT NULL))`\n\n"
+  },
+  {
+    "name": "MENSAJE",
+    "class": "Mensaje",
+    "cols": [
+      {
+        "name": "id_mensaje",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "id_emisor",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_receptor",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "contenido",
+        "type": "VARCHAR2(4000)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "leido",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0 |"
+      },
+      {
+        "name": "fecha_envio",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "eliminado",
+        "type": "NUMBER(1)",
+        "required": true,
+        "notes": "default 0 |"
+      }
+    ],
+    "pk": [
+      "id_mensaje"
+    ],
+    "fks": [
+      {
+        "col": "id_emisor",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      },
+      {
+        "col": "id_receptor",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {},
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_mensaje | NUMBER (IDENTITY) | NO | PK autogenerada |\n| id_emisor | NUMBER | NO |  |\n| id_receptor | NUMBER | NO |  |\n| contenido | VARCHAR2(4000) | NO |  |\n| leido | NUMBER(1) | NO | default 0 |\n| fecha_envio | TIMESTAMP | NO | default SYSTIMESTAMP |\n| eliminado | NUMBER(1) | NO | default 0 |\n\n- **PK:** id_mensaje\n- **FK:** id_emisor → USUARIO.id_usuario; id_receptor → USUARIO.id_usuario\n- **Checks:** `(id_emisor <> id_receptor)` · `(TRIM(contenido) IS NOT NULL)` · `(leido IN (0,1))` · `(eliminado IN (0,1))`\n\n"
+  },
+  {
+    "name": "AUDITORIA",
+    "class": "Auditoria",
+    "cols": [
+      {
+        "name": "id_auditoria",
+        "type": "NUMBER (IDENTITY)",
+        "required": true,
+        "notes": "PK autogenerada |"
+      },
+      {
+        "name": "tabla",
+        "type": "VARCHAR2(30)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_registro",
+        "type": "NUMBER",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "accion",
+        "type": "VARCHAR2(10)",
+        "required": true,
+        "notes": "|"
+      },
+      {
+        "name": "id_usuario",
+        "type": "NUMBER",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "fecha",
+        "type": "TIMESTAMP",
+        "required": true,
+        "notes": "default SYSTIMESTAMP |"
+      },
+      {
+        "name": "valores_antes",
+        "type": "CLOB",
+        "required": false,
+        "notes": "|"
+      },
+      {
+        "name": "valores_despues",
+        "type": "CLOB",
+        "required": false,
+        "notes": "|"
+      }
+    ],
+    "pk": [
+      "id_auditoria"
+    ],
+    "fks": [
+      {
+        "col": "id_usuario",
+        "table": "USUARIO",
+        "target": "id_usuario"
+      }
+    ],
+    "enums": {
+      "accion": [
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ]
+    },
+    "details": "\n| Columna | Tipo | Nulo | Default / notas |\n|---|---|---|---|\n| id_auditoria | NUMBER (IDENTITY) | NO | PK autogenerada |\n| tabla | VARCHAR2(30) | NO |  |\n| id_registro | NUMBER | NO |  |\n| accion | VARCHAR2(10) | NO |  |\n| id_usuario | NUMBER | sí |  |\n| fecha | TIMESTAMP | NO | default SYSTIMESTAMP |\n| valores_antes | CLOB | sí |  |\n| valores_despues | CLOB | sí |  |\n\n- **PK:** id_auditoria\n- **FK:** id_usuario → USUARIO.id_usuario\n- **Checks:** `(accion IN ('INSERT','UPDATE','DELETE'))` · `(valores_antes IS JSON)` · `(valores_despues IS JSON)`\n\n"
+  }
+]

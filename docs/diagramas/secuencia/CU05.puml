@@ -1,0 +1,21 @@
+@startuml
+title CU05 Crear comunidad
+autonumber
+actor Cliente
+control ComunidadController as Controller
+control ComunidadServiceImpl as Service
+database Oracle
+Cliente -> Controller : POST /comunidades
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : guardar(null, ComunidadDatos)
+Service -> SpringSecurity : exigir ROLE_ADMIN
+Service -> CategoriaRepository : existsById(idCategoria)
+opt imagen suministrada
+ Service -> AccessService : ownFile(idImagen)
+end
+Service -> TextPolicy : validar nombre y descripción
+Service -> ComunidadRepository : save(ACTIVA, creador, fecha)
+ComunidadRepository -> Oracle : INSERT COMUNIDAD, IDENTITY
+Service --> Controller : Comunidad
+Controller --> Cliente : 201
+@enduml

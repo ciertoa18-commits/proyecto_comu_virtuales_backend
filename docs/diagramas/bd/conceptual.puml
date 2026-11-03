@@ -1,0 +1,91 @@
+@startuml
+title Modelo conceptual de datos — Entidades del dominio
+hide members
+entity Rol
+entity Categoria
+entity Idioma
+entity PuebloOriginario
+entity Usuario
+entity Archivo
+entity Comunidad
+entity MiembroComunidad
+entity SolicitudIngreso
+entity PeriodoAcademico
+entity Curso
+entity Seccion
+entity Unidad
+entity Sesion
+entity Recurso
+entity Evento
+entity Matricula
+entity Evaluacion
+entity Tarea
+entity EntregaTarea
+entity Nota
+entity Asistencia
+entity Publicacion
+entity PublicacionArchivo
+entity Comentario
+entity Notificacion
+entity Mensaje
+entity Auditoria
+Usuario }o--|| Rol : id_rol
+Usuario }o--|| Idioma : id_idioma_pref
+Archivo }o--|| Usuario : id_subido_por
+Comunidad }o--|| Categoria : id_categoria
+Comunidad }o--|| Idioma : id_idioma
+Comunidad }o--|| PuebloOriginario : id_pueblo
+Comunidad }o--|| Archivo : id_imagen
+Comunidad }o--|| Usuario : id_creador
+MiembroComunidad }o--|| Comunidad : id_comunidad
+MiembroComunidad }o--|| Usuario : id_usuario
+SolicitudIngreso }o--|| Comunidad : id_comunidad
+SolicitudIngreso }o--|| Usuario : id_usuario
+SolicitudIngreso }o--|| Usuario : id_revisor
+Curso }o--|| Comunidad : id_comunidad
+Seccion }o--|| Curso : id_curso
+Seccion }o--|| PeriodoAcademico : id_periodo
+Seccion }o--|| Usuario : id_docente
+Unidad }o--|| Seccion : id_seccion
+Sesion }o--|| Unidad : id_unidad
+Recurso }o--|| Unidad : id_unidad
+Recurso }o--|| Sesion : id_sesion
+Recurso }o--|| Usuario : id_autor
+Recurso }o--|| Idioma : id_idioma
+Recurso }o--|| Archivo : id_archivo
+Evento }o--|| Comunidad : id_comunidad
+Evento }o--|| Seccion : id_seccion
+Evento }o--|| Usuario : id_creador
+Matricula }o--|| Seccion : id_seccion
+Matricula }o--|| Usuario : id_usuario
+Evaluacion }o--|| Seccion : id_seccion
+Evaluacion }o--|| Unidad : id_unidad
+Tarea }o--|| Recurso : id_recurso
+Tarea }o--|| Evaluacion : id_evaluacion
+EntregaTarea }o--|| Tarea : id_recurso
+EntregaTarea }o--|| Matricula : id_matricula
+EntregaTarea }o--|| Archivo : id_archivo
+Nota }o--|| Matricula : id_matricula
+Nota }o--|| Evaluacion : id_evaluacion
+Nota }o--|| Usuario : id_registrado_por
+Asistencia }o--|| Sesion : id_sesion
+Asistencia }o--|| Matricula : id_matricula
+Asistencia }o--|| Usuario : id_registrado_por
+Publicacion }o--|| Comunidad : id_comunidad
+Publicacion }o--|| Seccion : id_seccion
+Publicacion }o--|| Usuario : id_autor
+Publicacion }o--|| Usuario : id_moderador
+PublicacionArchivo }o--|| Publicacion : id_publicacion
+PublicacionArchivo }o--|| Archivo : id_archivo
+Comentario }o--|| Publicacion : id_publicacion
+Comentario }o--|| Recurso : id_recurso
+Comentario }o--|| Comentario : id_comentario_padre
+Comentario }o--|| Usuario : id_autor
+Comentario }o--|| Usuario : id_eliminado_por
+Notificacion }o--|| Usuario : id_destinatario
+Notificacion }o--|| Usuario : id_emisor
+Notificacion }o--|| Comunidad : id_comunidad
+Mensaje }o--|| Usuario : id_emisor
+Mensaje }o--|| Usuario : id_receptor
+Auditoria }o--|| Usuario : id_usuario
+@enduml

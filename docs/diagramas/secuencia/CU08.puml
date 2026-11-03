@@ -1,0 +1,20 @@
+@startuml
+title CU08 Acceder a clases virtuales
+autonumber
+actor Cliente
+control AcademicoController as Controller
+control AccessService as Service
+database Oracle
+Cliente -> Controller : GET /me/clases
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> MatriculaRepository : findByIdUsuario(Actor.id)
+loop matrículas no retiradas
+ Controller -> Service : enrolled(idSeccion)
+ Service -> SeccionRepository : comprobar curso y comunidad activos
+ Service -> MiembroComunidadRepository : comprobar pertenencia
+ Controller -> UnidadRepository : findByIdSeccion(id)
+ Controller -> SesionRepository : findByIdUnidad(id)
+ Controller -> Controller : enlaceClase o salaVirtual de sección
+end
+Controller --> Cliente : 200 + clases y enlaces
+@enduml

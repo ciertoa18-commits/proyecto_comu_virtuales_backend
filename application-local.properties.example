@@ -1,0 +1,18 @@
+# Copia este archivo a .local/application-local.properties y completa tus datos.
+# La carpeta .local/ está excluida de Git: aquí van las contraseñas, nunca en el repositorio.
+
+spring.datasource.url=jdbc:oracle:thin:@//<IP_O_HOST>:1521/orcl
+spring.datasource.username=comunidades
+spring.datasource.password=<contraseña de Oracle>
+
+# Clave para firmar los tokens JWT (Base64, 32 bytes o más)
+app.jwt.secret=<clave Base64>
+
+server.address=127.0.0.1
+
+# --- Correo para "Recuperar contraseña" (opcional) ---
+# Si se deja comentado, el código de 6 dígitos aparece en la consola del backend.
+#spring.mail.host=smtp.gmail.com
+#spring.mail.port=587
+#spring.mail.username=tucorreo@gmail.com
+#spring.mail.password=<contraseña de aplicación de 16 letras>

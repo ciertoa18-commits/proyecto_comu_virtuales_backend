@@ -1,0 +1,21 @@
+@startuml
+title CU12 Gestionar notificaciones
+autonumber
+actor Cliente
+control ComunicacionController as Controller
+control NotificationService as Service
+database Oracle
+Cliente -> Controller : PUT /notificaciones/{id}/leida
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : read(id)
+Service -> NotificacionRepository : findById(id)
+alt destinatario distinto de Actor.id
+ Service --> Controller : acceso denegado
+ Controller --> Cliente : 403
+else destinatario propio
+ Service -> NotificacionRepository : leida=true, fechaLectura si faltaba
+ Service -> Oracle : COMMIT
+ Service --> Controller : operación completada
+ Controller --> Cliente : 204
+end
+@enduml

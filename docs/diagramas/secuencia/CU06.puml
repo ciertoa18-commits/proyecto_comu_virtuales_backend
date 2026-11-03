@@ -1,0 +1,28 @@
+@startuml
+title CU06 Gestionar miembros
+autonumber
+actor Cliente
+control ComunidadController as Controller
+control ComunidadServiceImpl as Service
+database Oracle
+Cliente -> Controller : PUT /solicitudes/{id}
+note over Controller : Spring Security valida JWT, expiración, revocación y cuenta activa antes del controlador
+Controller -> Service : resolver(id, Resolucion)
+Service -> SpringSecurity : exigir ROLE_ADMIN
+Service -> SolicitudIngresoRepository : bloquear(id)
+Service -> ComunidadRepository : bloquear(comunidad)
+alt solicitud ya resuelta
+ Service --> Controller : conflicto
+ Controller --> Cliente : 409
+else aprobar
+ Service -> MiembroComunidadRepository : activar miembro
+ Service -> SolicitudIngresoRepository : estado=APROBADA, revisor y fecha
+else rechazar
+ Service -> TextPolicy : exigir motivo
+ Service -> SolicitudIngresoRepository : estado=RECHAZADA, revisor, fecha, motivo
+end
+Service -> NotificationService : send(SOLICITUD_RESPUESTA)
+Service -> Oracle : COMMIT
+Service --> Controller : SolicitudIngreso
+Controller --> Cliente : 200
+@enduml
