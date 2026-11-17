@@ -1,0 +1,36 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Arial, fontSize: 14px, actorBkg: '#DAE8FC', actorBorder: '#6C8EBF', noteBkgColor: '#FFF2CC', noteBorderColor: '#D6B656' }
+  sequence: { mirrorActors: false, showSequenceNumbers: true, wrap: true }
+---
+sequenceDiagram
+    actor A as Administrador
+    participant C as FormularioComunidad
+    participant S as ComunidadApi / CatalogoApi
+    participant AC as ArchivoController
+    participant CC as ComunidadController
+    participant CS as ComunidadServiceImpl
+    participant R as Repositories
+    A->>C: abre "Nueva comunidad"
+    opt sube imagen
+        A->>C: elige imagen
+        C->>S: subirArchivo(imagen)
+        S->>AC: POST /api/v1/archivos (multipart)
+        AC-->>C: 201 {idArchivo}
+    end
+    A->>C: nombre, descripción, categoría, idioma, pueblo, visibilidad, moderación
+    C->>S: crear(datos)
+    S->>CC: POST /api/v1/comunidades
+    CC->>CC: @PreAuthorize("hasRole('ADMIN')")
+    CC->>CS: guardar(null, ComunidadDatos)
+    CS->>R: valida categoría (obligatoria), idioma y pueblo
+    CS->>R: ComunidadRepository.save(ACTIVA, creador = admin)
+    CC-->>C: 201 comunidad creada
+    opt editar / eliminar
+        C->>S: editar(id, datos) / eliminar(id)
+        S->>CC: PUT / DELETE /api/v1/comunidades/{id}
+        CC->>CS: guardar(id, datos) / desactivar(id)
+        CS->>R: actualiza o pone estado = INACTIVA
+        CC-->>C: 200 / 204
+    end

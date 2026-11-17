@@ -1,0 +1,43 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Arial, fontSize: 14px, actorBkg: '#DAE8FC', actorBorder: '#6C8EBF', noteBkgColor: '#FFF2CC', noteBorderColor: '#D6B656' }
+  sequence: { mirrorActors: false, showSequenceNumbers: true, wrap: true }
+---
+sequenceDiagram
+    actor D as Docente / Estudiante
+    participant C as TabMuro / PaginaPublicacion
+    participant S as ComunidadApi
+    participant PC as PublicacionController
+    participant PS as PublicacionServiceImpl
+    participant NS as NotificationService
+    participant R as Repositories
+    D->>C: escribe título, contenido y adjunta archivos
+    C->>S: publicar(idComunidad, datos)
+    S->>PC: POST /api/v1/comunidades/{id}/publicaciones
+    PC->>PS: guardar(comunidad, null, PublicacionDatos)
+    PS->>PS: AccessService.member(comunidad) y TextPolicy.clean(texto)
+    alt comunidad con moderación previa
+        PS->>R: PublicacionRepository.save(PENDIENTE)
+    else sin moderación
+        PS->>R: PublicacionRepository.save(APROBADA)
+        PS->>NS: broadcast(comunidad, NUEVA_PUBLICACION)
+    end
+    PS->>R: PublicacionArchivoRepository.save(adjuntos)
+    PC-->>C: 201 publicación
+    opt moderar
+        D->>C: moderador aprueba o rechaza
+        C->>S: moderar(id, estado)
+        S->>PC: PUT /api/v1/publicaciones/{id}/moderacion
+        PC->>PS: moderar(id, Moderacion)
+        PC-->>C: 200
+    end
+    opt comentar o responder
+        D->>C: escribe comentario
+        C->>S: comentar(id, contenido, padre)
+        S->>PC: POST /api/v1/publicaciones/{id}/comentarios
+        PC->>PS: comentar(id, ComentarioDatos)
+        PS->>R: ComentarioRepository.save
+        PS->>NS: comment(autor, comunidad, id)
+        PC-->>C: 201 comentario
+    end

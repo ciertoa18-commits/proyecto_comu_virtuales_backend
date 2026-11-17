@@ -1,0 +1,33 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Arial, fontSize: 14px, actorBkg: '#DAE8FC', actorBorder: '#6C8EBF', noteBkgColor: '#FFF2CC', noteBorderColor: '#D6B656' }
+  sequence: { mirrorActors: false, showSequenceNumbers: true, wrap: true }
+---
+sequenceDiagram
+    actor U as Estudiante / Docente
+    participant C as ListaComunidades
+    participant S as ComunidadApi / CatalogoApi
+    participant CC as ComunidadController
+    participant CS as ComunidadServiceImpl
+    participant R as ComunidadRepository
+    participant DB as Oracle (COMUNIDAD)
+    U->>C: abre "Comunidades"
+    C->>S: categorias$ / idiomas$
+    S->>CC: GET /api/v1/categorias, /idiomas
+    CC-->>C: listas para los filtros
+    U->>C: escribe palabra clave y elige filtros
+    C->>S: listar({q, categoria, idioma, page})
+    S->>CC: GET /api/v1/comunidades?q=&categoria=&idioma=
+    CC->>CS: buscar(q, categoria, idioma, page, size)
+    CS->>R: findAll(especificación: estado = ACTIVA + filtros, página)
+    R->>DB: SELECT ... WHERE estado='ACTIVA'
+    DB-->>R: filas
+    CS-->>CC: Page<Comunidad>
+    CC-->>C: 200 página de comunidades
+    C-->>U: tarjetas con nombre, categoría, idioma y visibilidad
+    opt recomendadas
+        C->>S: recomendadas()
+        S->>CC: GET /api/v1/comunidades/recomendadas
+        CC-->>C: comunidades activas donde aún no es miembro
+    end

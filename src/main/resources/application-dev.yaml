@@ -1,0 +1,8 @@
+# Perfil de desarrollo; las credenciales se cargan desde .local/ o el entorno.
+spring:
+  jpa:
+    show-sql: ${SHOW_SQL:false}
+
+logging:
+  level:
+    pe.perueduca.comunidades: ${APP_LOG_LEVEL:INFO}

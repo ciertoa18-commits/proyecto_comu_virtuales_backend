@@ -1,0 +1,42 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Arial, fontSize: 14px, actorBkg: '#DAE8FC', actorBorder: '#6C8EBF', noteBkgColor: '#FFF2CC', noteBorderColor: '#D6B656' }
+  sequence: { mirrorActors: false, showSequenceNumbers: true, wrap: true }
+---
+sequenceDiagram
+    actor U as Usuario
+    participant C as Perfil (componente)
+    participant S as CuentaApi
+    participant PC as PerfilController
+    participant PS as PerfilService
+    participant AR as ArchivoService
+    participant R as UsuarioRepository
+    U->>C: abre "Mi perfil"
+    C->>S: yo()
+    S->>PC: GET /api/v1/me
+    PC->>PS: me()
+    PS->>R: findById(idUsuario)
+    PC-->>C: datos del perfil (sin contraseña)
+    U->>C: edita nombres, teléfono, idioma
+    C->>S: guardarPerfil(datos)
+    S->>PC: PUT /api/v1/me
+    PC->>PS: update(Perfil)
+    PS->>R: save(usuario)
+    PC-->>C: 200 perfil actualizado
+    opt cambia la foto
+        U->>C: elige imagen
+        C->>S: cambiarFoto(archivo)
+        S->>PC: PUT /api/v1/me/foto
+        PC->>AR: subir(archivo, foto=true)
+        AR->>AR: validar(extensión jpg/png, tamaño ≤ 2 MB, contenido)
+        PC->>PS: foto(idArchivo)
+        PC-->>C: 200 nueva foto
+    end
+    opt cambia la contraseña
+        C->>S: cambiarPassword(actual, nueva)
+        S->>PC: PUT /api/v1/me/password
+        PC->>PS: password(Password)
+        PS->>PS: verifica la actual con BCrypt y cifra la nueva
+        PC-->>C: 204
+    end

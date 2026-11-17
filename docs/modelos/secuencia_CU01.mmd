@@ -1,0 +1,56 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Arial, fontSize: 14px, actorBkg: '#DAE8FC', actorBorder: '#6C8EBF', noteBkgColor: '#FFF2CC', noteBorderColor: '#D6B656' }
+  sequence: { mirrorActors: false, showSequenceNumbers: true, wrap: true }
+---
+sequenceDiagram
+    actor U as Usuario
+    participant C as Login / Registro<br/>(componente Angular)
+    participant S as SesionService / CuentaApi<br/>(servicio Angular)
+    participant AC as AuthController / CuentaController
+    participant AS as AuthServiceImpl / CuentaService
+    participant R as UsuarioRepository
+    participant DB as Oracle (USUARIO)
+    rect rgb(240,246,255)
+    Note over U,DB: Iniciar sesión
+    U->>C: ingresa correo y contraseña
+    C->>S: ingresar(correo, password)
+    S->>AC: POST /api/v1/auth/login
+    AC->>AS: login(Login)
+    AS->>R: bloquearPorCorreo(correo)
+    R->>DB: SELECT ... FOR UPDATE
+    DB-->>R: usuario
+    alt cuenta PENDIENTE o bloqueada
+        AS-->>AC: motivo
+        AC-->>S: 403 CUENTA_PENDIENTE / 423 CUENTA_BLOQUEADA
+    else contraseña incorrecta (BCrypt)
+        AS->>R: intentosFallidos + 1 (a los 5 bloquea 15 min)
+        AC-->>S: 401 credenciales inválidas
+    else contraseña correcta
+        AS->>R: reinicia intentos
+        AS->>AS: JwtService.issue(correo)
+        AC-->>S: 200 {token, rol, idUsuario}
+        S-->>C: guarda la sesión
+        C-->>U: muestra el portal según su rol
+    end
+    end
+    rect rgb(255,248,235)
+    Note over U,DB: Crear cuenta (estudiante o docente)
+    U->>C: elige rol y llena datos
+    C->>S: registrar(datos)
+    S->>AC: POST /api/v1/auth/registro
+    AC->>AS: registrar(Registro)
+    AS->>AS: validarDominio(correo, rol)
+    alt dominio no corresponde al rol
+        AC-->>S: 422 "Los estudiantes deben usar @perueduca.pe"
+    else correcto
+        AS->>R: save(usuario) ACTIVO si es estudiante / PENDIENTE si es docente
+        R->>DB: INSERT USUARIO
+        opt es docente
+            AS->>DB: INSERT NOTIFICACION a los administradores
+        end
+        AC-->>S: 201 {estado, mensaje}
+        S-->>C: muestra el resultado
+    end
+    end

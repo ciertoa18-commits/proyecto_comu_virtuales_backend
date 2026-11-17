@@ -1,0 +1,39 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Arial, fontSize: 14px, actorBkg: '#DAE8FC', actorBorder: '#6C8EBF', noteBkgColor: '#FFF2CC', noteBorderColor: '#D6B656' }
+  sequence: { mirrorActors: false, showSequenceNumbers: true, wrap: true }
+---
+sequenceDiagram
+    actor A as Administrador / Docente moderador
+    participant C as Solicitudes / TabMiembros
+    participant S as ComunidadApi
+    participant CC as ComunidadController
+    participant CS as ComunidadServiceImpl
+    participant NS as NotificationService
+    participant R as Repositories
+    A->>C: ve solicitudes pendientes
+    C->>S: solicitudes('PENDIENTE')
+    S->>CC: GET /api/v1/solicitudes?estado=PENDIENTE
+    CC-->>C: lista
+    A->>C: aprueba o rechaza (con motivo)
+    C->>S: resolver(id, aprobar, motivo)
+    S->>CC: PUT /api/v1/solicitudes/{id}
+    CC->>CS: resolver(id, Resolucion)
+    CS->>R: SolicitudIngresoRepository.bloquear(id)
+    alt aprobar
+        CS->>R: MiembroComunidadRepository.save(MIEMBRO, ACTIVO)
+    else rechazar
+        CS->>CS: exige motivo de rechazo
+    end
+    CS->>R: guarda estado, revisor y fecha de respuesta
+    CS->>NS: send(solicitante, SOLICITUD_RESPUESTA)
+    CC-->>C: 200
+    opt expulsar miembro
+        A->>C: "Expulsar"
+        C->>S: expulsar(id, idUsuario)
+        S->>CC: DELETE /api/v1/comunidades/{id}/miembros/{usuario}
+        CC->>CS: expulsar(id, usuario)
+        CS->>R: estado = EXPULSADO, fechaSalida = hoy
+        CC-->>C: 204
+    end

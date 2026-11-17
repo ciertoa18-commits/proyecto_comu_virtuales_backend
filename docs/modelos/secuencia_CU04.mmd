@@ -1,0 +1,40 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Arial, fontSize: 14px, actorBkg: '#DAE8FC', actorBorder: '#6C8EBF', noteBkgColor: '#FFF2CC', noteBorderColor: '#D6B656' }
+  sequence: { mirrorActors: false, showSequenceNumbers: true, wrap: true }
+---
+sequenceDiagram
+    actor U as Estudiante / Docente
+    participant C as DetalleComunidad
+    participant S as ComunidadApi
+    participant CC as ComunidadController
+    participant CS as ComunidadServiceImpl
+    participant NS as NotificationService
+    participant R as Repositories
+    U->>C: abre la comunidad
+    alt comunidad PÚBLICA
+        U->>C: clic en "Unirme"
+        C->>S: unirse(id)
+        S->>CC: POST /api/v1/comunidades/{id}/unirse
+        CC->>CS: unirse(id)
+        CS->>R: MiembroComunidadRepository.save(MIEMBRO, ACTIVO)
+        CC-->>C: 200 ya es miembro
+    else comunidad PRIVADA
+        U->>C: escribe mensaje y "Solicitar ingreso"
+        C->>S: solicitarIngreso(id, mensaje)
+        S->>CC: POST /api/v1/comunidades/{id}/solicitudes
+        CC->>CS: solicitar(id, Solicitud)
+        CS->>R: SolicitudIngresoRepository.save(PENDIENTE)
+        CS->>NS: solicitud(comunidad, idSolicitud)
+        NS->>R: NotificacionRepository.saveAll(a los administradores)
+        CC-->>C: 201 solicitud enviada
+    end
+    opt abandonar
+        U->>C: "Salir de la comunidad"
+        C->>S: salir(id)
+        S->>CC: DELETE /api/v1/comunidades/{id}/miembros/me
+        CC->>CS: salir(id)
+        CS->>R: miembro.estado = RETIRADO, fechaSalida = hoy
+        CC-->>C: 204
+    end
