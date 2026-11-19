@@ -10,7 +10,6 @@ import pe.perueduca.comunidades.dto.CuentaRequests;
 import pe.perueduca.comunidades.entity.*;
 import pe.perueduca.comunidades.service.impl.AdminUsuarioService;
 
-/** Panel del administrador: gestión de usuarios y aprobación de docentes. */
 @RestController
 @RequestMapping("/api/v1/admin/usuarios")
 @PreAuthorize("hasRole('ADMIN')")

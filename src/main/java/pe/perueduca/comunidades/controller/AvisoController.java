@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import pe.perueduca.comunidades.dto.CuentaRequests;
 import pe.perueduca.comunidades.service.impl.*;
 
-/** Enviar avisos (notificaciones) y datos de apoyo para elegir destinatarios. */
 @RestController
 @RequestMapping("/api/v1")
 @lombok.RequiredArgsConstructor
@@ -36,7 +35,6 @@ public class AvisoController {
     return usuarios.misSecciones();
   }
 
-  /** Datos públicos de una persona (para mostrar nombres en mensajes, muro, etc.). */
   @GetMapping("/usuarios/{id}/publico")
   public Object publico(@PathVariable Long id) {
     var u =
@@ -53,7 +51,6 @@ public class AvisoController {
     return m;
   }
 
-  /** Comunidades del usuario actual: membresías activas y solicitudes pendientes. */
   @GetMapping("/me/comunidades")
   public Object misComunidades() {
     Long yo = pe.perueduca.comunidades.security.Actor.actual().id();
@@ -81,10 +78,6 @@ public class AvisoController {
     return lista;
   }
 
-  /**
-   * Personas a las que puedo escribir un mensaje: las que comparten alguna comunidad conmigo. No
-   * expone correos. El administrador puede escribir a cualquier usuario activo.
-   */
   @GetMapping("/me/contactos")
   public Object contactos() {
     var actor = pe.perueduca.comunidades.security.Actor.actual();

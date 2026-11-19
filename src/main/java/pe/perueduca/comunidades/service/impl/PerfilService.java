@@ -36,6 +36,10 @@ public class PerfilService {
     u.setApellidos(text.required(d.apellidos()));
     u.setIdIdiomaPref(d.idIdiomaPref());
     u.setTelefono(d.telefono() == null || d.telefono().isBlank() ? null : d.telefono().trim());
+    u.setCorreoRecuperacion(
+        d.correoRecuperacion() == null || d.correoRecuperacion().isBlank()
+            ? null
+            : d.correoRecuperacion().trim().toLowerCase(java.util.Locale.ROOT));
     if (Actor.actual().docente()) u.setEspecialidad(text.clean(d.especialidad()));
     u.setFechaActualizacion(LocalDateTime.now());
     return u;

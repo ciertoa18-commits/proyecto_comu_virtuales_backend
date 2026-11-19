@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-/** Código de 6 dígitos para recuperar la contraseña (CU13). Solo se guarda su hash BCrypt. */
 @Entity
 @Table(name = "CODIGO_RECUPERACION")
 @Getter

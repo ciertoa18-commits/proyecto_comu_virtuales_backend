@@ -17,7 +17,6 @@ import pe.perueduca.comunidades.entity.*;
 import pe.perueduca.comunidades.exception.ApiException;
 import pe.perueduca.comunidades.repository.*;
 
-/** Registro público (CU01) y recuperación de contraseña por código al correo (CU13). */
 @Service
 @Transactional
 @lombok.RequiredArgsConstructor
@@ -37,11 +36,9 @@ public class CuentaService {
 
   public record Resultado(String estado, String mensaje) {}
 
-  // ---------- Registro ----------
-
   public Resultado registrar(CuentaRequests.Registro d) {
     if (d.rol() == RolCodigo.ADMIN)
-      throw ApiException.denied(); // un administrador solo lo crea otro administrador
+      throw ApiException.denied();
     String mail = normalizar(d.correo());
     validarDominio(mail, d.rol());
     if (usuarios.findByCorreo(mail).isPresent())
@@ -57,6 +54,7 @@ public class CuentaService {
     u.setApellidos(text.required(d.apellidos()));
     u.setEspecialidad(d.rol() == RolCodigo.DOCENTE ? text.clean(d.especialidad()) : null);
     u.setTelefono(blancoANulo(d.telefono()));
+    u.setCorreoRecuperacion(normalizar(d.correoRecuperacion()));
     u.setIdIdiomaPref(d.idIdiomaPref() != null ? d.idIdiomaPref() : 1L);
     u.setPasswordHash(encoder.encode(d.password()));
     u.setIntentosFallidos(0L);
@@ -96,14 +94,12 @@ public class CuentaService {
             });
   }
 
-  // ---------- Recuperación de contraseña ----------
-
-  /** Siempre responde lo mismo, exista o no el correo, para no revelar cuentas. */
   public Resultado solicitarCodigo(CuentaRequests.Recuperacion d) {
     Resultado generico =
         new Resultado(
             "ENVIADO",
-            "Si el correo está registrado, te enviamos un código de 6 dígitos. Vence en "
+            "Si el correo está registrado, te enviamos un código de 6 dígitos a tu correo de"
+                + " recuperación (Gmail). Vence en "
                 + MINUTOS_VIGENCIA
                 + " minutos.");
     Optional<Usuario> ou = usuarios.findByCorreo(normalizar(d.correo()));
@@ -115,8 +111,8 @@ public class CuentaService {
         codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(u.getIdUsuario(), false);
     if (!previos.isEmpty()
         && previos.get(0).getFechaCreacion().isAfter(ahora.minusSeconds(SEGUNDOS_ENTRE_CODIGOS)))
-      return generico; // evita spam: un código por minuto
-    previos.forEach(c -> c.setUsado(true)); // invalida códigos anteriores
+      return generico;
+    previos.forEach(c -> c.setUsado(true));
 
     String codigo = String.format("%06d", random.nextInt(1_000_000));
     CodigoRecuperacion c = new CodigoRecuperacion();
@@ -128,8 +124,12 @@ public class CuentaService {
     c.setFechaExpiracion(ahora.plusMinutes(MINUTOS_VIGENCIA));
     codigos.save(c);
 
+    String destino =
+        u.getCorreoRecuperacion() != null && !u.getCorreoRecuperacion().isBlank()
+            ? u.getCorreoRecuperacion()
+            : u.getCorreo();
     correo.enviar(
-        u.getCorreo(),
+        destino,
         "Código para restablecer tu contraseña - Comunidades Virtuales",
         "Hola "
             + u.getNombres()
@@ -142,7 +142,6 @@ public class CuentaService {
     return generico;
   }
 
-  // noRollbackFor: el intento fallido debe quedar guardado aunque se responda con error.
   @Transactional(noRollbackFor = ApiException.class)
   public Resultado restablecer(CuentaRequests.Restablecer d) {
     ApiException invalido = ApiException.rule("El código no es válido o ya venció");
@@ -168,8 +167,6 @@ public class CuentaService {
     return new Resultado("OK", "Tu contraseña fue cambiada. Ya puedes iniciar sesión.");
   }
 
-  // ---------- utilidades ----------
-
   Long idRol(RolCodigo codigo) {
     return roles.findAll().stream()
         .filter(r -> r.getCodigo() == codigo)
@@ -178,7 +175,6 @@ public class CuentaService {
         .getIdRol();
   }
 
-  /** ESTUDIANTE solo @perueduca.pe; DOCENTE y ADMIN solo @minedu.gob.pe. */
   static void validarDominio(String correo, RolCodigo rol) {
     String dominio = CuentaRequests.dominioDe(rol);
     if (!correo.endsWith(dominio))

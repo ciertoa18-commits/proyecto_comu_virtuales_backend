@@ -30,7 +30,6 @@ public class AcademicoController {
   private final EventoRepository eventos;
   private final UsuarioRepository usuarios;
 
-  /** Nombre del estudiante para que el docente no vea solo un número. */
   private Map<String, Object> alumno(Long idUsuario) {
     return usuarios
         .findById(idUsuario)

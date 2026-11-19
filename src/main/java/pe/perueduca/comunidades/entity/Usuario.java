@@ -40,6 +40,9 @@ public class Usuario {
   @Column(name = "telefono", length = 15)
   private String telefono;
 
+  @Column(name = "correo_recuperacion", length = 150)
+  private String correoRecuperacion;
+
   @Column(name = "keycloak_sub", length = 64)
   @com.fasterxml.jackson.annotation.JsonIgnore
   private String keycloakSub;

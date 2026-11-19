@@ -17,13 +17,6 @@ import pe.perueduca.comunidades.exception.ApiException;
 import pe.perueduca.comunidades.repository.*;
 import pe.perueduca.comunidades.security.Actor;
 
-/**
- * Envío de avisos (CU12): a todos, a todos los docentes, a todos los estudiantes, a los alumnos de
- * una sección o a una persona. Se guarda una fila de NOTIFICACION por cada destinatario.
- *
- * <p>Permisos: ADMIN cualquier destino; DOCENTE solo a sus secciones o a una persona; ESTUDIANTE no
- * envía avisos.
- */
 @Service
 @Transactional
 @lombok.RequiredArgsConstructor

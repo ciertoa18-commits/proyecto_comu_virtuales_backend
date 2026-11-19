@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import pe.perueduca.comunidades.dto.CuentaRequests;
 import pe.perueduca.comunidades.service.impl.CuentaService;
 
-/** Rutas públicas de cuenta: crear cuenta y recuperar contraseña. */
 @RestController
 @RequestMapping("/api/v1/auth")
 @lombok.RequiredArgsConstructor

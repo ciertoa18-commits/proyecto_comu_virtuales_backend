@@ -20,7 +20,6 @@ import pe.perueduca.comunidades.exception.ApiException;
 import pe.perueduca.comunidades.repository.*;
 import pe.perueduca.comunidades.security.Actor;
 
-/** Gestión de usuarios por el administrador: listar, aprobar docentes, activar/desactivar. */
 @Service
 @Transactional
 @lombok.RequiredArgsConstructor
@@ -111,6 +110,10 @@ public class AdminUsuarioService {
     u.setApellidos(text.required(d.apellidos()));
     u.setEspecialidad(d.rol() == RolCodigo.DOCENTE ? text.clean(d.especialidad()) : null);
     u.setTelefono(CuentaService.blancoANulo(d.telefono()));
+    u.setCorreoRecuperacion(
+        d.correoRecuperacion() == null || d.correoRecuperacion().isBlank()
+            ? null
+            : CuentaService.normalizar(d.correoRecuperacion()));
     u.setIdIdiomaPref(1L);
     u.setPasswordHash(encoder.encode(d.password()));
     u.setIntentosFallidos(0L);
@@ -165,14 +168,12 @@ public class AdminUsuarioService {
     audit.record("USUARIO", id, AuditoriaAccion.UPDATE, null, "{\"passwordReseteado\":true}");
   }
 
-  /** Buscador para elegir destinatario (admin y docentes). Solo cuentas activas. */
   @Transactional(readOnly = true)
   public List<UsuarioResumen> buscar(String q) {
     if (q == null || q.trim().length() < 2) return List.of();
     return listar(null, UsuarioEstado.ACTIVO, q, 0, 20).getContent();
   }
 
-  /** Secciones del usuario actual: las que dicta (docente) o en las que está matriculado. */
   @Transactional(readOnly = true)
   public List<SeccionResumen> misSecciones() {
     Actor a = Actor.actual();

@@ -6,11 +6,9 @@ import pe.perueduca.comunidades.enums.UsuarioEstado;
 import jakarta.validation.constraints.*;
 import pe.perueduca.comunidades.entity.*;
 
-/** Solicitudes de cuenta: registro, recuperación, gestión de usuarios y avisos (iteración 1). */
 public final class CuentaRequests {
   private CuentaRequests() {}
 
-  /** Solo correos institucionales; el dominio exacto según el rol lo valida el servicio. */
   public static final String DOMINIO_ESTUDIANTE = "@perueduca.pe";
   public static final String DOMINIO_PERSONAL = "@minedu.gob.pe";
   public static final String CORREO_VALIDO =
@@ -18,12 +16,10 @@ public final class CuentaRequests {
   public static final String MSG_CORREO =
       "debe ser institucional: @perueduca.pe (estudiante) o @minedu.gob.pe (docente/administrador)";
 
-  /** Dominio obligatorio para cada rol. */
   public static String dominioDe(RolCodigo rol) {
     return rol == RolCodigo.ESTUDIANTE ? DOMINIO_ESTUDIANTE : DOMINIO_PERSONAL;
   }
 
-  /** Registro público: solo ESTUDIANTE o DOCENTE. */
   public record Registro(
       @NotBlank @Size(max = 100) String nombres,
       @NotBlank @Size(max = 100) String apellidos,
@@ -33,7 +29,8 @@ public final class CuentaRequests {
       @NotNull RolCodigo rol,
       @Size(max = 100) String especialidad,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
-      Long idIdiomaPref) {}
+      Long idIdiomaPref,
+      @NotBlank @Email @Size(max = 150) String correoRecuperacion) {}
 
   public record Recuperacion(@NotBlank @Size(max = 150) String correo) {}
 
@@ -42,7 +39,6 @@ public final class CuentaRequests {
       @NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "debe tener 6 dígitos") String codigo,
       @NotBlank @Size(min = 12, max = 72) String nueva) {}
 
-  /** Alta de usuario hecha por un administrador (cualquier rol, queda ACTIVO). */
   public record NuevoUsuario(
       @NotBlank @Size(max = 100) String nombres,
       @NotBlank @Size(max = 100) String apellidos,
@@ -51,7 +47,8 @@ public final class CuentaRequests {
       @NotBlank @Size(min = 12, max = 72) String password,
       @NotNull RolCodigo rol,
       @Size(max = 100) String especialidad,
-      @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono) {}
+      @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
+      @Email @Size(max = 150) String correoRecuperacion) {}
 
   public record CambioEstado(@NotNull UsuarioEstado estado) {}
 

@@ -8,10 +8,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-/**
- * Envía correos por SMTP. Si no hay servidor configurado (MAIL_HOST vacío), escribe el mensaje en
- * la consola del backend para poder probar en desarrollo.
- */
 @Service
 public class CorreoService {
   private static final Logger log = LoggerFactory.getLogger(CorreoService.class);
@@ -21,7 +17,7 @@ public class CorreoService {
 
   public CorreoService(
       ObjectProvider<JavaMailSender> sender,
-      @Value("${app.mail.from:no-responder@perueduca.pe}") String remitente,
+      @Value("${app.mail.from:${spring.mail.username:no-responder@perueduca.pe}}") String remitente,
       @Value("${spring.mail.host:}") String host) {
     this.sender = sender;
     this.remitente = remitente;
@@ -47,7 +43,6 @@ public class CorreoService {
       m.setText(texto);
       mail.send(m);
     } catch (RuntimeException e) {
-      // No se revela al usuario si el correo existe o si falló el envío.
       log.error("No se pudo enviar el correo a {}: {}", para, e.getMessage());
     }
   }

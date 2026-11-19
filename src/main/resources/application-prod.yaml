@@ -1,4 +1,3 @@
-# Activar con SPRING_PROFILES_ACTIVE=prod.
 spring:
   datasource:
     url: ${DB_URL}

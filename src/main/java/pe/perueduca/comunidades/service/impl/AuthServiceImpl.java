@@ -35,14 +35,19 @@ public class AuthServiceImpl implements pe.perueduca.comunidades.service.AuthSer
     }
   }
 
-  // A failed login returns normally so the increment/lock is committed before HTTP 401.
+  private volatile String hashFicticio;
+
+  private String hashFicticio() {
+    if (hashFicticio == null) hashFicticio = encoder.encode(java.util.UUID.randomUUID().toString());
+    return hashFicticio;
+  }
+
   @Transactional
   public LoginResult login(Requests.Login req) {
     String correo = req.correo().trim().toLowerCase(Locale.ROOT);
     var optional = usuarios.bloquearPorCorreo(correo);
     if (optional.isEmpty()) {
-      encoder.matches(
-          req.password(), "$2a$10$7EqJtq98hPqEX7fNZaFWoO5H7jGzL7DFzF5uAQ3QK8WzWsPmgxZ9i");
+      encoder.matches(req.password(), hashFicticio());
       return new LoginResult(false, null, null, null);
     }
     Usuario u = optional.get();

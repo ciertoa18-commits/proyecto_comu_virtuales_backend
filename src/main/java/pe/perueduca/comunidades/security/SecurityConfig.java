@@ -73,7 +73,6 @@ public class SecurityConfig {
                         "/api/v1/auth/recuperacion",
                         "/api/v1/auth/restablecer")
                     .permitAll()
-                    // Catálogo de idiomas: lo usa el formulario público de "Crear cuenta".
                     .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/idiomas")
                     .permitAll()
                     .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")

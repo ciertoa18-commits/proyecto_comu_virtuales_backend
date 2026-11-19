@@ -24,7 +24,8 @@ public final class Requests {
       @NotBlank @Size(max = 100) String apellidos,
       @Size(max = 100) String especialidad,
       Long idIdiomaPref,
-      @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono) {}
+      @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
+      @Email @Size(max = 150) String correoRecuperacion) {}
 
   public record Password(
       @NotBlank String actual, @NotBlank @Size(min = 12, max = 72) String nueva) {}
