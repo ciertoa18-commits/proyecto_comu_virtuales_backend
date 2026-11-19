@@ -33,7 +33,7 @@ jobs:
       - name: Pruebas, cobertura (JaCoCo) y análisis de SonarQube
         run: >
           bash mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.projectKey=ciertoa18-commits_proyecto_bakent
+          -Dsonar.projectKey=ciertoa18-commits_proyecto_comu_virtuales_backend
           -Dsonar.organization=ciertoa18-commits
           -Dsonar.host.url=https://sonarcloud.io
           "-Dsonar.coverage.exclusions=**/entity/**,**/dto/**,**/enums/**,**/config/**"
