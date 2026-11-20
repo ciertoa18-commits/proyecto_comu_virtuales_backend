@@ -33,6 +33,7 @@ public class ComunidadServiceImpl implements pe.perueduca.comunidades.service.Co
   private final CategoriaRepository categorias;
   private final IdiomaRepository idiomas;
   private final PuebloOriginarioRepository pueblos;
+  private final ComunidadIdiomaRepository segundasLenguas;
 
   @Transactional(readOnly = true)
   public Page<Comunidad> buscar(String q, Long cat, Long lang, int page, int size) {
@@ -77,7 +78,27 @@ public class ComunidadServiceImpl implements pe.perueduca.comunidades.service.Co
       c.setEstado(ComunidadEstado.ACTIVA);
       c.setFechaCreacion(LocalDateTime.now());
     } else c.setFechaActualizacion(LocalDateTime.now());
-    return repo.save(c);
+    Comunidad guardada = repo.save(c);
+    if (d.segundasLenguas() != null) guardarSegundasLenguas(guardada, d.segundasLenguas());
+    return guardada;
+  }
+
+  private void guardarSegundasLenguas(Comunidad c, List<Long> lista) {
+    Set<Long> unicas = new LinkedHashSet<>(lista);
+    unicas.remove(c.getIdIdioma());
+    for (Long id : unicas)
+      if (!idiomas.existsById(id)) throw ApiException.rule("Una de las segundas lenguas no existe");
+    segundasLenguas.deleteByIdComunidad(c.getIdComunidad());
+    segundasLenguas.flush();
+    unicas.forEach(id -> segundasLenguas.save(new ComunidadIdioma(c.getIdComunidad(), id)));
+  }
+
+  @Transactional(readOnly = true)
+  public List<Long> segundasLenguas(Long idComunidad) {
+    access.comunidad(idComunidad);
+    return segundasLenguas.findByIdComunidad(idComunidad).stream()
+        .map(ComunidadIdioma::getIdIdioma)
+        .toList();
   }
 
   @PreAuthorize("hasRole('ADMIN')")
