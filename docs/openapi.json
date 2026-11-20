@@ -1,1 +1,4970 @@
-{"openapi":"3.1.0","info":{"title":"Comunidades Virtuales API","description":"Backend PerúEduca. Login devuelve token JWT; usar Authorize para las demás operaciones.","version":"1.0.0"},"servers":[{"url":"http://localhost:63328","description":"Generated server url"}],"security":[{"bearerAuth":[]}],"paths":{"/api/v1/unidades/{id}":{"put":{"tags":["academico-controller"],"operationId":"editUnit","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UnidadDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"delete":{"tags":["academico-controller"],"operationId":"deleteUnit","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK"}}}},"/api/v1/solicitudes/{id}":{"put":{"tags":["comunidad-controller"],"operationId":"resolve","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Resolucion"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/sesiones/{id}":{"put":{"tags":["academico-controller"],"operationId":"editSession","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SesionDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/recursos/{id}":{"put":{"tags":["academico-controller"],"operationId":"editResource","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RecursoDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"delete":{"tags":["academico-controller"],"operationId":"deleteResource","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK"}}}},"/api/v1/publicaciones/{id}":{"get":{"tags":["publicacion-controller"],"operationId":"one","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"put":{"tags":["publicacion-controller"],"operationId":"edit","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/PublicacionDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"delete":{"tags":["publicacion-controller"],"operationId":"delete","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"No Content"}}}},"/api/v1/publicaciones/{id}/moderacion":{"put":{"tags":["publicacion-controller"],"operationId":"moderate","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Moderacion"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/notificaciones/{id}/leida":{"put":{"tags":["comunicacion-controller"],"operationId":"read","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"No Content"}}}},"/api/v1/notas":{"put":{"tags":["academico-controller"],"operationId":"grade","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/NotaDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/mensajes/{id}/leido":{"put":{"tags":["comunicacion-controller"],"operationId":"readMessage","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"No Content"}}}},"/api/v1/me":{"get":{"tags":["perfil-controller"],"operationId":"me","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"put":{"tags":["perfil-controller"],"operationId":"update","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Perfil"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/password":{"put":{"tags":["perfil-controller"],"operationId":"password","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Password"}}},"required":true},"responses":{"204":{"description":"No Content"}}}},"/api/v1/me/notificaciones/leidas":{"put":{"tags":["comunicacion-controller"],"operationId":"readAll","responses":{"204":{"description":"No Content"}}}},"/api/v1/me/foto":{"put":{"tags":["perfil-controller"],"operationId":"photo","requestBody":{"content":{"multipart/form-data":{"schema":{"type":"object","properties":{"archivo":{"type":"string","format":"binary"}},"required":["archivo"]}}}},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/matriculas/{id}/retiro":{"put":{"tags":["academico-controller"],"operationId":"withdraw","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK"}}}},"/api/v1/cursos/{id}":{"get":{"tags":["academico-controller"],"operationId":"course","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"put":{"tags":["academico-controller"],"operationId":"editCourse","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CursoDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"delete":{"tags":["academico-controller"],"operationId":"deleteCourse","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK"}}}},"/api/v1/comunidades/{id}":{"get":{"tags":["comunidad-controller"],"operationId":"get","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"put":{"tags":["comunidad-controller"],"operationId":"update_1","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ComunidadDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"delete":{"tags":["comunidad-controller"],"operationId":"delete_1","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"No Content"}}}},"/api/v1/admin/usuarios/{id}/password":{"put":{"tags":["admin-usuario-controller"],"operationId":"password_1","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ResetPassword"}}},"required":true},"responses":{"204":{"description":"No Content"}}}},"/api/v1/admin/usuarios/{id}/estado":{"put":{"tags":["admin-usuario-controller"],"operationId":"estado","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CambioEstado"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/admin/usuarios/{id}/aprobar":{"put":{"tags":["admin-usuario-controller"],"operationId":"aprobar","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/unidades/{id}/sesiones":{"get":{"tags":["academico-controller"],"operationId":"sessions","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"createSession","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SesionDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/unidades/{id}/recursos":{"get":{"tags":["academico-controller"],"operationId":"resources","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"createResource","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RecursoDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/tareas/{id}/entregas":{"get":{"tags":["academico-controller"],"operationId":"submissions","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"submit","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/EntregaDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/sesiones/{id}/asistencia":{"get":{"tags":["academico-controller"],"operationId":"attendance","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"recordAttendance","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/AsistenciaDatos"}}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}/unidades":{"get":{"tags":["academico-controller"],"operationId":"units","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"createUnit","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UnidadDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}/matriculas":{"post":{"tags":["academico-controller"],"operationId":"enroll","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"idUsuario","in":"query","required":false,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}/evaluaciones":{"get":{"tags":["academico-controller"],"operationId":"evaluations","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"evaluation","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/EvaluacionDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}/cerrar":{"post":{"tags":["academico-controller"],"operationId":"close","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK"}}}},"/api/v1/publicaciones/{id}/comentarios":{"get":{"tags":["publicacion-controller"],"operationId":"comments","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":50}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["publicacion-controller"],"operationId":"comment","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ComentarioDatos"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/notificaciones":{"post":{"tags":["aviso-controller"],"operationId":"enviar","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Aviso"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Envio"}}}}}}},"/api/v1/mensajes":{"post":{"tags":["comunicacion-controller"],"operationId":"send","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/MensajeDatos"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/cursos/{id}/secciones":{"get":{"tags":["academico-controller"],"operationId":"sections","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"createSection","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SeccionDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades":{"get":{"tags":["comunidad-controller"],"operationId":"list","parameters":[{"name":"q","in":"query","required":false,"schema":{"type":"string"}},{"name":"categoria","in":"query","required":false,"schema":{"type":"integer","format":"int64"}},{"name":"idioma","in":"query","required":false,"schema":{"type":"integer","format":"int64"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":20}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["comunidad-controller"],"operationId":"create","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ComunidadDatos"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/{id}/unirse":{"post":{"tags":["comunidad-controller"],"operationId":"join","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/{id}/solicitudes":{"post":{"tags":["comunidad-controller"],"operationId":"request","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Solicitud"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/{id}/publicaciones":{"get":{"tags":["publicacion-controller"],"operationId":"wall","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":20}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["publicacion-controller"],"operationId":"create_1","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/PublicacionDatos"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/{id}/eventos":{"get":{"tags":["academico-controller"],"operationId":"events","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"createEvent","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/EventoDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/{id}/cursos":{"get":{"tags":["academico-controller"],"operationId":"courses","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["academico-controller"],"operationId":"createCourse","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CursoDatos"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/auth/restablecer":{"post":{"tags":["cuenta-controller"],"operationId":"restablecer","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Restablecer"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Resultado"}}}}}}},"/api/v1/auth/registro":{"post":{"tags":["cuenta-controller"],"operationId":"registro","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Registro"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Resultado"}}}}}}},"/api/v1/auth/recuperacion":{"post":{"tags":["cuenta-controller"],"operationId":"recuperacion","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Recuperacion"}}},"required":true},"responses":{"202":{"description":"Accepted","content":{"*/*":{"schema":{"$ref":"#/components/schemas/Resultado"}}}}}}},"/api/v1/auth/logout":{"post":{"tags":["auth-controller"],"operationId":"logout","parameters":[{"name":"Authorization","in":"header","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK"}}}},"/api/v1/auth/login":{"post":{"tags":["auth-controller"],"operationId":"login","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Login"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/archivos":{"post":{"tags":["archivo-controller"],"operationId":"upload","requestBody":{"content":{"multipart/form-data":{"schema":{"type":"object","properties":{"archivo":{"type":"string","format":"binary"}},"required":["archivo"]}}}},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/admin/usuarios":{"get":{"tags":["admin-usuario-controller"],"operationId":"listar","parameters":[{"name":"rol","in":"query","required":false,"schema":{"type":"string","enum":["ESTUDIANTE","DOCENTE","ADMIN"]}},{"name":"estado","in":"query","required":false,"schema":{"type":"string","enum":["ACTIVO","INACTIVO","PENDIENTE"]}},{"name":"q","in":"query","required":false,"schema":{"type":"string"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":20}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}},"post":{"tags":["admin-usuario-controller"],"operationId":"crear","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/NuevoUsuario"}}},"required":true},"responses":{"201":{"description":"Created","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/usuarios/{id}/publico":{"get":{"tags":["aviso-controller"],"operationId":"publico","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/usuarios/buscar":{"get":{"tags":["aviso-controller"],"operationId":"buscar","parameters":[{"name":"q","in":"query","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/solicitudes":{"get":{"tags":["comunidad-controller"],"operationId":"requests","parameters":[{"name":"estado","in":"query","required":false,"schema":{"type":"string","default":"PENDIENTE","enum":["PENDIENTE","APROBADA","RECHAZADA"]}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":20}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}":{"get":{"tags":["academico-controller"],"operationId":"section","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}/riesgo":{"get":{"tags":["academico-controller"],"operationId":"risk","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}/ranking":{"get":{"tags":["academico-controller"],"operationId":"ranking","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/secciones/{id}/notas":{"get":{"tags":["academico-controller"],"operationId":"grades","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/reportes/idiomas":{"get":{"tags":["reporte-controller"],"operationId":"idiomas","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/reportes/docentes":{"get":{"tags":["reporte-controller"],"operationId":"docentes","parameters":[{"name":"periodo","in":"query","required":false,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/recursos/{id}/descarga":{"get":{"tags":["academico-controller"],"operationId":"download","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/pueblos":{"get":{"tags":["catalogo-controller"],"operationId":"pueblos","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/periodos":{"get":{"tags":["catalogo-controller"],"operationId":"periodos","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/secciones":{"get":{"tags":["aviso-controller"],"operationId":"misSecciones","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/recursos":{"get":{"tags":["academico-controller"],"operationId":"myResources","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/notificaciones":{"get":{"tags":["comunicacion-controller"],"operationId":"notifications","parameters":[{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":20}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/notas":{"get":{"tags":["academico-controller"],"operationId":"myGrades","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/mensajes":{"get":{"tags":["comunicacion-controller"],"operationId":"messages","parameters":[{"name":"con","in":"query","required":false,"schema":{"type":"integer","format":"int64"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":20}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/contactos":{"get":{"tags":["aviso-controller"],"operationId":"contactos","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/comunidades":{"get":{"tags":["aviso-controller"],"operationId":"misComunidades","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/me/clases":{"get":{"tags":["academico-controller"],"operationId":"classes","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/idiomas":{"get":{"tags":["catalogo-controller"],"operationId":"idiomas_1","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/{id}/publicaciones/pendientes":{"get":{"tags":["publicacion-controller"],"operationId":"pending","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"size","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":20}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/{id}/miembros":{"get":{"tags":["comunidad-controller"],"operationId":"members","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/comunidades/recomendadas":{"get":{"tags":["comunidad-controller"],"operationId":"recommendations","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/categorias":{"get":{"tags":["catalogo-controller"],"operationId":"categorias","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/archivos/{id}":{"get":{"tags":["archivo-controller"],"operationId":"metadata","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"object"}}}}}}},"/api/v1/archivos/{id}/descarga":{"get":{"tags":["archivo-controller"],"operationId":"download_1","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"string","format":"binary"}}}}}}},"/api/v1/comunidades/{id}/miembros/{usuario}":{"delete":{"tags":["comunidad-controller"],"operationId":"expel","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"usuario","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"No Content"}}}},"/api/v1/comunidades/{id}/miembros/me":{"delete":{"tags":["comunidad-controller"],"operationId":"leave","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"No Content"}}}},"/api/v1/comentarios/{id}":{"delete":{"tags":["publicacion-controller"],"operationId":"deleteComment","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"No Content"}}}}},"components":{"schemas":{"UnidadDatos":{"type":"object","properties":{"nombre":{"type":"string","maxLength":150,"minLength":0},"descripcion":{"type":"string","maxLength":1000,"minLength":0},"orden":{"type":"integer","format":"int64"}},"required":["nombre","orden"]},"Resolucion":{"type":"object","properties":{"aprobar":{"type":"boolean"},"motivo":{"type":"string","maxLength":500,"minLength":0}}},"SesionDatos":{"type":"object","properties":{"titulo":{"type":"string","maxLength":200,"minLength":0},"orden":{"type":"integer","format":"int64"},"fechaInicio":{"type":"string","format":"date-time"},"duracionMin":{"type":"integer","format":"int64"},"enlaceClase":{"type":"string","maxLength":500,"minLength":0}},"required":["orden","titulo"]},"RecursoDatos":{"type":"object","properties":{"titulo":{"type":"string","maxLength":200,"minLength":0},"descripcion":{"type":"string","maxLength":1000,"minLength":0},"tipo":{"type":"string","enum":["DOCUMENTO","VIDEO","ENLACE","TAREA"]},"idSesion":{"type":"integer","format":"int64"},"idIdioma":{"type":"integer","format":"int64"},"idArchivo":{"type":"integer","format":"int64"},"urlExterna":{"type":"string","maxLength":500,"minLength":0},"fechaEntrega":{"type":"string","format":"date-time"},"permiteTardias":{"type":"boolean"},"idEvaluacion":{"type":"integer","format":"int64"}},"required":["tipo","titulo"]},"PublicacionDatos":{"type":"object","properties":{"titulo":{"type":"string","maxLength":200,"minLength":0},"contenido":{"type":"string","maxLength":20000,"minLength":0},"idSeccion":{"type":"integer","format":"int64"},"archivos":{"type":"array","items":{"type":"integer","format":"int64"},"maxItems":10,"minItems":0}}},"Moderacion":{"type":"object","properties":{"estado":{"type":"string","enum":["PENDIENTE","APROBADA","RECHAZADA"]}},"required":["estado"]},"NotaDatos":{"type":"object","properties":{"idMatricula":{"type":"integer","format":"int64"},"idEvaluacion":{"type":"integer","format":"int64"},"calificacion":{"type":"number","maximum":20,"minimum":0},"comentarioDocente":{"type":"string","maxLength":1000,"minLength":0}},"required":["calificacion","idEvaluacion","idMatricula"]},"Perfil":{"type":"object","properties":{"nombres":{"type":"string","maxLength":100,"minLength":0},"apellidos":{"type":"string","maxLength":100,"minLength":0},"especialidad":{"type":"string","maxLength":100,"minLength":0},"idIdiomaPref":{"type":"integer","format":"int64"},"telefono":{"type":"string","pattern":"^[0-9]{9}$"}},"required":["apellidos","nombres"]},"Password":{"type":"object","properties":{"actual":{"type":"string","minLength":1},"nueva":{"type":"string","maxLength":72,"minLength":12}},"required":["actual","nueva"]},"CursoDatos":{"type":"object","properties":{"codigo":{"type":"string","maxLength":20,"minLength":0},"nombre":{"type":"string","maxLength":150,"minLength":0},"descripcion":{"type":"string","maxLength":1000,"minLength":0}},"required":["codigo","nombre"]},"ComunidadDatos":{"type":"object","properties":{"nombre":{"type":"string","maxLength":150,"minLength":0},"descripcion":{"type":"string","maxLength":1000,"minLength":0},"idCategoria":{"type":"integer","format":"int64"},"idIdioma":{"type":"integer","format":"int64"},"idPueblo":{"type":"integer","format":"int64"},"visibilidad":{"type":"string","enum":["PUBLICA","PRIVADA"]},"moderacionPrevia":{"type":"boolean"},"idImagen":{"type":"integer","format":"int64"}},"required":["idCategoria","nombre","visibilidad"]},"ResetPassword":{"type":"object","properties":{"nueva":{"type":"string","maxLength":72,"minLength":12}},"required":["nueva"]},"CambioEstado":{"type":"object","properties":{"estado":{"type":"string","enum":["ACTIVO","INACTIVO","PENDIENTE"]}},"required":["estado"]},"EntregaDatos":{"type":"object","properties":{"idArchivo":{"type":"integer","format":"int64"},"comentario":{"type":"string","maxLength":1000,"minLength":0}}},"AsistenciaDatos":{"type":"object","properties":{"idMatricula":{"type":"integer","format":"int64"},"estado":{"type":"string","enum":["PRESENTE","TARDANZA","FALTA","JUSTIFICADA"]},"observacion":{"type":"string","maxLength":300,"minLength":0}},"required":["estado","idMatricula"]},"EvaluacionDatos":{"type":"object","properties":{"nombre":{"type":"string","maxLength":100,"minLength":0},"tipo":{"type":"string","enum":["PRACTICA","TAREA","EXAMEN","PROYECTO","PARTICIPACION"]},"peso":{"type":"number","maximum":100,"minimum":0.01},"idUnidad":{"type":"integer","format":"int64"},"fecha":{"type":"string","format":"date-time"}},"required":["nombre","peso","tipo"]},"ComentarioDatos":{"type":"object","properties":{"contenido":{"type":"string","maxLength":2000,"minLength":0},"idComentarioPadre":{"type":"integer","format":"int64"}},"required":["contenido"]},"Aviso":{"type":"object","properties":{"destino":{"type":"string","enum":["TODOS","DOCENTES","ESTUDIANTES","SECCION","USUARIO"]},"idSeccion":{"type":"integer","format":"int64"},"idUsuario":{"type":"integer","format":"int64"},"titulo":{"type":"string","maxLength":200,"minLength":0},"contenido":{"type":"string","maxLength":500,"minLength":0}},"required":["destino","titulo"]},"Envio":{"type":"object","properties":{"enviadas":{"type":"integer","format":"int32"},"mensaje":{"type":"string"}}},"MensajeDatos":{"type":"object","properties":{"idReceptor":{"type":"integer","format":"int64"},"contenido":{"type":"string","maxLength":4000,"minLength":0}},"required":["contenido","idReceptor"]},"SeccionDatos":{"type":"object","properties":{"idPeriodo":{"type":"integer","format":"int64"},"idDocente":{"type":"integer","format":"int64"},"grupo":{"type":"string","maxLength":10,"minLength":0},"cupoMaximo":{"type":"integer","format":"int64"},"salaVirtual":{"type":"string","maxLength":500,"minLength":0}},"required":["grupo","idDocente","idPeriodo"]},"Solicitud":{"type":"object","properties":{"mensaje":{"type":"string","maxLength":500,"minLength":0}}},"EventoDatos":{"type":"object","properties":{"titulo":{"type":"string","maxLength":200,"minLength":0},"descripcion":{"type":"string","maxLength":1000,"minLength":0},"fechaInicio":{"type":"string","format":"date-time"},"fechaFin":{"type":"string","format":"date-time"},"enlace":{"type":"string","maxLength":500,"minLength":0},"idSeccion":{"type":"integer","format":"int64"}},"required":["fechaInicio","titulo"]},"Restablecer":{"type":"object","properties":{"correo":{"type":"string","maxLength":150,"minLength":0},"codigo":{"type":"string","minLength":1,"pattern":"^[0-9]{6}$"},"nueva":{"type":"string","maxLength":72,"minLength":12}},"required":["codigo","correo","nueva"]},"Resultado":{"type":"object","properties":{"estado":{"type":"string"},"mensaje":{"type":"string"}}},"Registro":{"type":"object","properties":{"nombres":{"type":"string","maxLength":100,"minLength":0},"apellidos":{"type":"string","maxLength":100,"minLength":0},"correo":{"type":"string","maxLength":150,"minLength":0,"pattern":"(?i)^[A-Za-z0-9._%+-]+@(perueduca\\.pe|minedu\\.gob\\.pe)$"},"password":{"type":"string","maxLength":72,"minLength":12},"rol":{"type":"string","enum":["ESTUDIANTE","DOCENTE","ADMIN"]},"especialidad":{"type":"string","maxLength":100,"minLength":0},"telefono":{"type":"string","pattern":"^[0-9]{9}$"},"idIdiomaPref":{"type":"integer","format":"int64"}},"required":["apellidos","correo","nombres","password","rol"]},"Recuperacion":{"type":"object","properties":{"correo":{"type":"string","maxLength":150,"minLength":0}},"required":["correo"]},"Login":{"type":"object","properties":{"correo":{"type":"string","format":"email","maxLength":150,"minLength":0},"password":{"type":"string","maxLength":200,"minLength":0}},"required":["correo","password"]},"NuevoUsuario":{"type":"object","properties":{"nombres":{"type":"string","maxLength":100,"minLength":0},"apellidos":{"type":"string","maxLength":100,"minLength":0},"correo":{"type":"string","maxLength":150,"minLength":0,"pattern":"(?i)^[A-Za-z0-9._%+-]+@(perueduca\\.pe|minedu\\.gob\\.pe)$"},"password":{"type":"string","maxLength":72,"minLength":12},"rol":{"type":"string","enum":["ESTUDIANTE","DOCENTE","ADMIN"]},"especialidad":{"type":"string","maxLength":100,"minLength":0},"telefono":{"type":"string","pattern":"^[0-9]{9}$"}},"required":["apellidos","correo","nombres","password","rol"]}},"securitySchemes":{"bearerAuth":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}}}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Comunidades Virtuales API",
+    "description": "Backend PerúEduca. Login devuelve token JWT; usar Authorize para las demás operaciones.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/unidades/{id}": {
+      "put": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "editUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnidadDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "deleteUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/solicitudes/{id}": {
+      "put": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "resolve",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Resolucion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sesiones/{id}": {
+      "put": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "editSession",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SesionDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/silabo": {
+      "get": {
+        "tags": [
+          "silabo-controller"
+        ],
+        "operationId": "ver",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Silabo"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "silabo-controller"
+        ],
+        "operationId": "guardar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SilaboDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Silabo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/recursos/{id}": {
+      "put": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "editResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecursoDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "deleteResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/pueblos/{id}": {
+      "put": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "editarPueblo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PuebloDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "eliminarPueblo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/publicaciones/{id}": {
+      "get": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "one",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "edit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicacionDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/publicaciones/{id}/moderacion": {
+      "put": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "moderate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Moderacion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/permisos-nota/{id}": {
+      "put": {
+        "tags": [
+          "permiso-nota-controller"
+        ],
+        "operationId": "resolver",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RespuestaPermiso"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notificaciones/{id}/leida": {
+      "put": {
+        "tags": [
+          "comunicacion-controller"
+        ],
+        "operationId": "read",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/notas": {
+      "put": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "grade",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotaDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mensajes/{id}/leido": {
+      "put": {
+        "tags": [
+          "comunicacion-controller"
+        ],
+        "operationId": "readMessage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": [
+          "perfil-controller"
+        ],
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "perfil-controller"
+        ],
+        "operationId": "update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Perfil"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/password": {
+      "put": {
+        "tags": [
+          "perfil-controller"
+        ],
+        "operationId": "password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Password"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/me/notificaciones/leidas": {
+      "put": {
+        "tags": [
+          "comunicacion-controller"
+        ],
+        "operationId": "readAll",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/me/foto": {
+      "put": {
+        "tags": [
+          "perfil-controller"
+        ],
+        "operationId": "photo",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "archivo": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "archivo"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/matriculas/{id}/retiro": {
+      "put": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "withdraw",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/idiomas/{id}": {
+      "put": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "editarIdioma",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdiomaDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "eliminarIdioma",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/cursos/{id}": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "course",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "editCourse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CursoDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "deleteCourse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}": {
+      "get": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComunidadDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/categorias/{id}": {
+      "put": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "editarCategoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoriaDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "eliminarCategoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "detalle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "editar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EdicionUsuario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/usuarios/{id}/password": {
+      "put": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "password_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/admin/usuarios/{id}/estado": {
+      "put": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "estado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CambioEstado"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/usuarios/{id}/desbloquear": {
+      "put": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "desbloquear",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/usuarios/{id}/aprobar": {
+      "put": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "aprobar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/unidades/{id}/sesiones": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "sessions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "createSession",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SesionDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/unidades/{id}/recursos": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "resources",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "createResource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecursoDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tareas/{id}/entregas": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "submissions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "submit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntregaDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sesiones/{id}/asistencia": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "attendance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "recordAttendance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AsistenciaDatos"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/unidades": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "units",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "createUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnidadDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/permisos-nota": {
+      "post": {
+        "tags": [
+          "permiso-nota-controller"
+        ],
+        "operationId": "solicitar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PermisoNotaDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/matriculas": {
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "enroll",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "idUsuario",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/evaluaciones": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "evaluations",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "evaluation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluacionDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/cerrar": {
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "close",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/pueblos": {
+      "get": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "pueblos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "crearPueblo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PuebloDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publicaciones/{id}/comentarios": {
+      "get": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "comments",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "comment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComentarioDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notificaciones": {
+      "post": {
+        "tags": [
+          "aviso-controller"
+        ],
+        "operationId": "enviar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Aviso"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envio"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/mensajes": {
+      "post": {
+        "tags": [
+          "comunicacion-controller"
+        ],
+        "operationId": "send",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MensajeDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/password/codigo": {
+      "post": {
+        "tags": [
+          "perfil-controller"
+        ],
+        "operationId": "passwordCode",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/idiomas": {
+      "get": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "idiomas",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "crearIdioma",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdiomaDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cursos/{id}/secciones": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "sections",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "createSection",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeccionDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades": {
+      "get": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoria",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "idioma",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComunidadDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/unirse": {
+      "post": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "join",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/solicitudes": {
+      "post": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "request",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Solicitud"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/publicaciones": {
+      "get": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "wall",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "create_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicacionDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/eventos": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "events",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "createEvent",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventoDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/cursos": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "courses",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "createCourse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CursoDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/importar": {
+      "post": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "importar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Importacion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categorias": {
+      "get": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "categorias",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "crearCategoria",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoriaDatos"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/restablecer": {
+      "post": {
+        "tags": [
+          "cuenta-controller"
+        ],
+        "operationId": "restablecer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Restablecer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resultado"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/registro": {
+      "post": {
+        "tags": [
+          "cuenta-controller"
+        ],
+        "operationId": "registro",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registro"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resultado"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/recuperacion": {
+      "post": {
+        "tags": [
+          "cuenta-controller"
+        ],
+        "operationId": "recuperacion",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Recuperacion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resultado"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "logout",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/archivos": {
+      "post": {
+        "tags": [
+          "archivo-controller"
+        ],
+        "operationId": "upload",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "archivo": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "archivo"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/usuarios": {
+      "get": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "listar",
+        "parameters": [
+          {
+            "name": "rol",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ESTUDIANTE",
+                "DOCENTE",
+                "ADMIN"
+              ]
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ACTIVO",
+                "INACTIVO",
+                "PENDIENTE"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admin-usuario-controller"
+        ],
+        "operationId": "crear",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NuevoUsuario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/usuarios/{id}/publico": {
+      "get": {
+        "tags": [
+          "aviso-controller"
+        ],
+        "operationId": "publico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/usuarios/buscar": {
+      "get": {
+        "tags": [
+          "aviso-controller"
+        ],
+        "operationId": "buscar",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/solicitudes": {
+      "get": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "requests",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "PENDIENTE",
+              "enum": [
+                "PENDIENTE",
+                "APROBADA",
+                "RECHAZADA"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "section",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/riesgo": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "risk",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/ranking": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "ranking",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/permisos-nota/estado": {
+      "get": {
+        "tags": [
+          "permiso-nota-controller"
+        ],
+        "operationId": "estado_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaPermiso"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secciones/{id}/notas": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "grades",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reportes/idiomas": {
+      "get": {
+        "tags": [
+          "reporte-controller"
+        ],
+        "operationId": "idiomas_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reportes/docentes": {
+      "get": {
+        "tags": [
+          "reporte-controller"
+        ],
+        "operationId": "docentes",
+        "parameters": [
+          {
+            "name": "periodo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/recursos/{id}/descarga": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "download",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/permisos-nota": {
+      "get": {
+        "tags": [
+          "permiso-nota-controller"
+        ],
+        "operationId": "listar_1",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "PENDIENTE"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/periodos": {
+      "get": {
+        "tags": [
+          "catalogo-controller"
+        ],
+        "operationId": "periodos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/secciones": {
+      "get": {
+        "tags": [
+          "aviso-controller"
+        ],
+        "operationId": "misSecciones",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/recursos": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "myResources",
+        "parameters": [
+          {
+            "name": "seccion",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/notificaciones": {
+      "get": {
+        "tags": [
+          "comunicacion-controller"
+        ],
+        "operationId": "notifications",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/notas": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "myGrades",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/mensajes": {
+      "get": {
+        "tags": [
+          "comunicacion-controller"
+        ],
+        "operationId": "messages",
+        "parameters": [
+          {
+            "name": "con",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/cursos-resumen": {
+      "get": {
+        "tags": [
+          "silabo-controller"
+        ],
+        "operationId": "misCursos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/contactos": {
+      "get": {
+        "tags": [
+          "aviso-controller"
+        ],
+        "operationId": "contactos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/comunidades": {
+      "get": {
+        "tags": [
+          "aviso-controller"
+        ],
+        "operationId": "misComunidades",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/clases": {
+      "get": {
+        "tags": [
+          "academico-controller"
+        ],
+        "operationId": "classes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/segundas-lenguas": {
+      "get": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "secondLanguages",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/publicaciones/pendientes": {
+      "get": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "pending",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/miembros": {
+      "get": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "members",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/recomendadas": {
+      "get": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "recommendations",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/archivos/{id}": {
+      "get": {
+        "tags": [
+          "archivo-controller"
+        ],
+        "operationId": "metadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/archivos/{id}/descarga": {
+      "get": {
+        "tags": [
+          "archivo-controller"
+        ],
+        "operationId": "download_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/miembros/{usuario}": {
+      "delete": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "expel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "usuario",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/comunidades/{id}/miembros/me": {
+      "delete": {
+        "tags": [
+          "comunidad-controller"
+        ],
+        "operationId": "leave",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/comentarios/{id}": {
+      "delete": {
+        "tags": [
+          "publicacion-controller"
+        ],
+        "operationId": "deleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UnidadDatos": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "orden": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "nombre",
+          "orden"
+        ]
+      },
+      "Resolucion": {
+        "type": "object",
+        "properties": {
+          "aprobar": {
+            "type": "boolean"
+          },
+          "motivo": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        }
+      },
+      "SesionDatos": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "orden": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fechaInicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duracionMin": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "enlaceClase": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "orden",
+          "titulo"
+        ]
+      },
+      "SilaboDatos": {
+        "type": "object",
+        "properties": {
+          "sumilla": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "competencias": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "contenidos": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "metodologia": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "evaluacion": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "bibliografia": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          },
+          "idArchivo": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Silabo": {
+        "type": "object",
+        "properties": {
+          "idSilabo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idSeccion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sumilla": {
+            "type": "string"
+          },
+          "competencias": {
+            "type": "string"
+          },
+          "contenidos": {
+            "type": "string"
+          },
+          "metodologia": {
+            "type": "string"
+          },
+          "evaluacion": {
+            "type": "string"
+          },
+          "bibliografia": {
+            "type": "string"
+          },
+          "idArchivo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idAutor": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fechaActualizacion": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RecursoDatos": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "DOCUMENTO",
+              "VIDEO",
+              "ENLACE",
+              "TAREA"
+            ]
+          },
+          "idSesion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idIdioma": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idArchivo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "urlExterna": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "fechaEntrega": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "permiteTardias": {
+            "type": "boolean"
+          },
+          "idEvaluacion": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "tipo",
+          "titulo"
+        ]
+      },
+      "PuebloDatos": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "familiaLinguistica": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "nombre"
+        ]
+      },
+      "PublicacionDatos": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "contenido": {
+            "type": "string",
+            "maxLength": 20000,
+            "minLength": 0
+          },
+          "idSeccion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "archivos": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "maxItems": 10,
+            "minItems": 0
+          }
+        }
+      },
+      "Moderacion": {
+        "type": "object",
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "PENDIENTE",
+              "APROBADA",
+              "RECHAZADA"
+            ]
+          }
+        },
+        "required": [
+          "estado"
+        ]
+      },
+      "RespuestaPermiso": {
+        "type": "object",
+        "properties": {
+          "aprobar": {
+            "type": "boolean"
+          },
+          "respuesta": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        }
+      },
+      "NotaDatos": {
+        "type": "object",
+        "properties": {
+          "idMatricula": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idEvaluacion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "calificacion": {
+            "type": "number",
+            "maximum": 20,
+            "minimum": 0
+          },
+          "comentarioDocente": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "calificacion",
+          "idEvaluacion",
+          "idMatricula"
+        ]
+      },
+      "Perfil": {
+        "type": "object",
+        "properties": {
+          "nombres": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "apellidos": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "especialidad": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "idIdiomaPref": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "telefono": {
+            "type": "string",
+            "pattern": "^[0-9]{9}$"
+          },
+          "correoRecuperacion": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "idiomas": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "maxItems": 20,
+            "minItems": 0
+          }
+        },
+        "required": [
+          "apellidos",
+          "correoRecuperacion",
+          "nombres"
+        ]
+      },
+      "Password": {
+        "type": "object",
+        "properties": {
+          "actual": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nueva": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 12
+          },
+          "codigo": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9]{6}$"
+          }
+        },
+        "required": [
+          "actual",
+          "codigo",
+          "nueva"
+        ]
+      },
+      "IdiomaDatos": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z-]+$"
+          },
+          "nombre": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "codigo",
+          "nombre"
+        ]
+      },
+      "CursoDatos": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "nombre": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "codigo",
+          "nombre"
+        ]
+      },
+      "ComunidadDatos": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "idCategoria": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idIdioma": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idPueblo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "visibilidad": {
+            "type": "string",
+            "enum": [
+              "PUBLICA",
+              "PRIVADA"
+            ]
+          },
+          "moderacionPrevia": {
+            "type": "boolean"
+          },
+          "idImagen": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "segundasLenguas": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "maxItems": 10,
+            "minItems": 0
+          }
+        },
+        "required": [
+          "idCategoria",
+          "nombre",
+          "visibilidad"
+        ]
+      },
+      "CategoriaDatos": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "nombre"
+        ]
+      },
+      "EdicionUsuario": {
+        "type": "object",
+        "properties": {
+          "nombres": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "apellidos": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "correo": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0,
+            "pattern": "(?i)^[A-Za-z0-9._%+-]+@(perueduca\\.pe|minedu\\.gob\\.pe)$"
+          },
+          "rol": {
+            "type": "string",
+            "enum": [
+              "ESTUDIANTE",
+              "DOCENTE",
+              "ADMIN"
+            ]
+          },
+          "especialidad": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "telefono": {
+            "type": "string",
+            "pattern": "^[0-9]{9}$"
+          },
+          "correoRecuperacion": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "idIdiomaPref": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "apellidos",
+          "correo",
+          "correoRecuperacion",
+          "nombres",
+          "rol"
+        ]
+      },
+      "ResetPassword": {
+        "type": "object",
+        "properties": {
+          "nueva": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 12
+          }
+        },
+        "required": [
+          "nueva"
+        ]
+      },
+      "CambioEstado": {
+        "type": "object",
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "ACTIVO",
+              "INACTIVO",
+              "PENDIENTE"
+            ]
+          }
+        },
+        "required": [
+          "estado"
+        ]
+      },
+      "EntregaDatos": {
+        "type": "object",
+        "properties": {
+          "idArchivo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "comentario": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        }
+      },
+      "AsistenciaDatos": {
+        "type": "object",
+        "properties": {
+          "idMatricula": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "PRESENTE",
+              "TARDANZA",
+              "FALTA",
+              "JUSTIFICADA"
+            ]
+          },
+          "observacion": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "estado",
+          "idMatricula"
+        ]
+      },
+      "PermisoNotaDatos": {
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "motivo"
+        ]
+      },
+      "EvaluacionDatos": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "PRACTICA",
+              "TAREA",
+              "EXAMEN",
+              "PROYECTO",
+              "PARTICIPACION"
+            ]
+          },
+          "peso": {
+            "type": "number",
+            "maximum": 100,
+            "minimum": 0.01
+          },
+          "idUnidad": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "nombre",
+          "peso",
+          "tipo"
+        ]
+      },
+      "ComentarioDatos": {
+        "type": "object",
+        "properties": {
+          "contenido": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0
+          },
+          "idComentarioPadre": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "contenido"
+        ]
+      },
+      "Aviso": {
+        "type": "object",
+        "properties": {
+          "destino": {
+            "type": "string",
+            "enum": [
+              "TODOS",
+              "DOCENTES",
+              "ESTUDIANTES",
+              "SECCION",
+              "USUARIO"
+            ]
+          },
+          "idSeccion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idUsuario": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "titulo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "contenido": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "destino",
+          "titulo"
+        ]
+      },
+      "Envio": {
+        "type": "object",
+        "properties": {
+          "enviadas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mensaje": {
+            "type": "string"
+          }
+        }
+      },
+      "MensajeDatos": {
+        "type": "object",
+        "properties": {
+          "idReceptor": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "contenido": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "contenido",
+          "idReceptor"
+        ]
+      },
+      "SeccionDatos": {
+        "type": "object",
+        "properties": {
+          "idPeriodo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idDocente": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "grupo": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0
+          },
+          "cupoMaximo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "salaVirtual": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "grupo",
+          "idDocente",
+          "idPeriodo"
+        ]
+      },
+      "Solicitud": {
+        "type": "object",
+        "properties": {
+          "mensaje": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        }
+      },
+      "EventoDatos": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "fechaInicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "enlace": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "idSeccion": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "fechaInicio",
+          "titulo"
+        ]
+      },
+      "ComunidadImportada": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "descripcion": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "categoria": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "idioma": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "pueblo": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "visibilidad": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0
+          }
+        }
+      },
+      "Importacion": {
+        "type": "object",
+        "properties": {
+          "filas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComunidadImportada"
+            },
+            "maxItems": 200,
+            "minItems": 1
+          }
+        },
+        "required": [
+          "filas"
+        ]
+      },
+      "Restablecer": {
+        "type": "object",
+        "properties": {
+          "correo": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "codigo": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9]{6}$"
+          },
+          "nueva": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 12
+          }
+        },
+        "required": [
+          "codigo",
+          "correo",
+          "nueva"
+        ]
+      },
+      "Resultado": {
+        "type": "object",
+        "properties": {
+          "estado": {
+            "type": "string"
+          },
+          "mensaje": {
+            "type": "string"
+          }
+        }
+      },
+      "Registro": {
+        "type": "object",
+        "properties": {
+          "nombres": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "apellidos": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "correo": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0,
+            "pattern": "(?i)^[A-Za-z0-9._%+-]+@(perueduca\\.pe|minedu\\.gob\\.pe)$"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 12
+          },
+          "rol": {
+            "type": "string",
+            "enum": [
+              "ESTUDIANTE",
+              "DOCENTE",
+              "ADMIN"
+            ]
+          },
+          "especialidad": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "telefono": {
+            "type": "string",
+            "pattern": "^[0-9]{9}$"
+          },
+          "idIdiomaPref": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "correoRecuperacion": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "apellidos",
+          "correo",
+          "correoRecuperacion",
+          "nombres",
+          "password",
+          "rol"
+        ]
+      },
+      "Recuperacion": {
+        "type": "object",
+        "properties": {
+          "correo": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "correo"
+        ]
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "correo": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "correo",
+          "password"
+        ]
+      },
+      "NuevoUsuario": {
+        "type": "object",
+        "properties": {
+          "nombres": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "apellidos": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "correo": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0,
+            "pattern": "(?i)^[A-Za-z0-9._%+-]+@(perueduca\\.pe|minedu\\.gob\\.pe)$"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 12
+          },
+          "rol": {
+            "type": "string",
+            "enum": [
+              "ESTUDIANTE",
+              "DOCENTE",
+              "ADMIN"
+            ]
+          },
+          "especialidad": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "telefono": {
+            "type": "string",
+            "pattern": "^[0-9]{9}$"
+          },
+          "correoRecuperacion": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "apellidos",
+          "correo",
+          "correoRecuperacion",
+          "nombres",
+          "password",
+          "rol"
+        ]
+      },
+      "VistaPermiso": {
+        "type": "object",
+        "properties": {
+          "idPermiso": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idSeccion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "curso": {
+            "type": "string"
+          },
+          "grupo": {
+            "type": "string"
+          },
+          "idDocente": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "docente": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string"
+          },
+          "fechaSolicitud": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "respuesta": {
+            "type": "string"
+          },
+          "fechaRespuesta": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "vence": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "vigente": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
