@@ -23,6 +23,9 @@ public class PerfilService {
   private final TextPolicy text;
   private final AccessService access;
   private final AuditService audit;
+  private final UsuarioIdiomaRepository usuarioIdiomas;
+  private final CuentaService cuentas;
+  private final CorreoService correo;
 
   public Usuario me() {
     return repo.findById(Actor.actual().id()).orElseThrow(ApiException::missing);
@@ -36,21 +39,63 @@ public class PerfilService {
     u.setApellidos(text.required(d.apellidos()));
     u.setIdIdiomaPref(d.idIdiomaPref());
     u.setTelefono(d.telefono() == null || d.telefono().isBlank() ? null : d.telefono().trim());
-    u.setCorreoRecuperacion(
-        d.correoRecuperacion() == null || d.correoRecuperacion().isBlank()
-            ? null
-            : d.correoRecuperacion().trim().toLowerCase(java.util.Locale.ROOT));
+    u.setCorreoRecuperacion(d.correoRecuperacion().trim().toLowerCase(java.util.Locale.ROOT));
+    if (d.idiomas() != null) guardarIdiomas(u.getIdUsuario(), d.idiomas());
     if (Actor.actual().docente()) u.setEspecialidad(text.clean(d.especialidad()));
     u.setFechaActualizacion(LocalDateTime.now());
     return u;
   }
 
+  @Transactional(readOnly = true)
+  public java.util.List<Long> misIdiomas() {
+    return usuarioIdiomas.findByIdUsuario(Actor.actual().id()).stream()
+        .map(UsuarioIdioma::getIdIdioma)
+        .toList();
+  }
+
+  private void guardarIdiomas(Long idUsuario, java.util.List<Long> lista) {
+    java.util.Set<Long> unicos = new java.util.LinkedHashSet<>(lista);
+    for (Long id : unicos) if (!idiomas.existsById(id)) throw ApiException.rule("Uno de los idiomas no existe");
+    usuarioIdiomas.deleteByIdUsuario(idUsuario);
+    usuarioIdiomas.flush();
+    unicos.forEach(id -> usuarioIdiomas.save(new UsuarioIdioma(idUsuario, id)));
+  }
+
+  public java.util.Map<String, String> enviarCodigoPassword() {
+    Usuario u = me();
+    if (u.getCorreoRecuperacion() == null || u.getCorreoRecuperacion().isBlank())
+      throw ApiException.rule("Registra primero tu Gmail personal en tus datos");
+    String codigo = cuentas.nuevoCodigo(u);
+    if (codigo == null)
+      throw ApiException.rule("Espera un minuto antes de pedir otro código");
+    correo.enviar(
+        u.getCorreoRecuperacion(),
+        "Código para cambiar tu contraseña - Comunidades Virtuales",
+        "Hola "
+            + u.getNombres()
+            + ",\n\nTu código para confirmar el cambio de contraseña es: "
+            + codigo
+            + "\n\nVence en "
+            + CuentaService.minutosVigencia()
+            + " minutos y solo se puede usar una vez.\nSi no fuiste tú, ignora este correo y"
+            + " cambia tu contraseña.\n\nComunidades Virtuales - PerúEduca");
+    return java.util.Map.of("destino", ocultar(u.getCorreoRecuperacion()));
+  }
+
+  private static String ocultar(String correo) {
+    int arroba = correo.indexOf('@');
+    if (arroba <= 2) return correo;
+    return correo.substring(0, 2) + "*".repeat(arroba - 2) + correo.substring(arroba);
+  }
+
+  @Transactional(noRollbackFor = ApiException.class)
   public void password(Requests.Password d) {
     Usuario u = repo.bloquearPorCorreo(Actor.actual().correo()).orElseThrow(ApiException::missing);
     if (u.getPasswordHash() == null || !encoder.matches(d.actual(), u.getPasswordHash()))
       throw ApiException.rule("La contraseña actual no es correcta");
     if (d.nueva().getBytes(java.nio.charset.StandardCharsets.UTF_8).length > 72)
       throw ApiException.rule("La contraseña admite hasta 72 bytes UTF-8");
+    cuentas.usarCodigo(u, d.codigo(), ApiException.rule("El código no es válido o ya venció"));
     u.setPasswordHash(encoder.encode(d.nueva()));
     u.setFechaActualizacion(LocalDateTime.now());
     audit.record(

@@ -14,12 +14,22 @@ public class PerfilController {
   @GetMapping
   public Object me() {
     return java.util.Map.of(
-        "usuario", service.me(), "rol", pe.perueduca.comunidades.security.Actor.actual().rol());
+        "usuario",
+        service.me(),
+        "rol",
+        pe.perueduca.comunidades.security.Actor.actual().rol(),
+        "idiomas",
+        service.misIdiomas());
   }
 
   @PutMapping
   public Object update(@jakarta.validation.Valid @RequestBody Requests.Perfil d) {
     return service.update(d);
+  }
+
+  @PostMapping("/password/codigo")
+  public Object passwordCode() {
+    return service.enviarCodigoPassword();
   }
 
   @PutMapping("/password")
