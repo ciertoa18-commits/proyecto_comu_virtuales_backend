@@ -38,7 +38,19 @@ public final class Requests {
       Long idPueblo,
       @NotNull ComunidadVisibilidad visibilidad,
       boolean moderacionPrevia,
-      Long idImagen) {}
+      Long idImagen,
+      @Size(max = 10) List<@NotNull Long> segundasLenguas) {}
+
+  public record CategoriaDatos(
+      @NotBlank @Size(max = 100) String nombre, @Size(max = 500) String descripcion) {}
+
+  public record IdiomaDatos(
+      @NotBlank @Size(max = 10) @Pattern(regexp = "^[a-zA-Z-]+$", message = "solo letras y guiones")
+          String codigo,
+      @NotBlank @Size(max = 60) String nombre) {}
+
+  public record PuebloDatos(
+      @NotBlank @Size(max = 100) String nombre, @Size(max = 100) String familiaLinguistica) {}
 
   public record Solicitud(@Size(max = 500) String mensaje) {}
 

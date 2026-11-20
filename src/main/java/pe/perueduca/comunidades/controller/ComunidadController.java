@@ -39,6 +39,11 @@ public class ComunidadController {
     return service.buscar(null, null, idioma, 0, 10);
   }
 
+  @GetMapping("/comunidades/{id}/segundas-lenguas")
+  public Object secondLanguages(@PathVariable Long id) {
+    return service.segundasLenguas(id);
+  }
+
   @GetMapping("/comunidades/{id}")
   public Object get(@PathVariable Long id) {
     return access.comunidad(id);

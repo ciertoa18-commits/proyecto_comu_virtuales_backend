@@ -31,13 +31,14 @@ class ComunidadServiceImplTest {
   @Mock CategoriaRepository categorias;
   @Mock IdiomaRepository idiomas;
   @Mock PuebloOriginarioRepository pueblos;
+  @Mock ComunidadIdiomaRepository segundasLenguas;
 
   @InjectMocks ComunidadServiceImpl service;
 
   private Requests.ComunidadDatos datos(String nombre, Long categoria) {
     return new Requests.ComunidadDatos(
         nombre, "Comunidad de prueba", categoria, null, null,
-        ComunidadVisibilidad.PUBLICA, false, null);
+        ComunidadVisibilidad.PUBLICA, false, null, null);
   }
 
   @Test

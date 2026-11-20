@@ -9,6 +9,8 @@ public interface ComunidadService {
 
   Comunidad guardar(Long id, Requests.ComunidadDatos datos);
 
+  java.util.List<Long> segundasLenguas(Long idComunidad);
+
   void desactivar(Long id);
 
   MiembroComunidad unirse(Long id);
