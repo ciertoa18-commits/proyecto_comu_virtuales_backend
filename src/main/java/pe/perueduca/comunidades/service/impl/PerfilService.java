@@ -61,7 +61,7 @@ public class PerfilService {
     unicos.forEach(id -> usuarioIdiomas.save(new UsuarioIdioma(idUsuario, id)));
   }
 
-  public java.util.Map<String, String> enviarCodigoPassword() {
+  public java.util.Map<String, Object> enviarCodigoPassword() {
     Usuario u = me();
     if (u.getCorreoRecuperacion() == null || u.getCorreoRecuperacion().isBlank())
       throw ApiException.rule("Registra primero tu Gmail personal en tus datos");
@@ -79,7 +79,8 @@ public class PerfilService {
             + CuentaService.minutosVigencia()
             + " minutos y solo se puede usar una vez.\nSi no fuiste tú, ignora este correo y"
             + " cambia tu contraseña.\n\nComunidades Virtuales - PerúEduca");
-    return java.util.Map.of("destino", ocultar(u.getCorreoRecuperacion()));
+    return java.util.Map.of(
+        "destino", ocultar(u.getCorreoRecuperacion()), "correoActivo", correo.configurado());
   }
 
   private static String ocultar(String correo) {
