@@ -139,5 +139,14 @@ public final class Requests {
       @NotNull AsistenciaEstado estado,
       @Size(max = 300) String observacion) {}
 
+  public record SilaboDatos(
+      @Size(max = 4000) String sumilla,
+      @Size(max = 4000) String competencias,
+      @Size(max = 4000) String contenidos,
+      @Size(max = 4000) String metodologia,
+      @Size(max = 4000) String evaluacion,
+      @Size(max = 4000) String bibliografia,
+      Long idArchivo) {}
+
   public record EntregaDatos(Long idArchivo, @Size(max = 1000) String comentario) {}
 }

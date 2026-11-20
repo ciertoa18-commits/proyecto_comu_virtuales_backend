@@ -188,9 +188,10 @@ public class AcademicoController {
   }
 
   @GetMapping("/me/recursos")
-  public Object myResources() {
+  public Object myResources(@RequestParam(required = false) Long seccion) {
     return matriculas.findByIdUsuario(Actor.actual().id()).stream()
         .filter(m -> m.getEstado() != MatriculaEstado.RETIRADO)
+        .filter(m -> seccion == null || m.getIdSeccion().equals(seccion))
         .flatMap(
             m -> {
               access.enrolled(m.getIdSeccion());
