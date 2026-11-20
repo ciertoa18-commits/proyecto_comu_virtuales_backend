@@ -34,6 +34,7 @@ public class AdminUsuarioService {
   private final TextPolicy text;
   private final AuditService audit;
   private final CuentaService cuentas;
+  private final IdiomaRepository idiomas;
 
   public record UsuarioResumen(
       Long idUsuario,
@@ -46,6 +47,24 @@ public class AdminUsuarioService {
       String telefono,
       LocalDateTime fechaRegistro,
       boolean bloqueado) {}
+
+  public record UsuarioDetalle(
+      Long idUsuario,
+      String nombres,
+      String apellidos,
+      String correo,
+      String correoRecuperacion,
+      String rol,
+      String estado,
+      String especialidad,
+      String telefono,
+      Long idIdiomaPref,
+      String idioma,
+      Long intentosFallidos,
+      LocalDateTime bloqueadoHasta,
+      boolean bloqueado,
+      LocalDateTime fechaRegistro,
+      LocalDateTime fechaActualizacion) {}
 
   public record SeccionResumen(
       Long idSeccion, String grupo, Long idCurso, String curso, String estado) {}
@@ -156,6 +175,72 @@ public class AdminUsuarioService {
     audit.record("USUARIO", id, AuditoriaAccion.UPDATE, "{\"estado\":\"" + antes + "\"}",
         "{\"estado\":\"" + estado + "\"}");
     return resumen(u, codigosRol());
+  }
+
+  @Transactional(readOnly = true)
+  public UsuarioDetalle detalle(Long id) {
+    return detalle(usuarios.findById(id).orElseThrow(ApiException::missing));
+  }
+
+  private UsuarioDetalle detalle(Usuario u) {
+    String idioma =
+        u.getIdIdiomaPref() == null
+            ? null
+            : idiomas.findById(u.getIdIdiomaPref()).map(Idioma::getNombre).orElse(null);
+    return new UsuarioDetalle(
+        u.getIdUsuario(),
+        u.getNombres(),
+        u.getApellidos(),
+        u.getCorreo(),
+        u.getCorreoRecuperacion(),
+        codigosRol().get(u.getIdRol()),
+        u.getEstado().name(),
+        u.getEspecialidad(),
+        u.getTelefono(),
+        u.getIdIdiomaPref(),
+        idioma,
+        u.getIntentosFallidos(),
+        u.getBloqueadoHasta(),
+        u.getBloqueadoHasta() != null && u.getBloqueadoHasta().isAfter(LocalDateTime.now()),
+        u.getFechaRegistro(),
+        u.getFechaActualizacion());
+  }
+
+  public UsuarioDetalle editar(Long id, CuentaRequests.EdicionUsuario d) {
+    Usuario u = usuarios.findById(id).orElseThrow(ApiException::missing);
+    String mail = CuentaService.normalizar(d.correo());
+    CuentaService.validarDominio(mail, d.rol());
+    usuarios
+        .findByCorreo(mail)
+        .filter(otro -> !otro.getIdUsuario().equals(id))
+        .ifPresent(
+            otro -> {
+              throw ApiException.conflict("Ya existe una cuenta con ese correo");
+            });
+    if (id.equals(Actor.actual().id()) && !cuentas.idRol(d.rol()).equals(u.getIdRol()))
+      throw ApiException.rule("No puedes cambiar el rol de tu propia cuenta");
+    if (d.idIdiomaPref() != null && !idiomas.existsById(d.idIdiomaPref()))
+      throw ApiException.rule("El idioma elegido no existe");
+    u.setNombres(text.required(d.nombres()));
+    u.setApellidos(text.required(d.apellidos()));
+    u.setCorreo(mail);
+    u.setIdRol(cuentas.idRol(d.rol()));
+    u.setEspecialidad(d.rol() == RolCodigo.DOCENTE ? text.clean(d.especialidad()) : null);
+    u.setTelefono(CuentaService.blancoANulo(d.telefono()));
+    u.setCorreoRecuperacion(CuentaService.normalizar(d.correoRecuperacion()));
+    if (d.idIdiomaPref() != null) u.setIdIdiomaPref(d.idIdiomaPref());
+    u.setFechaActualizacion(LocalDateTime.now());
+    audit.record("USUARIO", id, AuditoriaAccion.UPDATE, null, "{\"editadoPorAdmin\":true}");
+    return detalle(u);
+  }
+
+  public UsuarioDetalle desbloquear(Long id) {
+    Usuario u = usuarios.findById(id).orElseThrow(ApiException::missing);
+    u.setIntentosFallidos(0L);
+    u.setBloqueadoHasta(null);
+    u.setFechaActualizacion(LocalDateTime.now());
+    audit.record("USUARIO", id, AuditoriaAccion.UPDATE, null, "{\"desbloqueado\":true}");
+    return detalle(u);
   }
 
   public void resetPassword(Long id, String nueva) {
