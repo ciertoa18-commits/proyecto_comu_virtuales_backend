@@ -7,7 +7,11 @@ import pe.perueduca.comunidades.entity.*;
 public interface ComunidadService {
   Page<Comunidad> buscar(String q, Long categoria, Long idioma, int page, int size);
 
+  Page<Comunidad> recomendadas(Long idUsuario, Long idiomaPreferido, int size);
+
   Comunidad guardar(Long id, Requests.ComunidadDatos datos);
+
+  java.util.List<java.util.Map<String, Object>> importar(Requests.Importacion datos);
 
   void desactivar(Long id);
 
