@@ -14,7 +14,6 @@ import pe.perueduca.comunidades.util.TextPolicy;
 
 @Service
 @Transactional
-@PreAuthorize("hasRole('ADMIN')")
 @lombok.RequiredArgsConstructor
 public class CatalogoService {
   private static final String EN_USO = "No se puede eliminar porque está en uso";
@@ -27,7 +26,10 @@ public class CatalogoService {
   private final ComunidadIdiomaRepository segundasLenguas;
   private final TextPolicy text;
 
+  @PreAuthorize("hasAnyRole('ADMIN', 'DOCENTE')")
   public Categoria guardarCategoria(Long id, Requests.CategoriaDatos d) {
+    if (id != null && !pe.perueduca.comunidades.security.Actor.actual().admin())
+      throw ApiException.denied();
     String nombre = text.required(d.nombre());
     categorias.findAll().stream()
         .filter(c -> c.getNombre().equalsIgnoreCase(nombre) && !c.getIdCategoria().equals(id))
@@ -41,12 +43,14 @@ public class CatalogoService {
     return categorias.save(c);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   public void eliminarCategoria(Long id) {
     if (!categorias.existsById(id)) throw ApiException.missing();
     if (!comunidades.findByIdCategoria(id).isEmpty()) throw ApiException.conflict(EN_USO);
     categorias.deleteById(id);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   public Idioma guardarIdioma(Long id, Requests.IdiomaDatos d) {
     String nombre = text.required(d.nombre());
     String codigo = d.codigo().trim().toLowerCase(Locale.ROOT);
@@ -63,6 +67,7 @@ public class CatalogoService {
     return idiomas.save(i);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   public void eliminarIdioma(Long id) {
     if (!idiomas.existsById(id)) throw ApiException.missing();
     if (!comunidades.findByIdIdioma(id).isEmpty()
@@ -71,6 +76,7 @@ public class CatalogoService {
     idiomas.deleteById(id);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   public PuebloOriginario guardarPueblo(Long id, Requests.PuebloDatos d) {
     String nombre = text.required(d.nombre());
     pueblos.findAll().stream()
@@ -85,6 +91,7 @@ public class CatalogoService {
     return pueblos.save(p);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   public void eliminarPueblo(Long id) {
     if (!pueblos.existsById(id)) throw ApiException.missing();
     if (!comunidades.findByIdPueblo(id).isEmpty()) throw ApiException.conflict(EN_USO);
