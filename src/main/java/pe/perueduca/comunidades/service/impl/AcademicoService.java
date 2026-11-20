@@ -47,6 +47,7 @@ public class AcademicoService {
   private final TextPolicy text;
   private final NotificationService notifications;
   private final AuditService audit;
+  private final PermisoNotaService permisosNota;
 
   public Curso curso(Long id) {
     Curso c = cursos.findById(id).orElseThrow(ApiException::missing);
@@ -335,6 +336,12 @@ public class AcademicoService {
     String before =
         n.getCalificacion() == null ? null : "{\"calificacion\":" + n.getCalificacion() + "}";
     boolean nuevo = n.getIdNota() == null;
+    if (!nuevo
+        && !Actor.actual().admin()
+        && n.getCalificacion() != null
+        && n.getCalificacion().compareTo(d.calificacion()) != 0
+        && !permisosNota.tienePermiso(m.getIdSeccion(), Actor.actual().id()))
+      throw ApiException.rule("Necesitas permiso del administrador para modificar una nota ya registrada");
     n.setIdMatricula(m.getIdMatricula());
     n.setIdEvaluacion(e.getIdEvaluacion());
     n.setCalificacion(d.calificacion());

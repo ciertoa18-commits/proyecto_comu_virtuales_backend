@@ -149,6 +149,10 @@ public final class Requests {
       @NotNull AsistenciaEstado estado,
       @Size(max = 300) String observacion) {}
 
+  public record PermisoNotaDatos(@NotBlank @Size(max = 500) String motivo) {}
+
+  public record RespuestaPermiso(boolean aprobar, @Size(max = 500) String respuesta) {}
+
   public record SilaboDatos(
       @Size(max = 4000) String sumilla,
       @Size(max = 4000) String competencias,

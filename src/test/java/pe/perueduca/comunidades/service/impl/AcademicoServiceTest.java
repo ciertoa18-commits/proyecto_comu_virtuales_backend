@@ -41,6 +41,7 @@ class AcademicoServiceTest {
   @Spy TextPolicy text = new TextPolicy("");
   @Mock NotificationService notifications;
   @Mock AuditService audit;
+  @Mock PermisoNotaService permisosNota;
   @Mock MiembroComunidadRepository miembros;
 
   @InjectMocks AcademicoService service;
