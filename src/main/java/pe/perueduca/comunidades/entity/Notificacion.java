@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "NOTIFICACION")
+@EntityListeners(pe.perueduca.comunidades.realtime.NotificacionListener.class)
 @Getter
 @Setter
 public class Notificacion {
