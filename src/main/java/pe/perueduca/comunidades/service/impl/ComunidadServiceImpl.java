@@ -182,15 +182,14 @@ public class ComunidadServiceImpl implements pe.perueduca.comunidades.service.Co
   public SolicitudIngreso resolver(Long id, Requests.Resolucion d) {
     SolicitudIngreso s = solicitudes.bloquear(id).orElseThrow(ApiException::missing);
     locked(s.getIdComunidad());
-    if (s.getEstado() != SolicitudIngresoEstado.PENDIENTE)
-      throw ApiException.conflict("La solicitud ya fue resuelta");
+    if (s.getEstado() != SolicitudIngresoEstado.PENDIENTE) return s;
     if (!d.aprobar() && text.clean(d.motivo()) == null)
       throw ApiException.rule("Indique el motivo de rechazo");
     if (d.aprobar()) activate(s.getIdComunidad(), s.getIdUsuario());
     s.setEstado(d.aprobar() ? SolicitudIngresoEstado.APROBADA : SolicitudIngresoEstado.RECHAZADA);
     s.setIdRevisor(Actor.actual().id());
     s.setFechaRespuesta(LocalDateTime.now());
-    s.setMotivoRechazo(d.aprobar() ? null : text.clean(d.motivo()));
+    s.setMotivoRechazo(text.clean(d.motivo()));
     notifications.send(
         s.getIdUsuario(),
         s.getIdComunidad(),
