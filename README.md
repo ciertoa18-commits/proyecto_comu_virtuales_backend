@@ -19,6 +19,10 @@ $bytes = New-Object byte[] 32
 [Convert]::ToBase64String($bytes)
 ```
 
+Cada vez que se reinicia el laboratorio de AWS cambia la IP de la instancia: actualiza solo `spring.datasource.url` en `.local/application-local.properties`. El repositorio no guarda ninguna IP.
+
+Para que lleguen los códigos de "Modificar contraseña" y "Recuperar contraseña", completa las líneas `spring.mail.*` con una cuenta de Gmail y una [contraseña de aplicación](https://myaccount.google.com/apppasswords) (requiere verificación en dos pasos). Sin esas líneas, el código se muestra en la consola del backend.
+
 Los archivos de configuración son:
 
 - `application.yaml`: configuración común.

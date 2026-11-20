@@ -24,6 +24,10 @@ public class CorreoService {
     this.smtpConfigurado = !host.isBlank();
   }
 
+  public boolean configurado() {
+    return smtpConfigurado && sender.getIfAvailable() != null;
+  }
+
   public void enviar(String para, String asunto, String texto) {
     JavaMailSender mail = smtpConfigurado ? sender.getIfAvailable() : null;
     if (mail == null) {
