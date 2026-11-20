@@ -398,6 +398,9 @@ public class AcademicoService {
     for (var d : datos) {
       if (!seen.add(d.idMatricula()))
         throw ApiException.rule("Matrícula duplicada en el registro de asistencia");
+      if (d.estado() == pe.perueduca.comunidades.enums.AsistenciaEstado.JUSTIFICADA
+          && text.clean(d.observacion()) == null)
+        throw ApiException.rule("Indica la razón de cada falta justificada");
       Matricula m = matriculas.findById(d.idMatricula()).orElseThrow(ApiException::missing);
       if (!m.getIdSeccion().equals(section) || m.getEstado() != MatriculaEstado.MATRICULADO)
         throw ApiException.rule("Matrícula inválida para esta sesión");

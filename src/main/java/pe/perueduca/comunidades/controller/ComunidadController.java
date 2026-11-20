@@ -46,6 +46,11 @@ public class ComunidadController {
     return service.recomendadas(yo, idioma, 8);
   }
 
+  @GetMapping("/comunidades/{id}/segundas-lenguas")
+  public Object secondLanguages(@PathVariable Long id) {
+    return service.segundasLenguas(id);
+  }
+
   @GetMapping("/comunidades/{id}")
   public Object get(@PathVariable Long id) {
     return access.comunidad(id);
@@ -121,12 +126,28 @@ public class ComunidadController {
   @PreAuthorize("hasRole('ADMIN')")
   public Object requests(
       @RequestParam(defaultValue = "PENDIENTE") SolicitudIngresoEstado estado,
+      @RequestParam(required = false) String q,
       @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "20") int size) {
+      @RequestParam(defaultValue = "10") int size) {
+    String filtro = q == null || q.isBlank() ? null : "%" + q.trim().toLowerCase() + "%";
     return solicitudes.findAll(
-        (r, q, b) -> b.equal(r.get("estado"), estado),
+        (r, cq, b) -> {
+          jakarta.persistence.criteria.Predicate p = b.equal(r.get("estado"), estado);
+          if (filtro == null) return p;
+          var u = r.join("refIdUsuario");
+          var c = r.join("refIdComunidad");
+          return b.and(
+              p,
+              b.or(
+                  b.like(b.lower(u.get("nombres")), filtro),
+                  b.like(b.lower(u.get("apellidos")), filtro),
+                  b.like(b.lower(u.get("correo")), filtro),
+                  b.like(b.lower(c.get("nombre")), filtro)));
+        },
         org.springframework.data.domain.PageRequest.of(
-            Math.max(page, 0), Math.max(1, Math.min(size, 100))));
+            Math.max(page, 0),
+            Math.max(1, Math.min(size, 50)),
+            org.springframework.data.domain.Sort.by("fechaSolicitud").descending()));
   }
 
   @PutMapping("/solicitudes/{id}")
