@@ -33,10 +33,17 @@ public class ComunidadController {
     return service.buscar(q, categoria, idioma, page, size);
   }
 
+  @PostMapping("/comunidades/importar")
+  @PreAuthorize("hasRole('ADMIN')")
+  public Object importar(@jakarta.validation.Valid @RequestBody Requests.Importacion d) {
+    return service.importar(d);
+  }
+
   @GetMapping("/comunidades/recomendadas")
   public Object recommendations() {
-    Long idioma = usuarios.findById(Actor.actual().id()).orElseThrow().getIdIdiomaPref();
-    return service.buscar(null, null, idioma, 0, 10);
+    Long yo = Actor.actual().id();
+    Long idioma = usuarios.findById(yo).orElseThrow().getIdIdiomaPref();
+    return service.recomendadas(yo, idioma, 8);
   }
 
   @GetMapping("/comunidades/{id}/segundas-lenguas")

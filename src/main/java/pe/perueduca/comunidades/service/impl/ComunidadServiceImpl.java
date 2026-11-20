@@ -55,6 +55,129 @@ public class ComunidadServiceImpl implements pe.perueduca.comunidades.service.Co
   }
 
   @PreAuthorize("hasRole('ADMIN')")
+  public List<Map<String, Object>> importar(Requests.Importacion d) {
+    Map<String, Long> cats = new HashMap<>();
+    categorias.findAll().forEach(x -> cats.put(clave(x.getNombre()), x.getIdCategoria()));
+    Map<String, Long> langs = new HashMap<>();
+    idiomas.findAll().forEach(x -> langs.put(clave(x.getNombre()), x.getIdIdioma()));
+    Map<String, Long> towns = new HashMap<>();
+    pueblos.findAll().forEach(x -> towns.put(clave(x.getNombre()), x.getIdPueblo()));
+    Set<String> existentes = new HashSet<>();
+    repo.findAll().forEach(c -> existentes.add(clave(c.getNombre())));
+    List<Map<String, Object>> resultado = new ArrayList<>();
+    int fila = 1;
+    for (Requests.ComunidadImportada x : d.filas()) {
+      fila++;
+      String nombre = text.clean(x.nombre());
+      String error = null;
+      Long cat = cats.get(clave(x.categoria()));
+      Long lang = vacio(x.idioma()) ? null : langs.get(clave(x.idioma()));
+      Long town = vacio(x.pueblo()) ? null : towns.get(clave(x.pueblo()));
+      ComunidadVisibilidad vis = visibilidad(x.visibilidad());
+      if (nombre == null) error = "Falta el nombre";
+      else if (existentes.contains(clave(nombre))) error = "Ya existe una comunidad con ese nombre";
+      else if (cat == null) error = "La categoría \"" + x.categoria() + "\" no existe";
+      else if (!vacio(x.idioma()) && lang == null) error = "El idioma \"" + x.idioma() + "\" no existe";
+      else if (!vacio(x.pueblo()) && town == null) error = "El pueblo \"" + x.pueblo() + "\" no existe";
+      else if (vis == null) error = "La visibilidad debe ser PUBLICA o PRIVADA";
+      if (error == null) {
+        try {
+          text.required(nombre);
+          text.clean(x.descripcion());
+        } catch (ApiException e) {
+          error = e.getMessage();
+        }
+      }
+      if (error != null) {
+        resultado.add(Map.of("fila", fila, "nombre", nombre == null ? "" : nombre, "ok", false, "mensaje", error));
+        continue;
+      }
+      Comunidad c = new Comunidad();
+      c.setNombre(nombre);
+      c.setDescripcion(text.clean(x.descripcion()));
+      c.setIdCategoria(cat);
+      c.setIdIdioma(lang);
+      c.setIdPueblo(town);
+      c.setVisibilidad(vis);
+      c.setModeracionPrevia(false);
+      c.setIdCreador(Actor.actual().id());
+      c.setEstado(ComunidadEstado.ACTIVA);
+      c.setFechaCreacion(LocalDateTime.now());
+      repo.save(c);
+      existentes.add(clave(nombre));
+      resultado.add(Map.of("fila", fila, "nombre", nombre, "ok", true, "mensaje", "Creada"));
+    }
+    return resultado;
+  }
+
+  private static String clave(String s) {
+    return s == null
+        ? ""
+        : java.text.Normalizer.normalize(s.trim().toLowerCase(Locale.ROOT), java.text.Normalizer.Form.NFD)
+            .replaceAll("\\p{M}", "");
+  }
+
+  private static boolean vacio(String s) {
+    return s == null || s.isBlank();
+  }
+
+  private static ComunidadVisibilidad visibilidad(String s) {
+    String v = clave(s).toUpperCase(Locale.ROOT);
+    if (v.isEmpty() || v.startsWith("PUB")) return ComunidadVisibilidad.PUBLICA;
+    if (v.startsWith("PRIV")) return ComunidadVisibilidad.PRIVADA;
+    return null;
+  }
+
+  @Transactional(readOnly = true)
+  public Page<Comunidad> recomendadas(Long idUsuario, Long idiomaPreferido, int size) {
+    Set<Long> excluidas = new HashSet<>();
+    List<Comunidad> mias = new ArrayList<>();
+    for (MiembroComunidad m : miembros.findByIdUsuario(idUsuario)) {
+      if (m.getEstado() != MiembroComunidadEstado.ACTIVO) continue;
+      excluidas.add(m.getIdComunidad());
+      repo.findById(m.getIdComunidad()).ifPresent(mias::add);
+    }
+    solicitudes.findByIdUsuario(idUsuario).stream()
+        .filter(s -> s.getEstado() == SolicitudIngresoEstado.PENDIENTE)
+        .forEach(s -> excluidas.add(s.getIdComunidad()));
+    Set<Long> idiomasCercanos = new HashSet<>();
+    Set<Long> pueblosCercanos = new HashSet<>();
+    Set<Long> categoriasCercanas = new HashSet<>();
+    if (idiomaPreferido != null) idiomasCercanos.add(idiomaPreferido);
+    for (Comunidad c : mias) {
+      if (c.getIdIdioma() != null) idiomasCercanos.add(c.getIdIdioma());
+      if (c.getIdPueblo() != null) pueblosCercanos.add(c.getIdPueblo());
+      categoriasCercanas.add(c.getIdCategoria());
+    }
+    List<Comunidad> lista =
+        repo.findAll(
+                (r, q, b) -> b.equal(r.get("estado"), ComunidadEstado.ACTIVA), Sort.by("nombre"))
+            .stream()
+            .filter(c -> !excluidas.contains(c.getIdComunidad()))
+            .sorted(
+                Comparator.comparingInt(
+                    (Comunidad c) ->
+                        -puntaje(c, idiomaPreferido, idiomasCercanos, pueblosCercanos, categoriasCercanas)))
+            .limit(Math.max(1, Math.min(size, 50)))
+            .toList();
+    return new PageImpl<>(lista, PageRequest.of(0, Math.max(1, lista.size())), lista.size());
+  }
+
+  private static int puntaje(
+      Comunidad c,
+      Long idiomaPreferido,
+      Set<Long> idiomas,
+      Set<Long> pueblos,
+      Set<Long> categorias) {
+    int p = 0;
+    if (idiomaPreferido != null && idiomaPreferido.equals(c.getIdIdioma())) p += 4;
+    else if (c.getIdIdioma() != null && idiomas.contains(c.getIdIdioma())) p += 2;
+    if (c.getIdPueblo() != null && pueblos.contains(c.getIdPueblo())) p += 3;
+    if (categorias.contains(c.getIdCategoria())) p += 1;
+    return p;
+  }
+
+  @PreAuthorize("hasRole('ADMIN')")
   public Comunidad guardar(Long id, Requests.ComunidadDatos d) {
     if (!categorias.existsById(d.idCategoria())
         || d.idIdioma() != null && !idiomas.existsById(d.idIdioma())

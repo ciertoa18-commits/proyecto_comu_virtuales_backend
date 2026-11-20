@@ -55,6 +55,16 @@ public final class Requests {
   public record PuebloDatos(
       @NotBlank @Size(max = 100) String nombre, @Size(max = 100) String familiaLinguistica) {}
 
+  public record ComunidadImportada(
+      @Size(max = 150) String nombre,
+      @Size(max = 1000) String descripcion,
+      @Size(max = 100) String categoria,
+      @Size(max = 100) String idioma,
+      @Size(max = 100) String pueblo,
+      @Size(max = 10) String visibilidad) {}
+
+  public record Importacion(@NotNull @Size(min = 1, max = 200) List<@NotNull @jakarta.validation.Valid ComunidadImportada> filas) {}
+
   public record Solicitud(@Size(max = 500) String mensaje) {}
 
   public record Resolucion(boolean aprobar, @Size(max = 500) String motivo) {}
