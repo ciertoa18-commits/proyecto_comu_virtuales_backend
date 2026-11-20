@@ -25,10 +25,13 @@ public final class Requests {
       @Size(max = 100) String especialidad,
       Long idIdiomaPref,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
-      @Email @Size(max = 150) String correoRecuperacion) {}
+      @NotBlank @Email @Size(max = 150) String correoRecuperacion,
+      @Size(max = 20) List<@NotNull Long> idiomas) {}
 
   public record Password(
-      @NotBlank String actual, @NotBlank @Size(min = 12, max = 72) String nueva) {}
+      @NotBlank String actual,
+      @NotBlank @Size(min = 12, max = 72) String nueva,
+      @NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "debe tener 6 dígitos") String codigo) {}
 
   public record ComunidadDatos(
       @NotBlank @Size(max = 150) String nombre,
@@ -38,7 +41,19 @@ public final class Requests {
       Long idPueblo,
       @NotNull ComunidadVisibilidad visibilidad,
       boolean moderacionPrevia,
-      Long idImagen) {}
+      Long idImagen,
+      @Size(max = 10) List<@NotNull Long> segundasLenguas) {}
+
+  public record CategoriaDatos(
+      @NotBlank @Size(max = 100) String nombre, @Size(max = 500) String descripcion) {}
+
+  public record IdiomaDatos(
+      @NotBlank @Size(max = 10) @Pattern(regexp = "^[a-zA-Z-]+$", message = "solo letras y guiones")
+          String codigo,
+      @NotBlank @Size(max = 60) String nombre) {}
+
+  public record PuebloDatos(
+      @NotBlank @Size(max = 100) String nombre, @Size(max = 100) String familiaLinguistica) {}
 
   public record ComunidadImportada(
       @Size(max = 150) String nombre,
@@ -133,6 +148,15 @@ public final class Requests {
       @NotNull Long idMatricula,
       @NotNull AsistenciaEstado estado,
       @Size(max = 300) String observacion) {}
+
+  public record SilaboDatos(
+      @Size(max = 4000) String sumilla,
+      @Size(max = 4000) String competencias,
+      @Size(max = 4000) String contenidos,
+      @Size(max = 4000) String metodologia,
+      @Size(max = 4000) String evaluacion,
+      @Size(max = 4000) String bibliografia,
+      Long idArchivo) {}
 
   public record EntregaDatos(Long idArchivo, @Size(max = 1000) String comentario) {}
 }

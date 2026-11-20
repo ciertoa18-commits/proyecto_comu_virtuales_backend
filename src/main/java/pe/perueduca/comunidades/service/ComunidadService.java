@@ -13,6 +13,8 @@ public interface ComunidadService {
 
   java.util.List<java.util.Map<String, Object>> importar(Requests.Importacion datos);
 
+  java.util.List<Long> segundasLenguas(Long idComunidad);
+
   void desactivar(Long id);
 
   MiembroComunidad unirse(Long id);

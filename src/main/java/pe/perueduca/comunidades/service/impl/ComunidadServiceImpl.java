@@ -33,6 +33,7 @@ public class ComunidadServiceImpl implements pe.perueduca.comunidades.service.Co
   private final CategoriaRepository categorias;
   private final IdiomaRepository idiomas;
   private final PuebloOriginarioRepository pueblos;
+  private final ComunidadIdiomaRepository segundasLenguas;
 
   @Transactional(readOnly = true)
   public Page<Comunidad> buscar(String q, Long cat, Long lang, int page, int size) {
@@ -200,7 +201,27 @@ public class ComunidadServiceImpl implements pe.perueduca.comunidades.service.Co
       c.setEstado(ComunidadEstado.ACTIVA);
       c.setFechaCreacion(LocalDateTime.now());
     } else c.setFechaActualizacion(LocalDateTime.now());
-    return repo.save(c);
+    Comunidad guardada = repo.save(c);
+    if (d.segundasLenguas() != null) guardarSegundasLenguas(guardada, d.segundasLenguas());
+    return guardada;
+  }
+
+  private void guardarSegundasLenguas(Comunidad c, List<Long> lista) {
+    Set<Long> unicas = new LinkedHashSet<>(lista);
+    unicas.remove(c.getIdIdioma());
+    for (Long id : unicas)
+      if (!idiomas.existsById(id)) throw ApiException.rule("Una de las segundas lenguas no existe");
+    segundasLenguas.deleteByIdComunidad(c.getIdComunidad());
+    segundasLenguas.flush();
+    unicas.forEach(id -> segundasLenguas.save(new ComunidadIdioma(c.getIdComunidad(), id)));
+  }
+
+  @Transactional(readOnly = true)
+  public List<Long> segundasLenguas(Long idComunidad) {
+    access.comunidad(idComunidad);
+    return segundasLenguas.findByIdComunidad(idComunidad).stream()
+        .map(ComunidadIdioma::getIdIdioma)
+        .toList();
   }
 
   @PreAuthorize("hasRole('ADMIN')")
@@ -305,15 +326,14 @@ public class ComunidadServiceImpl implements pe.perueduca.comunidades.service.Co
   public SolicitudIngreso resolver(Long id, Requests.Resolucion d) {
     SolicitudIngreso s = solicitudes.bloquear(id).orElseThrow(ApiException::missing);
     locked(s.getIdComunidad());
-    if (s.getEstado() != SolicitudIngresoEstado.PENDIENTE)
-      throw ApiException.conflict("La solicitud ya fue resuelta");
+    if (s.getEstado() != SolicitudIngresoEstado.PENDIENTE) return s;
     if (!d.aprobar() && text.clean(d.motivo()) == null)
       throw ApiException.rule("Indique el motivo de rechazo");
     if (d.aprobar()) activate(s.getIdComunidad(), s.getIdUsuario());
     s.setEstado(d.aprobar() ? SolicitudIngresoEstado.APROBADA : SolicitudIngresoEstado.RECHAZADA);
     s.setIdRevisor(Actor.actual().id());
     s.setFechaRespuesta(LocalDateTime.now());
-    s.setMotivoRechazo(d.aprobar() ? null : text.clean(d.motivo()));
+    s.setMotivoRechazo(text.clean(d.motivo()));
     notifications.send(
         s.getIdUsuario(),
         s.getIdComunidad(),
