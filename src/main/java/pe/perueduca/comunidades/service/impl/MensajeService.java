@@ -20,6 +20,7 @@ public class MensajeService {
   private final UsuarioRepository usuarios;
   private final TextPolicy text;
   private final NotificationService notifications;
+  private final pe.perueduca.comunidades.realtime.TiempoRealService tiempoReal;
 
   public Mensaje send(Requests.MensajeDatos d) {
     if (Actor.actual().id().equals(d.idReceptor()))
@@ -35,6 +36,7 @@ public class MensajeService {
     m.setEliminado(false);
     m.setFechaEnvio(java.time.LocalDateTime.now());
     m = repo.save(m);
+    tiempoReal.avisar(d.idReceptor(), "MENSAJE");
     notifications.send(
         d.idReceptor(),
         null,

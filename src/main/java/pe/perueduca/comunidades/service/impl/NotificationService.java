@@ -23,6 +23,7 @@ public class NotificationService {
   private final MiembroComunidadRepository miembros;
   private final UsuarioRepository usuarios;
   private final RolRepository roles;
+  private final pe.perueduca.comunidades.realtime.TiempoRealService tiempoReal;
 
   @Value("${app.db.triggers-activos:false}")
   private boolean triggers;
@@ -41,6 +42,7 @@ public class NotificationService {
     n.setLeida(false);
     n.setFechaCreacion(LocalDateTime.now());
     repo.save(n);
+    tiempoReal.avisar(to, "NOTIFICACION");
   }
 
   public void broadcast(
