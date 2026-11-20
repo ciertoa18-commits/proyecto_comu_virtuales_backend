@@ -25,10 +25,13 @@ public final class Requests {
       @Size(max = 100) String especialidad,
       Long idIdiomaPref,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
-      @Email @Size(max = 150) String correoRecuperacion) {}
+      @NotBlank @Email @Size(max = 150) String correoRecuperacion,
+      @Size(max = 20) List<@NotNull Long> idiomas) {}
 
   public record Password(
-      @NotBlank String actual, @NotBlank @Size(min = 12, max = 72) String nueva) {}
+      @NotBlank String actual,
+      @NotBlank @Size(min = 12, max = 72) String nueva,
+      @NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "debe tener 6 dígitos") String codigo) {}
 
   public record ComunidadDatos(
       @NotBlank @Size(max = 150) String nombre,

@@ -112,20 +112,18 @@ class RecuperacionPorGmailTest {
   }
 
   @Test
-  void elPerfilActualizaOBorraElGmail() {
+  void elPerfilActualizaElGmail() {
     Usuario u = usuario("viejo@gmail.com");
     SecurityContextHolder.getContext()
         .setAuthentication(
             new UsernamePasswordAuthenticationToken(
                 new Actor(1L, "ana@perueduca.pe", "ESTUDIANTE"), null));
     when(usuarios.findById(1L)).thenReturn(Optional.of(u));
-    PerfilService perfil = new PerfilService(usuarios, idiomas, encoder, text, null, null);
+    PerfilService perfil =
+        new PerfilService(usuarios, idiomas, encoder, text, null, null, null, cuentas, correo);
 
-    perfil.update(new Requests.Perfil("Ana", "Quispe", null, null, null, " Nuevo@Gmail.com "));
+    perfil.update(new Requests.Perfil("Ana", "Quispe", null, null, null, " Nuevo@Gmail.com ", null));
     assertEquals("nuevo@gmail.com", u.getCorreoRecuperacion());
-
-    perfil.update(new Requests.Perfil("Ana", "Quispe", null, null, null, "  "));
-    assertNull(u.getCorreoRecuperacion());
   }
 
   @Test
