@@ -48,7 +48,18 @@ public final class CuentaRequests {
       @NotNull RolCodigo rol,
       @Size(max = 100) String especialidad,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
-      @Email @Size(max = 150) String correoRecuperacion) {}
+      @NotBlank @Email @Size(max = 150) String correoRecuperacion) {}
+
+  public record EdicionUsuario(
+      @NotBlank @Size(max = 100) String nombres,
+      @NotBlank @Size(max = 100) String apellidos,
+      @NotBlank @Size(max = 150) @Pattern(regexp = CORREO_VALIDO, message = MSG_CORREO)
+          String correo,
+      @NotNull RolCodigo rol,
+      @Size(max = 100) String especialidad,
+      @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
+      @NotBlank @Email @Size(max = 150) String correoRecuperacion,
+      Long idIdiomaPref) {}
 
   public record CambioEstado(@NotNull UsuarioEstado estado) {}
 
