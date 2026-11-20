@@ -105,24 +105,8 @@ public class CuentaService {
     Optional<Usuario> ou = usuarios.findByCorreo(normalizar(d.correo()));
     if (ou.isEmpty() || ou.get().getEstado() == UsuarioEstado.INACTIVO) return generico;
     Usuario u = ou.get();
-    LocalDateTime ahora = LocalDateTime.now();
-
-    List<CodigoRecuperacion> previos =
-        codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(u.getIdUsuario(), false);
-    if (!previos.isEmpty()
-        && previos.get(0).getFechaCreacion().isAfter(ahora.minusSeconds(SEGUNDOS_ENTRE_CODIGOS)))
-      return generico;
-    previos.forEach(c -> c.setUsado(true));
-
-    String codigo = String.format("%06d", random.nextInt(1_000_000));
-    CodigoRecuperacion c = new CodigoRecuperacion();
-    c.setIdUsuario(u.getIdUsuario());
-    c.setCodigoHash(encoder.encode(codigo));
-    c.setIntentos(0L);
-    c.setUsado(false);
-    c.setFechaCreacion(ahora);
-    c.setFechaExpiracion(ahora.plusMinutes(MINUTOS_VIGENCIA));
-    codigos.save(c);
+    String codigo = nuevoCodigo(u);
+    if (codigo == null) return generico;
 
     String destino =
         u.getCorreoRecuperacion() != null && !u.getCorreoRecuperacion().isBlank()
@@ -148,23 +132,52 @@ public class CuentaService {
     Usuario u =
         usuarios.bloquearPorCorreo(normalizar(d.correo())).orElseThrow(() -> invalido);
     LocalDateTime ahora = LocalDateTime.now();
-    CodigoRecuperacion c =
-        codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(u.getIdUsuario(), false).stream()
-            .findFirst()
-            .filter(x -> x.vigente(ahora))
-            .orElseThrow(() -> invalido);
-    if (!encoder.matches(d.codigo(), c.getCodigoHash())) {
-      c.setIntentos(c.getIntentos() + 1);
-      if (c.getIntentos() >= 5) c.setUsado(true);
-      throw invalido;
-    }
     validarBytes(d.nueva());
-    c.setUsado(true);
+    usarCodigo(u, d.codigo(), invalido);
     u.setPasswordHash(encoder.encode(d.nueva()));
     u.setIntentosFallidos(0L);
     u.setBloqueadoHasta(null);
     u.setFechaActualizacion(ahora);
     return new Resultado("OK", "Tu contraseña fue cambiada. Ya puedes iniciar sesión.");
+  }
+
+  String nuevoCodigo(Usuario u) {
+    LocalDateTime ahora = LocalDateTime.now();
+    List<CodigoRecuperacion> previos =
+        codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(u.getIdUsuario(), false);
+    if (!previos.isEmpty()
+        && previos.get(0).getFechaCreacion().isAfter(ahora.minusSeconds(SEGUNDOS_ENTRE_CODIGOS)))
+      return null;
+    previos.forEach(c -> c.setUsado(true));
+    String codigo = String.format("%06d", random.nextInt(1_000_000));
+    CodigoRecuperacion c = new CodigoRecuperacion();
+    c.setIdUsuario(u.getIdUsuario());
+    c.setCodigoHash(encoder.encode(codigo));
+    c.setIntentos(0L);
+    c.setUsado(false);
+    c.setFechaCreacion(ahora);
+    c.setFechaExpiracion(ahora.plusMinutes(MINUTOS_VIGENCIA));
+    codigos.save(c);
+    return codigo;
+  }
+
+  void usarCodigo(Usuario u, String codigo, ApiException invalido) {
+    LocalDateTime ahora = LocalDateTime.now();
+    CodigoRecuperacion c =
+        codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(u.getIdUsuario(), false).stream()
+            .findFirst()
+            .filter(x -> x.vigente(ahora))
+            .orElseThrow(() -> invalido);
+    if (!encoder.matches(codigo, c.getCodigoHash())) {
+      c.setIntentos(c.getIntentos() + 1);
+      if (c.getIntentos() >= 5) c.setUsado(true);
+      throw invalido;
+    }
+    c.setUsado(true);
+  }
+
+  static int minutosVigencia() {
+    return MINUTOS_VIGENCIA;
   }
 
   Long idRol(RolCodigo codigo) {
