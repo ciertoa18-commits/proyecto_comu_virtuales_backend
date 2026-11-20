@@ -133,7 +133,7 @@ class RecuperacionPorGmailTest {
     AuditService audit = mock(AuditService.class);
     AdminUsuarioService admin =
         new AdminUsuarioService(
-            usuarios, roles, null, null, null, notificaciones, encoder, text, audit, cuentas);
+            usuarios, roles, null, null, null, notificaciones, encoder, text, audit, cuentas, idiomas);
     when(usuarios.findByCorreo("jcampos@minedu.gob.pe")).thenReturn(Optional.empty());
     Rol docente = new Rol();
     docente.setIdRol(2L);
