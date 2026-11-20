@@ -33,6 +33,23 @@ public class AdminUsuarioController {
     return service.crear(d);
   }
 
+  @GetMapping("/{id}")
+  public Object detalle(@PathVariable Long id) {
+    return service.detalle(id);
+  }
+
+  @PutMapping("/{id}")
+  public Object editar(
+      @PathVariable Long id,
+      @jakarta.validation.Valid @RequestBody CuentaRequests.EdicionUsuario d) {
+    return service.editar(id, d);
+  }
+
+  @PutMapping("/{id}/desbloquear")
+  public Object desbloquear(@PathVariable Long id) {
+    return service.desbloquear(id);
+  }
+
   @PutMapping("/{id}/aprobar")
   public Object aprobar(@PathVariable Long id) {
     return service.aprobar(id);
