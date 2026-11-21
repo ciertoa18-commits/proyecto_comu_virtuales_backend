@@ -81,6 +81,19 @@ class RecuperacionPorGmailTest {
   }
 
   @Test
+  void tambienSePuedeRecuperarEscribiendoElGmailPersonal() {
+    Usuario u = usuario("ana.quispe@gmail.com");
+    when(usuarios.findByCorreo("ana.quispe@gmail.com")).thenReturn(Optional.empty());
+    when(usuarios.findByCorreoRecuperacion("ana.quispe@gmail.com")).thenReturn(List.of(u));
+    when(codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(1L, false)).thenReturn(List.of());
+    when(encoder.encode(anyString())).thenReturn("hash");
+
+    cuentas.solicitarCodigo(new CuentaRequests.Recuperacion(" Ana.Quispe@Gmail.com "));
+
+    verify(correo).enviar(eq("ana.quispe@gmail.com"), anyString(), contains("código"));
+  }
+
+  @Test
   void correoNoRegistradoNoEnviaNadaYRespondeIgual() {
     when(usuarios.findByCorreo("nadie@perueduca.pe")).thenReturn(Optional.empty());
 
