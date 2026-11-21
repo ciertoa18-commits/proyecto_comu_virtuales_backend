@@ -36,7 +36,7 @@ app:
   jwt:
     secret: ${JWT_SECRET}
   cors:
-    origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:4200,http://localhost:4201}
+    origins: ${CORS_ORIGINS:http://localhost:4200,http://localhost:4201}
   db:
     triggers-activos: ${DB_TRIGGERS_ACTIVOS:false}
   storage:
