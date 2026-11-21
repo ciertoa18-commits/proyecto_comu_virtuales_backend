@@ -25,6 +25,12 @@ public class CuentaController {
     return service.solicitarCodigo(d);
   }
 
+  @PostMapping("/verificar-codigo")
+  public CuentaService.Resultado verificarCodigo(
+      @jakarta.validation.Valid @RequestBody CuentaRequests.VerificarCodigo d) {
+    return service.verificarCodigo(d);
+  }
+
   @PostMapping("/restablecer")
   public CuentaService.Resultado restablecer(
       @jakarta.validation.Valid @RequestBody CuentaRequests.Restablecer d) {

@@ -94,6 +94,20 @@ class RecuperacionPorGmailTest {
   }
 
   @Test
+  void enModoDemostracionSinCorreoConfiguradoElCodigoSeMuestraEnPantalla() {
+    org.springframework.test.util.ReflectionTestUtils.setField(cuentas, "codigoEnPantalla", true);
+    when(correo.configurado()).thenReturn(false);
+    prepararCodigo(usuario("ana.quispe@gmail.com"));
+
+    CuentaService.Resultado r =
+        cuentas.solicitarCodigo(new CuentaRequests.Recuperacion("ana@perueduca.pe"));
+
+    assertNotNull(r.codigoDemo());
+    assertEquals(6, r.codigoDemo().length());
+    verify(correo, never()).enviar(anyString(), anyString(), anyString());
+  }
+
+  @Test
   void correoNoRegistradoNoEnviaNadaYRespondeIgual() {
     when(usuarios.findByCorreo("nadie@perueduca.pe")).thenReturn(Optional.empty());
 

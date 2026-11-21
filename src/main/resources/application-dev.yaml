@@ -5,3 +5,7 @@ spring:
 logging:
   level:
     pe.perueduca.comunidades: ${APP_LOG_LEVEL:INFO}
+
+app:
+  recuperacion:
+    codigo-en-pantalla: ${CODIGO_EN_PANTALLA:true}

@@ -34,7 +34,14 @@ public class CuentaService {
   private final TextPolicy text;
   private final CorreoService correo;
 
-  public record Resultado(String estado, String mensaje) {}
+  @org.springframework.beans.factory.annotation.Value("${app.recuperacion.codigo-en-pantalla:false}")
+  private boolean codigoEnPantalla;
+
+  public record Resultado(String estado, String mensaje, String codigoDemo) {
+    public Resultado(String estado, String mensaje) {
+      this(estado, mensaje, null);
+    }
+  }
 
   public Resultado registrar(CuentaRequests.Registro d) {
     if (d.rol() == RolCodigo.ADMIN)
@@ -107,6 +114,11 @@ public class CuentaService {
     Usuario u = ou.get();
     String codigo = nuevoCodigo(u);
     if (codigo == null) return generico;
+    if (codigoEnPantalla && !correo.configurado())
+      return new Resultado(
+          "ENVIADO",
+          "Modo demostración: el envío de correos no está configurado, este es tu código.",
+          codigo);
 
     String destino =
         u.getCorreoRecuperacion() != null && !u.getCorreoRecuperacion().isBlank()
@@ -174,7 +186,19 @@ public class CuentaService {
     return codigo;
   }
 
+  @Transactional(noRollbackFor = ApiException.class)
+  public Resultado verificarCodigo(CuentaRequests.VerificarCodigo d) {
+    ApiException invalido = ApiException.rule("El código no es válido o ya venció");
+    Usuario u = buscarParaRecuperar(d.correo()).orElseThrow(() -> invalido);
+    comprobarCodigo(u, d.codigo(), invalido);
+    return new Resultado("OK", "Código correcto. Ahora crea tu nueva contraseña.");
+  }
+
   void usarCodigo(Usuario u, String codigo, ApiException invalido) {
+    comprobarCodigo(u, codigo, invalido).setUsado(true);
+  }
+
+  private CodigoRecuperacion comprobarCodigo(Usuario u, String codigo, ApiException invalido) {
     LocalDateTime ahora = LocalDateTime.now();
     CodigoRecuperacion c =
         codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(u.getIdUsuario(), false).stream()
@@ -186,7 +210,7 @@ public class CuentaService {
       if (c.getIntentos() >= 5) c.setUsado(true);
       throw invalido;
     }
-    c.setUsado(true);
+    return c;
   }
 
   static int minutosVigencia() {
