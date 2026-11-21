@@ -71,7 +71,8 @@ public class SecurityConfig {
                         "/api/v1/auth/login",
                         "/api/v1/auth/registro",
                         "/api/v1/auth/recuperacion",
-                        "/api/v1/auth/restablecer")
+                        "/api/v1/auth/restablecer",
+                        "/api/v1/auth/verificar-codigo")
                     .permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/idiomas")
                     .permitAll()

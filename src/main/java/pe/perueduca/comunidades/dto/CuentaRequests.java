@@ -34,6 +34,10 @@ public final class CuentaRequests {
 
   public record Recuperacion(@NotBlank @Size(max = 150) String correo) {}
 
+  public record VerificarCodigo(
+      @NotBlank @Size(max = 150) String correo,
+      @NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "debe tener 6 dígitos") String codigo) {}
+
   public record Restablecer(
       @NotBlank @Size(max = 150) String correo,
       @NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "debe tener 6 dígitos") String codigo,

@@ -24,7 +24,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           "/api/v1/auth/login",
           "/api/v1/auth/registro",
           "/api/v1/auth/recuperacion",
-          "/api/v1/auth/restablecer");
+          "/api/v1/auth/restablecer",
+          "/api/v1/auth/verificar-codigo");
 
   protected boolean shouldNotFilter(HttpServletRequest q) {
     return PUBLICAS.contains(q.getServletPath()) || q.getMethod().equals("OPTIONS");
