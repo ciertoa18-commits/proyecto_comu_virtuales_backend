@@ -98,11 +98,11 @@ public class CuentaService {
     Resultado generico =
         new Resultado(
             "ENVIADO",
-            "Si el correo está registrado, te enviamos un código de 6 dígitos a tu correo de"
-                + " recuperación (Gmail). Vence en "
+            "Si el correo está registrado, te enviamos un código de 6 dígitos a tu Gmail personal."
+                + " Vence en "
                 + MINUTOS_VIGENCIA
                 + " minutos.");
-    Optional<Usuario> ou = usuarios.findByCorreo(normalizar(d.correo()));
+    Optional<Usuario> ou = buscarParaRecuperar(d.correo());
     if (ou.isEmpty() || ou.get().getEstado() == UsuarioEstado.INACTIVO) return generico;
     Usuario u = ou.get();
     String codigo = nuevoCodigo(u);
@@ -130,7 +130,9 @@ public class CuentaService {
   public Resultado restablecer(CuentaRequests.Restablecer d) {
     ApiException invalido = ApiException.rule("El código no es válido o ya venció");
     Usuario u =
-        usuarios.bloquearPorCorreo(normalizar(d.correo())).orElseThrow(() -> invalido);
+        buscarParaRecuperar(d.correo())
+            .flatMap(x -> usuarios.bloquearPorCorreo(x.getCorreo()))
+            .orElseThrow(() -> invalido);
     LocalDateTime ahora = LocalDateTime.now();
     validarBytes(d.nueva());
     usarCodigo(u, d.codigo(), invalido);
@@ -139,6 +141,17 @@ public class CuentaService {
     u.setBloqueadoHasta(null);
     u.setFechaActualizacion(ahora);
     return new Resultado("OK", "Tu contraseña fue cambiada. Ya puedes iniciar sesión.");
+  }
+
+  Optional<Usuario> buscarParaRecuperar(String correo) {
+    String c = normalizar(correo);
+    Optional<Usuario> institucional = usuarios.findByCorreo(c);
+    if (institucional.isPresent()) return institucional;
+    List<Usuario> personales =
+        usuarios.findByCorreoRecuperacion(c).stream()
+            .filter(u -> u.getEstado() != UsuarioEstado.INACTIVO)
+            .toList();
+    return personales.size() == 1 ? Optional.of(personales.get(0)) : Optional.empty();
   }
 
   String nuevoCodigo(Usuario u) {

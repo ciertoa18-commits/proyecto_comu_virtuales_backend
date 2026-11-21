@@ -13,6 +13,8 @@ public interface UsuarioRepository
 
   java.util.Optional<Usuario> findByCorreo(String correo);
 
+  java.util.List<Usuario> findByCorreoRecuperacion(String correoRecuperacion);
+
   @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
   @org.springframework.data.jpa.repository.Query("select u from Usuario u where u.correo = :correo")
   java.util.Optional<Usuario> bloquearPorCorreo(
