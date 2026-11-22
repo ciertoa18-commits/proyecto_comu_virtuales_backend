@@ -152,6 +152,18 @@ class RecuperacionPorGmailTest {
   }
 
   @Test
+  void alCambiarLaContrasenaLlegaUnAvisoAlGmailYALaCampana() {
+    cuentas.avisarCambioDeContrasena(usuario("ana.quispe@gmail.com"));
+
+    verify(correo).enviar(eq("ana.quispe@gmail.com"), contains("contraseña fue cambiada"), contains("Si NO fuiste tú"));
+    ArgumentCaptor<pe.perueduca.comunidades.entity.Notificacion> n =
+        ArgumentCaptor.forClass(pe.perueduca.comunidades.entity.Notificacion.class);
+    verify(notificaciones).save(n.capture());
+    assertEquals(1L, n.getValue().getIdDestinatario());
+    assertEquals("Tu contraseña fue cambiada", n.getValue().getTitulo());
+  }
+
+  @Test
   void correoNoRegistradoNoEnviaNadaYRespondeIgual() {
     when(usuarios.findByCorreo("nadie@perueduca.pe")).thenReturn(Optional.empty());
 

@@ -82,6 +82,43 @@ public class CuentaService {
     return new Resultado("ACTIVO", "Tu cuenta fue creada. Ya puedes iniciar sesión.");
   }
 
+  boolean mostrarCodigoEnPantalla() {
+    return codigoEnPantalla;
+  }
+
+  /** Avisa por correo y en la campana que la contraseña cambió, por si no fue el dueño. */
+  void avisarCambioDeContrasena(Usuario u) {
+    String destino =
+        u.getCorreoRecuperacion() != null && !u.getCorreoRecuperacion().isBlank()
+            ? u.getCorreoRecuperacion()
+            : u.getCorreo();
+    String cuando =
+        LocalDateTime.now()
+            .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy 'a las' HH:mm"));
+    correo.enviar(
+        destino,
+        "Tu contraseña fue cambiada - Comunidades Virtuales",
+        "Hola "
+            + u.getNombres()
+            + ",\n\nLa contraseña de tu cuenta "
+            + u.getCorreo()
+            + " se cambió el "
+            + cuando
+            + ".\n\nSi fuiste tú, no tienes que hacer nada.\nSi NO fuiste tú, entra a"
+            + " \"¿Has olvidado tu contraseña?\" para recuperarla de inmediato y avisa al"
+            + " administrador.\n\nComunidades Virtuales - PerúEduca");
+    Notificacion n = new Notificacion();
+    n.setIdDestinatario(u.getIdUsuario());
+    n.setTipo(NotificacionTipo.SISTEMA);
+    n.setTitulo("Tu contraseña fue cambiada");
+    n.setContenido("Se cambió el " + cuando + ". Si no fuiste tú, recupera tu cuenta y avisa al administrador.");
+    n.setEntidadTipo("USUARIO");
+    n.setEntidadId(u.getIdUsuario());
+    n.setLeida(false);
+    n.setFechaCreacion(LocalDateTime.now());
+    notificaciones.save(n);
+  }
+
   private void avisarAdmins(Usuario docente) {
     Long admin = idRol(RolCodigo.ADMIN);
     usuarios.findByIdRol(admin).stream()
@@ -164,6 +201,7 @@ public class CuentaService {
     u.setIntentosFallidos(0L);
     u.setBloqueadoHasta(null);
     u.setFechaActualizacion(ahora);
+    avisarCambioDeContrasena(u);
     return new Resultado("OK", "Tu contraseña fue cambiada. Ya puedes iniciar sesión.");
   }
 
