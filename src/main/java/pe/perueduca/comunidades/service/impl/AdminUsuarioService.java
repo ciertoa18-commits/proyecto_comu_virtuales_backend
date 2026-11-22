@@ -133,12 +133,14 @@ public class AdminUsuarioService {
         d.correoRecuperacion() == null || d.correoRecuperacion().isBlank()
             ? null
             : CuentaService.normalizar(d.correoRecuperacion()));
-    u.setIdIdiomaPref(1L);
+    Long idioma = cuentas.resolverIdioma(d.idIdiomaPref(), d.idiomaOtro());
+    u.setIdIdiomaPref(idioma);
     u.setPasswordHash(encoder.encode(d.password()));
     u.setIntentosFallidos(0L);
     u.setEstado(UsuarioEstado.ACTIVO);
     u.setFechaRegistro(LocalDateTime.now());
     usuarios.save(u);
+    cuentas.guardarLenguas(u.getIdUsuario(), idioma, d.idSegundaLengua());
     audit.record(
         "USUARIO",
         u.getIdUsuario(),
