@@ -61,6 +61,7 @@ class RecuperacionPorGmailTest {
     when(usuarios.findByCorreo("ana@perueduca.pe")).thenReturn(Optional.of(u));
     when(codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(1L, false)).thenReturn(List.of());
     when(encoder.encode(anyString())).thenReturn("hash");
+    lenient().when(correo.enviar(anyString(), anyString(), anyString())).thenReturn(true);
   }
 
   @Test
@@ -88,6 +89,7 @@ class RecuperacionPorGmailTest {
     when(usuarios.findByCorreoRecuperacion("ana.quispe@gmail.com")).thenReturn(List.of(u));
     when(codigos.findByIdUsuarioAndUsadoOrderByFechaCreacionDesc(1L, false)).thenReturn(List.of());
     when(encoder.encode(anyString())).thenReturn("hash");
+    when(correo.enviar(anyString(), anyString(), anyString())).thenReturn(true);
 
     cuentas.solicitarCodigo(new CuentaRequests.Recuperacion(" Ana.Quispe@Gmail.com "));
 
@@ -123,6 +125,30 @@ class RecuperacionPorGmailTest {
 
     assertEquals(2L, cuentas.resolverIdioma(null, " quechua "));
     assertEquals(9L, cuentas.resolverIdioma(null, "Awajún"));
+  }
+
+  @Test
+  void siGmailRechazaElEnvioSeAvisaEnVezDeDecirEnviado() {
+    prepararCodigo(usuario("ana.quispe@gmail.com"));
+    when(correo.enviar(anyString(), anyString(), anyString())).thenReturn(false);
+
+    var e =
+        assertThrows(
+            pe.perueduca.comunidades.exception.ApiException.class,
+            () -> cuentas.solicitarCodigo(new CuentaRequests.Recuperacion("ana@perueduca.pe")));
+    assertTrue(e.getMessage().contains("No pudimos enviar"));
+  }
+
+  @Test
+  void siGmailRechazaElEnvioEnModoDemostracionElCodigoSeMuestraEnPantalla() {
+    org.springframework.test.util.ReflectionTestUtils.setField(cuentas, "codigoEnPantalla", true);
+    when(correo.configurado()).thenReturn(true);
+    prepararCodigo(usuario("ana.quispe@gmail.com"));
+    when(correo.enviar(anyString(), anyString(), anyString())).thenReturn(false);
+
+    CuentaService.Resultado r =
+        cuentas.solicitarCodigo(new CuentaRequests.Recuperacion("ana@perueduca.pe"));
+    assertEquals(6, r.codigoDemo().length());
   }
 
   @Test

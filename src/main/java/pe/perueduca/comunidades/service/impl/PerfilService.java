@@ -69,7 +69,8 @@ public class PerfilService {
     String codigo = cuentas.nuevoCodigo(u);
     if (codigo == null)
       throw ApiException.rule("Espera un minuto antes de pedir otro código");
-    correo.enviar(
+    boolean enviado =
+        correo.enviar(
         u.getCorreoRecuperacion(),
         "Código para cambiar tu contraseña - Comunidades Virtuales",
         "Hola "
@@ -80,6 +81,10 @@ public class PerfilService {
             + CuentaService.minutosVigencia()
             + " minutos y solo se puede usar una vez.\nSi no fuiste tú, ignora este correo y"
             + " cambia tu contraseña.\n\nComunidades Virtuales - PerúEduca");
+    if (!enviado)
+      throw ApiException.rule(
+          "No pudimos enviar el código a tu Gmail en este momento. Inténtalo más tarde o avisa al"
+              + " administrador.");
     return java.util.Map.of(
         "destino", ocultar(u.getCorreoRecuperacion()), "correoActivo", correo.configurado());
   }
