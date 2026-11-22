@@ -13,7 +13,6 @@ spring:
     # La base en AWS cierra las conexiones inactivas: se renuevan antes para evitar ORA-17008
     hikari:
       keepalive-time: 120000
-      idle-timeout: 300000
       max-lifetime: 900000
       validation-timeout: 5000
   jpa:
