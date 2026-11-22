@@ -99,17 +99,11 @@ public class NotificationService {
     if (n.getFechaLectura() == null) n.setFechaLectura(LocalDateTime.now());
   }
 
-  public void unread(Long id) {
-    Notificacion n = propia(id);
-    n.setLeida(false);
-    n.setFechaLectura(null);
-  }
-
   public void delete(Long id) {
     repo.delete(propia(id));
   }
 
-  /** Solo el destinatario puede leer, marcar o eliminar su notificación. */
+  /** Solo el destinatario puede leer o eliminar su notificación. Una vez leída, queda leída. */
   private Notificacion propia(Long id) {
     Notificacion n = repo.findById(id).orElseThrow(ApiException::missing);
     if (!n.getIdDestinatario().equals(Actor.actual().id())) throw ApiException.denied();
