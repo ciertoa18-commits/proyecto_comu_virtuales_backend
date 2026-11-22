@@ -47,6 +47,14 @@ public class AuthServiceImpl implements pe.perueduca.comunidades.service.AuthSer
     String correo = req.correo().trim().toLowerCase(Locale.ROOT);
     var optional = usuarios.bloquearPorCorreo(correo);
     if (optional.isEmpty()) {
+      // Tambien se puede ingresar con el Gmail personal registrado en la cuenta
+      List<Usuario> porGmail =
+          usuarios.findByCorreoRecuperacion(correo).stream()
+              .filter(x -> x.getEstado() != UsuarioEstado.INACTIVO)
+              .toList();
+      if (porGmail.size() == 1) optional = usuarios.bloquearPorCorreo(porGmail.get(0).getCorreo());
+    }
+    if (optional.isEmpty()) {
       encoder.matches(req.password(), hashFicticio());
       return new LoginResult(false, null, null, null);
     }
@@ -76,7 +84,7 @@ public class AuthServiceImpl implements pe.perueduca.comunidades.service.AuthSer
     u.setBloqueadoHasta(null);
     return new LoginResult(
         true,
-        jwt.issue(correo),
+        jwt.issue(u.getCorreo()),
         u.getIdUsuario(),
         roles.findById(u.getIdRol()).orElseThrow().getCodigo().name());
   }

@@ -52,6 +52,7 @@ public class CuentaService {
     if (usuarios.findByCorreo(mail).isPresent())
       throw ApiException.conflict("Ya existe una cuenta con ese correo");
     validarBytes(d.password());
+    validarGmailLibre(d.correoRecuperacion(), null);
     Long idioma = resolverIdioma(d.idIdiomaPref(), d.idiomaOtro());
 
     Usuario u = new Usuario();
@@ -190,6 +191,17 @@ public class CuentaService {
   private static String sinTildes(String s) {
     return java.text.Normalizer.normalize(s.trim().toLowerCase(Locale.ROOT), java.text.Normalizer.Form.NFD)
         .replaceAll("\\p{M}", "");
+  }
+
+  /** Un Gmail solo puede pertenecer a una cuenta, porque tambien sirve para iniciar sesion. */
+  void validarGmailLibre(String gmail, Long idUsuario) {
+    if (gmail == null || gmail.isBlank()) return;
+    String g = normalizar(gmail);
+    boolean usado =
+        usuarios.findByCorreo(g).filter(o -> !o.getIdUsuario().equals(idUsuario)).isPresent()
+            || usuarios.findByCorreoRecuperacion(g).stream()
+                .anyMatch(o -> !o.getIdUsuario().equals(idUsuario));
+    if (usado) throw ApiException.conflict("Ese Gmail ya está registrado en otra cuenta");
   }
 
   Optional<Usuario> buscarParaRecuperar(String correo) {

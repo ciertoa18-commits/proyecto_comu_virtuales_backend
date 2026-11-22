@@ -133,6 +133,7 @@ public class AdminUsuarioService {
         d.correoRecuperacion() == null || d.correoRecuperacion().isBlank()
             ? null
             : CuentaService.normalizar(d.correoRecuperacion()));
+    cuentas.validarGmailLibre(u.getCorreoRecuperacion(), null);
     Long idioma = cuentas.resolverIdioma(d.idIdiomaPref(), d.idiomaOtro());
     u.setIdIdiomaPref(idioma);
     u.setPasswordHash(encoder.encode(d.password()));
@@ -229,6 +230,7 @@ public class AdminUsuarioService {
     u.setIdRol(cuentas.idRol(d.rol()));
     u.setEspecialidad(d.rol() == RolCodigo.DOCENTE ? text.clean(d.especialidad()) : null);
     u.setTelefono(CuentaService.blancoANulo(d.telefono()));
+    cuentas.validarGmailLibre(d.correoRecuperacion(), u.getIdUsuario());
     u.setCorreoRecuperacion(CuentaService.normalizar(d.correoRecuperacion()));
     if (d.idIdiomaPref() != null) u.setIdIdiomaPref(d.idIdiomaPref());
     u.setFechaActualizacion(LocalDateTime.now());
