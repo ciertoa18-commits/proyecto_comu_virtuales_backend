@@ -28,6 +28,18 @@ public class ComunicacionController {
     notifications.read(id);
   }
 
+  @DeleteMapping("/notificaciones/{id}/leida")
+  @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+  public void unread(@PathVariable Long id) {
+    notifications.unread(id);
+  }
+
+  @DeleteMapping("/notificaciones/{id}")
+  @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+  public void delete(@PathVariable Long id) {
+    notifications.delete(id);
+  }
+
   @PutMapping("/me/notificaciones/leidas")
   @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
   public void readAll() {
