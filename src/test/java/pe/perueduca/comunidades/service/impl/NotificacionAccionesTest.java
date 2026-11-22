@@ -49,11 +49,12 @@ class NotificacionAccionesTest {
   }
 
   @Test
-  void marcarComoNoLeidaVuelveAContarlaSinLeer() {
+  void unaNotificacionLeidaSigueLeidaAlVolverAMarcarla() {
     Notificacion n = de(1L);
-    notificaciones.unread(5L);
-    assertFalse(n.getLeida());
-    assertNull(n.getFechaLectura());
+    LocalDateTime primera = n.getFechaLectura();
+    notificaciones.read(5L);
+    assertTrue(n.getLeida());
+    assertEquals(primera, n.getFechaLectura());
   }
 
   @Test
@@ -64,10 +65,10 @@ class NotificacionAccionesTest {
   }
 
   @Test
-  void nadiePuedeEliminarNiMarcarNotificacionesDeOtro() {
+  void nadiePuedeEliminarNiLeerNotificacionesDeOtro() {
     Notificacion n = de(2L);
     assertThrows(ApiException.class, () -> notificaciones.delete(5L));
-    assertThrows(ApiException.class, () -> notificaciones.unread(5L));
+    assertThrows(ApiException.class, () -> notificaciones.read(5L));
     verify(repo, never()).delete(any(Notificacion.class));
     assertTrue(n.getLeida());
   }
