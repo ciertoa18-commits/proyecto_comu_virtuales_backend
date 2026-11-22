@@ -17,6 +17,11 @@ public class ComunicacionController {
     return notifications.list(page, size);
   }
 
+  @GetMapping("/me/notificaciones/no-leidas")
+  public java.util.Map<String, Long> unread() {
+    return java.util.Map.of("total", notifications.sinLeer());
+  }
+
   @PutMapping("/notificaciones/{id}/leida")
   @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
   public void read(@PathVariable Long id) {
