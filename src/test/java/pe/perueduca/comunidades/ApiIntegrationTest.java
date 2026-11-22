@@ -104,6 +104,9 @@ class ApiIntegrationTest {
     docente = login("docente@perueduca.pe");
     alumno = login("alumno@perueduca.pe");
     otro = login("otro@perueduca.pe");
+    // Con un token válido, una ruta o método inexistente no debe cerrar la sesión (no 401)
+    assertEquals("NO_ENCONTRADO", ok("GET", "/ruta-que-no-existe", alumno, null, 404).body.get("codigo").asText());
+    assertEquals("METODO_NO_PERMITIDO", ok("POST", "/me", alumno, Map.of(), 405).body.get("codigo").asText());
     var me = ok("GET", "/me", alumno, null, 200);
     assertFalse(me.raw.contains("passwordHash"));
     assertFalse(me.raw.contains("intentosFallidos"));
