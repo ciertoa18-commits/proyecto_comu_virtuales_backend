@@ -126,7 +126,8 @@ public class CuentaService {
         u.getCorreoRecuperacion() != null && !u.getCorreoRecuperacion().isBlank()
             ? u.getCorreoRecuperacion()
             : u.getCorreo();
-    correo.enviar(
+    boolean enviado =
+        correo.enviar(
         destino,
         "Código para restablecer tu contraseña - Comunidades Virtuales",
         "Hola "
@@ -137,7 +138,16 @@ public class CuentaService {
             + MINUTOS_VIGENCIA
             + " minutos y solo se puede usar una vez.\nSi no lo pediste, ignora este correo."
             + "\n\nComunidades Virtuales - PerúEduca");
-    return generico;
+    if (enviado) return generico;
+    if (codigoEnPantalla)
+      return new Resultado(
+          "ENVIADO",
+          "Gmail no permitió enviar el correo (revisa la configuración de correo del servidor)."
+              + " Modo demostración: este es tu código.",
+          codigo);
+    throw ApiException.rule(
+        "No pudimos enviar el código a tu Gmail en este momento. Inténtalo más tarde o avisa al"
+            + " administrador.");
   }
 
   @Transactional(noRollbackFor = ApiException.class)

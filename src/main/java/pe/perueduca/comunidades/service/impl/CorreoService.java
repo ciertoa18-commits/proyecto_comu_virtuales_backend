@@ -28,7 +28,11 @@ public class CorreoService {
     return smtpConfigurado && sender.getIfAvailable() != null;
   }
 
-  public void enviar(String para, String asunto, String texto) {
+  /**
+   * Envia un correo. Devuelve false solo si el servidor de correo (por ejemplo Gmail) rechazo el
+   * envio; sin SMTP configurado el mensaje se muestra en la consola y devuelve true.
+   */
+  public boolean enviar(String para, String asunto, String texto) {
     JavaMailSender mail = smtpConfigurado ? sender.getIfAvailable() : null;
     if (mail == null) {
       log.warn(
@@ -37,7 +41,7 @@ public class CorreoService {
           para,
           asunto,
           texto);
-      return;
+      return true;
     }
     try {
       SimpleMailMessage m = new SimpleMailMessage();
@@ -46,8 +50,14 @@ public class CorreoService {
       m.setSubject(asunto);
       m.setText(texto);
       mail.send(m);
+      return true;
     } catch (RuntimeException e) {
-      log.error("No se pudo enviar el correo a {}: {}", para, e.getMessage());
+      log.error(
+          "No se pudo enviar el correo a {}: {}. Si dice 'Authentication failed', MAIL_USERNAME debe"
+              + " ser el Gmail completo y MAIL_PASSWORD una contraseña de aplicación de Google.",
+          para,
+          e.getMessage());
+      return false;
     }
   }
 }
