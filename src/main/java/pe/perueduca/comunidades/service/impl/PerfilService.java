@@ -39,6 +39,7 @@ public class PerfilService {
     u.setApellidos(text.required(d.apellidos()));
     u.setIdIdiomaPref(d.idIdiomaPref());
     u.setTelefono(d.telefono() == null || d.telefono().isBlank() ? null : d.telefono().trim());
+    cuentas.validarGmailLibre(d.correoRecuperacion(), u.getIdUsuario());
     u.setCorreoRecuperacion(d.correoRecuperacion().trim().toLowerCase(java.util.Locale.ROOT));
     if (d.idiomas() != null) guardarIdiomas(u.getIdUsuario(), d.idiomas());
     if (Actor.actual().docente()) u.setEspecialidad(text.clean(d.especialidad()));
