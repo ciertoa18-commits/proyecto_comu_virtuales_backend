@@ -81,6 +81,11 @@ public class PerfilService {
             + CuentaService.minutosVigencia()
             + " minutos y solo se puede usar una vez.\nSi no fuiste tú, ignora este correo y"
             + " cambia tu contraseña.\n\nComunidades Virtuales - PerúEduca");
+    if (!enviado && cuentas.mostrarCodigoEnPantalla())
+      return java.util.Map.of(
+          "destino", ocultar(u.getCorreoRecuperacion()),
+          "correoActivo", false,
+          "codigoDemo", codigo);
     if (!enviado)
       throw ApiException.rule(
           "No pudimos enviar el código a tu Gmail en este momento. Inténtalo más tarde o avisa al"
@@ -107,6 +112,7 @@ public class PerfilService {
     u.setFechaActualizacion(LocalDateTime.now());
     audit.record(
         "USUARIO", u.getIdUsuario(), AuditoriaAccion.UPDATE, null, "{\"passwordCambiado\":true}");
+    cuentas.avisarCambioDeContrasena(u);
   }
 
   public Usuario foto(Long id) {
