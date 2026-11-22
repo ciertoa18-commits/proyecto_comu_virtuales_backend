@@ -76,4 +76,18 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(413)
         .body(new Error("ARCHIVO_GRANDE", "El archivo excede el límite permitido"));
   }
+
+  /** Ruta que no existe: 404 (antes terminaba en 401 y la app cerraba la sesion). */
+  @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+  ResponseEntity<Error> noExiste() {
+    return ResponseEntity.status(404)
+        .body(new Error("NO_ENCONTRADO", "Esta función no está disponible en el servidor. Reinicia el backend."));
+  }
+
+  /** Metodo HTTP que la ruta no acepta: 405 en vez de 401. */
+  @ExceptionHandler(org.springframework.web.HttpRequestMethodNotSupportedException.class)
+  ResponseEntity<Error> metodo() {
+    return ResponseEntity.status(405)
+        .body(new Error("METODO_NO_PERMITIDO", "Esta función no está disponible en el servidor. Reinicia el backend."));
+  }
 }

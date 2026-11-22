@@ -80,6 +80,11 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers("/ws")
                     .permitAll()
+                    // Las paginas de error de Spring no deben pedir token: si no, un 404 llega como 401
+                    .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.ERROR)
+                    .permitAll()
+                    .requestMatchers("/error")
+                    .permitAll()
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(
