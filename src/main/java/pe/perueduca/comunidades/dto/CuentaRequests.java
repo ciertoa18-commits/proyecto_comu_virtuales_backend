@@ -30,7 +30,9 @@ public final class CuentaRequests {
       @Size(max = 100) String especialidad,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
       Long idIdiomaPref,
-      @NotBlank @Email @Size(max = 150) String correoRecuperacion) {}
+      @NotBlank @Email @Size(max = 150) String correoRecuperacion,
+      @Size(max = 60) String idiomaOtro,
+      Long idSegundaLengua) {}
 
   public record Recuperacion(@NotBlank @Size(max = 150) String correo) {}
 
@@ -52,7 +54,10 @@ public final class CuentaRequests {
       @NotNull RolCodigo rol,
       @Size(max = 100) String especialidad,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
-      @NotBlank @Email @Size(max = 150) String correoRecuperacion) {}
+      @NotBlank @Email @Size(max = 150) String correoRecuperacion,
+      Long idIdiomaPref,
+      @Size(max = 60) String idiomaOtro,
+      Long idSegundaLengua) {}
 
   public record EdicionUsuario(
       @NotBlank @Size(max = 100) String nombres,

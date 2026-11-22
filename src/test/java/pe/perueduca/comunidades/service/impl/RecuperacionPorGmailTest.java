@@ -38,6 +38,7 @@ class RecuperacionPorGmailTest {
   @Mock PasswordEncoder encoder;
   @Spy TextPolicy text = new TextPolicy("");
   @Mock CorreoService correo;
+  @Mock UsuarioIdiomaRepository usuarioIdiomas;
 
   @InjectMocks CuentaService cuentas;
 
@@ -108,6 +109,23 @@ class RecuperacionPorGmailTest {
   }
 
   @Test
+  void elIdiomaOtroSeCreaSiNoExisteYSeReutilizaSiYaExiste() {
+    pe.perueduca.comunidades.entity.Idioma quechua = new pe.perueduca.comunidades.entity.Idioma();
+    quechua.setIdIdioma(2L);
+    quechua.setCodigo("qu");
+    quechua.setNombre("Quechua");
+    when(idiomas.findAll()).thenReturn(List.of(quechua));
+    when(idiomas.save(any())).thenAnswer(i -> {
+      pe.perueduca.comunidades.entity.Idioma n = i.getArgument(0);
+      n.setIdIdioma(9L);
+      return n;
+    });
+
+    assertEquals(2L, cuentas.resolverIdioma(null, " quechua "));
+    assertEquals(9L, cuentas.resolverIdioma(null, "Awajún"));
+  }
+
+  @Test
   void correoNoRegistradoNoEnviaNadaYRespondeIgual() {
     when(usuarios.findByCorreo("nadie@perueduca.pe")).thenReturn(Optional.empty());
 
@@ -130,7 +148,7 @@ class RecuperacionPorGmailTest {
         cuentas.registrar(
             new CuentaRequests.Registro(
                 "Ana", "Quispe", "ana@perueduca.pe", "Comunidades2026!", RolCodigo.ESTUDIANTE,
-                null, null, null, " Ana.Quispe@Gmail.com "));
+                null, null, null, " Ana.Quispe@Gmail.com ", null, null));
 
     ArgumentCaptor<Usuario> guardado = ArgumentCaptor.forClass(Usuario.class);
     verify(usuarios).save(guardado.capture());
@@ -168,7 +186,7 @@ class RecuperacionPorGmailTest {
     admin.crear(
         new CuentaRequests.NuevoUsuario(
             "Julio", "Campos", "jcampos@minedu.gob.pe", "Comunidades2026!", RolCodigo.DOCENTE,
-            "Matemática", null, "JCampos@Gmail.com"));
+            "Matemática", null, "JCampos@Gmail.com", null, null, null));
 
     ArgumentCaptor<Usuario> guardado = ArgumentCaptor.forClass(Usuario.class);
     verify(usuarios).save(guardado.capture());

@@ -33,6 +33,7 @@ public class CuentaService {
   private final PasswordEncoder encoder;
   private final TextPolicy text;
   private final CorreoService correo;
+  private final UsuarioIdiomaRepository usuarioIdiomas;
 
   @org.springframework.beans.factory.annotation.Value("${app.recuperacion.codigo-en-pantalla:false}")
   private boolean codigoEnPantalla;
@@ -50,9 +51,8 @@ public class CuentaService {
     validarDominio(mail, d.rol());
     if (usuarios.findByCorreo(mail).isPresent())
       throw ApiException.conflict("Ya existe una cuenta con ese correo");
-    if (d.idIdiomaPref() != null && !idiomas.existsById(d.idIdiomaPref()))
-      throw ApiException.missing();
     validarBytes(d.password());
+    Long idioma = resolverIdioma(d.idIdiomaPref(), d.idiomaOtro());
 
     Usuario u = new Usuario();
     u.setIdRol(idRol(d.rol()));
@@ -62,13 +62,14 @@ public class CuentaService {
     u.setEspecialidad(d.rol() == RolCodigo.DOCENTE ? text.clean(d.especialidad()) : null);
     u.setTelefono(blancoANulo(d.telefono()));
     u.setCorreoRecuperacion(normalizar(d.correoRecuperacion()));
-    u.setIdIdiomaPref(d.idIdiomaPref() != null ? d.idIdiomaPref() : 1L);
+    u.setIdIdiomaPref(idioma);
     u.setPasswordHash(encoder.encode(d.password()));
     u.setIntentosFallidos(0L);
     u.setFechaRegistro(LocalDateTime.now());
     boolean docente = d.rol() == RolCodigo.DOCENTE;
     u.setEstado(docente ? UsuarioEstado.PENDIENTE : UsuarioEstado.ACTIVO);
     usuarios.save(u);
+    guardarLenguas(u.getIdUsuario(), idioma, d.idSegundaLengua());
 
     if (docente) {
       avisarAdmins(u);
@@ -153,6 +154,42 @@ public class CuentaService {
     u.setBloqueadoHasta(null);
     u.setFechaActualizacion(ahora);
     return new Resultado("OK", "Tu contraseña fue cambiada. Ya puedes iniciar sesión.");
+  }
+
+  Long resolverIdioma(Long idIdioma, String otro) {
+    String nombre = text.clean(otro);
+    if (nombre == null) {
+      if (idIdioma == null) return 1L;
+      if (!idiomas.existsById(idIdioma)) throw ApiException.rule("El idioma elegido no existe");
+      return idIdioma;
+    }
+    String clave = sinTildes(nombre);
+    Optional<Idioma> existente =
+        idiomas.findAll().stream().filter(i -> sinTildes(i.getNombre()).equals(clave)).findFirst();
+    if (existente.isPresent()) return existente.get().getIdIdioma();
+    String base = clave.replaceAll("[^a-z]", "");
+    base = base.length() > 6 ? base.substring(0, 6) : base.isEmpty() ? "otro" : base;
+    Set<String> codigos = new HashSet<>();
+    idiomas.findAll().forEach(i -> codigos.add(i.getCodigo().toLowerCase(Locale.ROOT)));
+    String codigo = base;
+    for (int n = 2; codigos.contains(codigo); n++) codigo = base + n;
+    Idioma nuevo = new Idioma();
+    nuevo.setCodigo(codigo);
+    nuevo.setNombre(nombre.substring(0, 1).toUpperCase(Locale.ROOT) + nombre.substring(1));
+    return idiomas.save(nuevo).getIdIdioma();
+  }
+
+  void guardarLenguas(Long idUsuario, Long principal, Long segunda) {
+    usuarioIdiomas.save(new UsuarioIdioma(idUsuario, principal));
+    if (segunda != null && !segunda.equals(principal)) {
+      if (!idiomas.existsById(segunda)) throw ApiException.rule("La segunda lengua no existe");
+      usuarioIdiomas.save(new UsuarioIdioma(idUsuario, segunda));
+    }
+  }
+
+  private static String sinTildes(String s) {
+    return java.text.Normalizer.normalize(s.trim().toLowerCase(Locale.ROOT), java.text.Normalizer.Form.NFD)
+        .replaceAll("\\p{M}", "");
   }
 
   Optional<Usuario> buscarParaRecuperar(String correo) {
