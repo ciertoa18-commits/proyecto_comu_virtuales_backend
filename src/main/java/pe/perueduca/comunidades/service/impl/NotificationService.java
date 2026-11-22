@@ -79,6 +79,11 @@ public class NotificationService {
       send(to, community, NotificacionTipo.NUEVO_COMENTARIO, "Nuevo comentario", "COMENTARIO", id);
   }
 
+  @Transactional(readOnly = true)
+  public long sinLeer() {
+    return repo.countByIdDestinatarioAndLeida(Actor.actual().id(), false);
+  }
+
   public org.springframework.data.domain.Page<Notificacion> list(int page, int size) {
     return repo.findAll(
         (r, q, b) -> b.equal(r.get("idDestinatario"), Actor.actual().id()),
