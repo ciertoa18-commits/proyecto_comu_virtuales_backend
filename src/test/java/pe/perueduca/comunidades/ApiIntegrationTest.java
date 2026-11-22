@@ -107,7 +107,12 @@ class ApiIntegrationTest {
     var me = ok("GET", "/me", alumno, null, 200);
     assertFalse(me.raw.contains("passwordHash"));
     assertFalse(me.raw.contains("intentosFallidos"));
-    ok("PUT", "/me", alumno, Map.of("nombres", "Ana", "apellidos", "Prueba"), 200);
+    ok(
+        "PUT",
+        "/me",
+        alumno,
+        Map.of("nombres", "Ana", "apellidos", "Prueba", "correoRecuperacion", "ana.prueba@gmail.com"),
+        200);
     assertEquals(
         "Ana", ok("GET", "/me", alumno, null, 200).body.get("usuario").get("nombres").asText());
   }
@@ -155,7 +160,8 @@ class ApiIntegrationTest {
     ok("POST", "/comunidades/" + privada + "/solicitudes", alumno, Map.of(), 409);
     ok("PUT", "/solicitudes/" + solicitud, alumno, Map.of("aprobar", true), 403);
     ok("PUT", "/solicitudes/" + solicitud, admin, Map.of("aprobar", true), 200);
-    ok("PUT", "/solicitudes/" + solicitud, admin, Map.of("aprobar", true), 409);
+    // Responder otra vez una solicitud ya resuelta no da error: devuelve la misma solicitud
+    ok("PUT", "/solicitudes/" + solicitud, admin, Map.of("aprobar", true), 200);
     assertNotNull(
         jdbc.queryForObject(
             "select fecha_respuesta from solicitud_ingreso where id_solicitud=?",
