@@ -16,6 +16,11 @@ public final class CuentaRequests {
   public static final String MSG_CORREO =
       "debe ser institucional: @perueduca.pe (estudiante) o @minedu.gob.pe (docente/administrador)";
 
+  /** Contraseña segura: mayúscula, minúscula, número y símbolo (el largo lo controla @Size). */
+  public static final String CLAVE_SEGURA = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).*$";
+  public static final String MSG_CLAVE =
+      "debe tener al menos una mayúscula, una minúscula, un número y un símbolo";
+
   public static String dominioDe(RolCodigo rol) {
     return rol == RolCodigo.ESTUDIANTE ? DOMINIO_ESTUDIANTE : DOMINIO_PERSONAL;
   }
@@ -25,7 +30,7 @@ public final class CuentaRequests {
       @NotBlank @Size(max = 100) String apellidos,
       @NotBlank @Size(max = 150) @Pattern(regexp = CORREO_VALIDO, message = MSG_CORREO)
           String correo,
-      @NotBlank @Size(min = 12, max = 72) String password,
+      @NotBlank @Size(min = 12, max = 72) @Pattern(regexp = CLAVE_SEGURA, message = MSG_CLAVE) String password,
       @NotNull RolCodigo rol,
       @Size(max = 100) String especialidad,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
@@ -43,14 +48,14 @@ public final class CuentaRequests {
   public record Restablecer(
       @NotBlank @Size(max = 150) String correo,
       @NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "debe tener 6 dígitos") String codigo,
-      @NotBlank @Size(min = 12, max = 72) String nueva) {}
+      @NotBlank @Size(min = 12, max = 72) @Pattern(regexp = CLAVE_SEGURA, message = MSG_CLAVE) String nueva) {}
 
   public record NuevoUsuario(
       @NotBlank @Size(max = 100) String nombres,
       @NotBlank @Size(max = 100) String apellidos,
       @NotBlank @Size(max = 150) @Pattern(regexp = CORREO_VALIDO, message = MSG_CORREO)
           String correo,
-      @NotBlank @Size(min = 12, max = 72) String password,
+      @NotBlank @Size(min = 12, max = 72) @Pattern(regexp = CLAVE_SEGURA, message = MSG_CLAVE) String password,
       @NotNull RolCodigo rol,
       @Size(max = 100) String especialidad,
       @Pattern(regexp = "^[0-9]{9}$", message = "debe tener 9 dígitos") String telefono,
@@ -72,7 +77,7 @@ public final class CuentaRequests {
 
   public record CambioEstado(@NotNull UsuarioEstado estado) {}
 
-  public record ResetPassword(@NotBlank @Size(min = 12, max = 72) String nueva) {}
+  public record ResetPassword(@NotBlank @Size(min = 12, max = 72) @Pattern(regexp = CLAVE_SEGURA, message = MSG_CLAVE) String nueva) {}
 
   public enum Destino {
     TODOS,

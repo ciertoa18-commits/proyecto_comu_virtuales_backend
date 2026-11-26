@@ -30,7 +30,9 @@ public final class Requests {
 
   public record Password(
       @NotBlank String actual,
-      @NotBlank @Size(min = 12, max = 72) String nueva,
+      @NotBlank @Size(min = 12, max = 72)
+          @Pattern(regexp = CuentaRequests.CLAVE_SEGURA, message = CuentaRequests.MSG_CLAVE)
+          String nueva,
       @NotBlank @Pattern(regexp = "^[0-9]{6}$", message = "debe tener 6 dígitos") String codigo) {}
 
   public record ComunidadDatos(
