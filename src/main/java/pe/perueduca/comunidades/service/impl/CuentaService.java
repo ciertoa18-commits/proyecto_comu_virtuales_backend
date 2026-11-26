@@ -291,6 +291,9 @@ public class CuentaService {
     return new Resultado("OK", "Código correcto. Ahora crea tu nueva contraseña.");
   }
 
+  // Un código incorrecto no debe deshacer la transacción de quien llama (PerfilService.password):
+  // así se guarda el intento fallido y se responde "código no válido" en vez de un error 500.
+  @Transactional(noRollbackFor = ApiException.class)
   void usarCodigo(Usuario u, String codigo, ApiException invalido) {
     comprobarCodigo(u, codigo, invalido).setUsado(true);
   }
