@@ -10,11 +10,16 @@ spring:
     username: ${DB_USERNAME:comunidades}
     password: ${DB_PASSWORD}
     driver-class-name: oracle.jdbc.OracleDriver
-    # La base en AWS cierra las conexiones inactivas: se renuevan antes para evitar ORA-17008
+    # La base en AWS cierra las conexiones inactivas (ORA-17002 / ORA-17008): se mantienen vivas
+    # cada 30 s, se renuevan cada 5 min y se usa keep-alive de TCP para no perderlas en una demo
     hikari:
-      keepalive-time: 120000
-      max-lifetime: 900000
+      keepalive-time: 30000
+      max-lifetime: 300000
+      idle-timeout: 120000
+      minimum-idle: 2
       validation-timeout: 5000
+      data-source-properties:
+        oracle.net.keepAlive: true
   jpa:
     hibernate:
       ddl-auto: validate
