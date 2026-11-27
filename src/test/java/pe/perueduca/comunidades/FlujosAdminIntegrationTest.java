@@ -221,8 +221,8 @@ class FlujosAdminIntegrationTest {
     ok("PUT", "/admin/usuarios/" + idAdmin + "/estado", admin, mapa("estado", "INACTIVO"), 422);
     ok("PUT", "/admin/usuarios/" + nuevoDocente + "/estado", admin, mapa("estado", "PENDIENTE"), 422);
     // Desbloquear y nueva contraseña
-    jdbc.update("update usuario set intentos_fallidos=5, bloqueado_hasta=DATEADD('MINUTE',15,CURRENT_TIMESTAMP)"
-        + " where id_usuario=?", nuevoDocente);
+    jdbc.update("update usuario set intentos_fallidos=5, bloqueado_hasta=? where id_usuario=?",
+        java.time.LocalDateTime.now(java.time.ZoneId.of("America/Lima")).plusMinutes(15), nuevoDocente);
     assertTrue(ok("GET", "/admin/usuarios/" + nuevoDocente, admin, null, 200).body.get("bloqueado").asBoolean());
     assertFalse(ok("PUT", "/admin/usuarios/" + nuevoDocente + "/desbloquear", admin, null, 200)
         .body.get("bloqueado").asBoolean());
@@ -417,12 +417,12 @@ class FlujosAdminIntegrationTest {
     // La misma nota otra vez no necesita permiso
     ok("PUT", "/notas", docente, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 15), 200);
     // Con el permiso vencido, cambiar una nota registrada se bloquea
-    jdbc.update("update permiso_nota set vence=DATEADD('HOUR',-1,CURRENT_TIMESTAMP) where estado='APROBADO'");
+    jdbc.update("update permiso_nota set vence=? where estado='APROBADO'", java.time.LocalDateTime.now(java.time.ZoneId.of("America/Lima")).minusHours(1));
     ok("PUT", "/notas", docente, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 17), 422);
     assertFalse(ok("GET", "/secciones/" + seccion + "/permisos-nota/estado", docente, null, 200)
         .body.get("vigente").asBoolean());
     // Con el permiso vigente si se puede, y el administrador siempre puede
-    jdbc.update("update permiso_nota set vence=DATEADD('HOUR',5,CURRENT_TIMESTAMP) where estado='APROBADO'");
+    jdbc.update("update permiso_nota set vence=? where estado='APROBADO'", java.time.LocalDateTime.now(java.time.ZoneId.of("America/Lima")).plusHours(5));
     ok("PUT", "/notas", docente, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 17), 200);
     ok("PUT", "/notas", admin, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 18), 200);
     assertTrue(ok("GET", "/me/notas", alumno, null, 200).raw.contains("18"));
