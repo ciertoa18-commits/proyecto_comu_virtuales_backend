@@ -35,7 +35,10 @@ import tools.jackson.databind.ObjectMapper;
       "app.storage.directory=target/test-storage",
       "app.storage.type=local",
       "app.db.triggers-activos=false",
-      "app.recuperacion.codigo-en-pantalla=true"
+      "app.recuperacion.codigo-en-pantalla=true",
+      // Nunca enviar correos reales desde las pruebas (aunque .local tenga Gmail configurado)
+      "spring.mail.host=",
+      "spring.config.import="
     })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -56,7 +59,8 @@ class FlujosAdminIntegrationTest {
   record Reply(int status, JsonNode body, String raw) {}
 
   Reply call(String method, String route, String token, Object data) throws Exception {
-    var b = HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/v1" + route));
+    var b = HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/v1" + route))
+        .timeout(java.time.Duration.ofSeconds(30));
     if (token != null) b.header("Authorization", "Bearer " + token);
     String body = data == null ? "" : mapper.writeValueAsString(data);
     b.header("Content-Type", "application/json")
@@ -169,23 +173,23 @@ class FlujosAdminIntegrationTest {
             mapa(
                 "nombres", "Julio", "apellidos", "Campos", "correo", "jcampos@minedu.gob.pe",
                 "password", password, "rol", "DOCENTE", "especialidad", "Matemática",
-                "telefono", "987654321", "correoRecuperacion", "julio.campos@gmail.com",
+                "telefono", "987654321", "correoRecuperacion", "julio.campos@example.com",
                 "idIdiomaPref", idioma),
             201);
     nuevoDocente = nuevo.body.get("idUsuario").asLong();
     assertEquals("DOCENTE", nuevo.body.get("rol").asText());
     // Reglas: dominio por rol, correo repetido, contraseña débil, Gmail ya usado
     ok("POST", "/admin/usuarios", admin, mapa("nombres", "A", "apellidos", "B", "correo", "x@perueduca.pe",
-        "password", password, "rol", "DOCENTE", "correoRecuperacion", "x1@gmail.com"), 422);
+        "password", password, "rol", "DOCENTE", "correoRecuperacion", "x1@example.com"), 422);
     ok("POST", "/admin/usuarios", admin, mapa("nombres", "A", "apellidos", "B", "correo", "jcampos@minedu.gob.pe",
-        "password", password, "rol", "DOCENTE", "correoRecuperacion", "x2@gmail.com"), 409);
+        "password", password, "rol", "DOCENTE", "correoRecuperacion", "x2@example.com"), 409);
     ok("POST", "/admin/usuarios", admin, mapa("nombres", "A", "apellidos", "B", "correo", "debil@perueduca.pe",
-        "password", "clavedebil1234", "rol", "ESTUDIANTE", "correoRecuperacion", "x3@gmail.com"), 400);
+        "password", "clavedebil1234", "rol", "ESTUDIANTE", "correoRecuperacion", "x3@example.com"), 400);
     ok("POST", "/admin/usuarios", admin, mapa("nombres", "A", "apellidos", "B", "correo", "otro@perueduca.pe",
-        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "julio.campos@gmail.com"), 409);
+        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "julio.campos@example.com"), 409);
     // Idioma "Otro": se crea si no existe
     ok("POST", "/admin/usuarios", admin, mapa("nombres", "Rosa", "apellidos", "Ccori", "correo", "rccori@perueduca.pe",
-        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "rosa.ccori@gmail.com",
+        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "rosa.ccori@example.com",
         "idiomaOtro", "Asháninka", "idSegundaLengua", idioma), 201);
     // Listar con buscador y filtros, ver detalle
     // El buscador por texto se prueba contra Oracle (H2 no aplica igual el LIKE); aqui solo responde
@@ -193,22 +197,22 @@ class FlujosAdminIntegrationTest {
     var docentes = ok("GET", "/admin/usuarios?rol=DOCENTE&estado=ACTIVO", admin, null, 200);
     assertTrue(docentes.raw.contains("docente@minedu.gob.pe"), docentes.raw);
     var detalle = ok("GET", "/admin/usuarios/" + nuevoDocente, admin, null, 200);
-    assertEquals("julio.campos@gmail.com", detalle.body.get("correoRecuperacion").asText());
+    assertEquals("julio.campos@example.com", detalle.body.get("correoRecuperacion").asText());
     ok("GET", "/admin/usuarios/999999", admin, null, 404);
     ok("GET", "/admin/usuarios", docente, null, 403);
     // Editar
     var editado =
         ok("PUT", "/admin/usuarios/" + nuevoDocente, admin,
             mapa("nombres", "Julio César", "apellidos", "Campos", "correo", "jcampos@minedu.gob.pe", "rol", "DOCENTE",
-                "especialidad", "Física", "telefono", "912345678", "correoRecuperacion", "julio.campos@gmail.com",
+                "especialidad", "Física", "telefono", "912345678", "correoRecuperacion", "julio.campos@example.com",
                 "idIdiomaPref", idioma), 200);
     assertEquals("Julio César", editado.body.get("nombres").asText());
     ok("PUT", "/admin/usuarios/" + nuevoDocente, admin,
         mapa("nombres", "J", "apellidos", "C", "correo", "docente@minedu.gob.pe", "rol", "DOCENTE",
-            "correoRecuperacion", "julio.campos@gmail.com"), 409);
+            "correoRecuperacion", "julio.campos@example.com"), 409);
     ok("PUT", "/admin/usuarios/" + idAdmin, admin,
         mapa("nombres", "A", "apellidos", "B", "correo", "admin@minedu.gob.pe", "rol", "DOCENTE",
-            "correoRecuperacion", "admin.cv@gmail.com"), 422);
+            "correoRecuperacion", "admin.cv@example.com"), 422);
     // Desactivar / activar, no puede desactivarse a si mismo
     assertEquals("INACTIVO", ok("PUT", "/admin/usuarios/" + nuevoDocente + "/estado", admin,
         mapa("estado", "INACTIVO"), 200).body.get("estado").asText());
@@ -217,8 +221,8 @@ class FlujosAdminIntegrationTest {
     ok("PUT", "/admin/usuarios/" + idAdmin + "/estado", admin, mapa("estado", "INACTIVO"), 422);
     ok("PUT", "/admin/usuarios/" + nuevoDocente + "/estado", admin, mapa("estado", "PENDIENTE"), 422);
     // Desbloquear y nueva contraseña
-    jdbc.update("update usuario set intentos_fallidos=5, bloqueado_hasta=DATEADD('MINUTE',15,CURRENT_TIMESTAMP)"
-        + " where id_usuario=?", nuevoDocente);
+    jdbc.update("update usuario set intentos_fallidos=5, bloqueado_hasta=? where id_usuario=?",
+        java.time.LocalDateTime.now(java.time.ZoneId.of("America/Lima")).plusMinutes(15), nuevoDocente);
     assertTrue(ok("GET", "/admin/usuarios/" + nuevoDocente, admin, null, 200).body.get("bloqueado").asBoolean());
     assertFalse(ok("PUT", "/admin/usuarios/" + nuevoDocente + "/desbloquear", admin, null, 200)
         .body.get("bloqueado").asBoolean());
@@ -227,7 +231,7 @@ class FlujosAdminIntegrationTest {
     // Un docente que se registra queda PENDIENTE hasta que el admin lo aprueba
     ok("POST", "/auth/registro", null, mapa("nombres", "Lucía", "apellidos", "Vargas", "correo", "lvargas@minedu.gob.pe",
         "password", password, "rol", "DOCENTE", "especialidad", "Comunicación",
-        "correoRecuperacion", "lucia.vargas@gmail.com"), 201);
+        "correoRecuperacion", "lucia.vargas@example.com"), 201);
     long pendiente = id("select id_usuario from usuario where correo='lvargas@minedu.gob.pe'");
     ok("POST", "/auth/login", null, mapa("correo", "lvargas@minedu.gob.pe", "password", password), 403);
     assertTrue(ok("GET", "/admin/usuarios?estado=PENDIENTE", admin, null, 200).raw.contains("lvargas"));
@@ -387,7 +391,7 @@ class FlujosAdminIntegrationTest {
     assertFalse(me.raw.contains("passwordHash"));
     ok("PUT", "/me", alumno2,
         mapa("nombres", "Karen", "apellidos", "Mayta", "telefono", "911222333",
-            "correoRecuperacion", "karen.mayta@gmail.com", "idIdiomaPref", idioma,
+            "correoRecuperacion", "karen.mayta@example.com", "idIdiomaPref", idioma,
             "idiomas", List.of(idioma, id("select id_idioma from idioma where codigo='qu'"))), 200);
     assertEquals("Karen", ok("GET", "/me", alumno2, null, 200).body.get("usuario").get("nombres").asText());
     // Sin correo configurado en las pruebas, el codigo se "envia" a la consola
@@ -398,5 +402,126 @@ class FlujosAdminIntegrationTest {
     ok("PUT", "/me/password", alumno2, mapa("actual", password, "nueva", "debil", "codigo", "000000"), 400);
     // Un usuario sin Gmail personal no puede pedir el codigo
     ok("POST", "/me/password/codigo", alumno, null, 422);
+    // Un idioma que no existe se rechaza
+    ok("PUT", "/me", alumno2, mapa("nombres", "Karen", "apellidos", "Mayta",
+        "correoRecuperacion", "karen.mayta@example.com", "idiomas", List.of(999999)), 422);
+  }
+
+  @Test
+  @Order(7)
+  void notasYAsistenciaRespetanLasReglas() throws Exception {
+    long evaluacion = id("select min(id_evaluacion) from evaluacion where id_seccion=" + seccion);
+    long matricula = id("select id_matricula from matricula where id_seccion=" + seccion);
+    long sesion = id("select min(id_sesion) from sesion");
+    ok("PUT", "/notas", docente, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 15), 200);
+    // La misma nota otra vez no necesita permiso
+    ok("PUT", "/notas", docente, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 15), 200);
+    // Con el permiso vencido, cambiar una nota registrada se bloquea
+    jdbc.update("update permiso_nota set vence=? where estado='APROBADO'", java.time.LocalDateTime.now(java.time.ZoneId.of("America/Lima")).minusHours(1));
+    ok("PUT", "/notas", docente, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 17), 422);
+    assertFalse(ok("GET", "/secciones/" + seccion + "/permisos-nota/estado", docente, null, 200)
+        .body.get("vigente").asBoolean());
+    // Con el permiso vigente si se puede, y el administrador siempre puede
+    jdbc.update("update permiso_nota set vence=? where estado='APROBADO'", java.time.LocalDateTime.now(java.time.ZoneId.of("America/Lima")).plusHours(5));
+    ok("PUT", "/notas", docente, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 17), 200);
+    ok("PUT", "/notas", admin, mapa("idMatricula", matricula, "idEvaluacion", evaluacion, "calificacion", 18), 200);
+    assertTrue(ok("GET", "/me/notas", alumno, null, 200).raw.contains("18"));
+    // Una falta justificada necesita la razon
+    ok("POST", "/sesiones/" + sesion + "/asistencia", docente,
+        List.of(mapa("idMatricula", matricula, "estado", "JUSTIFICADA")), 422);
+    ok("POST", "/sesiones/" + sesion + "/asistencia", docente,
+        List.of(mapa("idMatricula", matricula, "estado", "JUSTIFICADA", "observacion", "Cita médica")), 200);
+    // Recursos del alumno, de todas sus secciones o de una
+    ok("GET", "/me/recursos", alumno, null, 200);
+    ok("GET", "/me/recursos?seccion=" + seccion, alumno, null, 200);
+    ok("GET", "/me/recursos?seccion=999999", alumno, null, 200);
+  }
+
+  @Test
+  @Order(8)
+  void recomendacionesEImportacionConErrores() throws Exception {
+    // El alumno es miembro de una comunidad con idioma y pueblo: se le recomiendan parecidas
+    var recomendadas = ok("GET", "/comunidades/recomendadas", alumno, null, 200);
+    assertFalse(recomendadas.raw.contains("\"idComunidad\":" + comunidad + ","));
+    ok("GET", "/comunidades/recomendadas", alumno2, null, 200);
+    ok("GET", "/comunidades/recomendadas", docente, null, 200);
+    var filas =
+        ok("POST", "/comunidades/importar", admin,
+            mapa("filas", List.of(
+                mapa("nombre", "Con idioma raro", "categoria", "Lenguas", "idioma", "Klingon"),
+                mapa("nombre", "Con pueblo raro", "categoria", "Lenguas", "pueblo", "Atlántida"),
+                mapa("nombre", "Visibilidad rara", "categoria", "Lenguas", "visibilidad", "SECRETA"),
+                mapa("nombre", "Sin categoría válida", "categoria", "No existe"))),
+            200);
+    assertEquals(4, filas.body.size());
+    assertFalse(filas.raw.contains("\"ok\":true"));
+  }
+
+  @Test
+  @Order(9)
+  void catalogosYUsuariosCasosLimite() throws Exception {
+    // Un docente puede crear una categoria pero no editarla
+    long delDocente =
+        ok("POST", "/categorias", docente, mapa("nombre", "Ciencia"), 201).body.get("idCategoria").asLong();
+    ok("PUT", "/categorias/" + delDocente, docente, mapa("nombre", "Ciencias"), 403);
+    ok("PUT", "/categorias/" + delDocente, admin, mapa("nombre", "Matemáticas"), 409);
+    ok("DELETE", "/idiomas/999999", admin, null, 404);
+    ok("DELETE", "/pueblos/999999", admin, null, 404);
+    ok("DELETE", "/idiomas/" + id("select id_idioma from idioma where codigo='es'"), admin, null, 409);
+    // El admin puede editarse sin cambiar su rol; un idioma inexistente se rechaza
+    ok("PUT", "/admin/usuarios/" + idAdmin, admin, mapa("nombres", "Rosa", "apellidos", "Quispe",
+        "correo", "admin@minedu.gob.pe", "rol", "ADMIN", "correoRecuperacion", "rosa.admin@example.com"), 200);
+    long rosa = id("select id_usuario from usuario where correo='rccori@perueduca.pe'");
+    ok("PUT", "/admin/usuarios/" + rosa, admin, mapa("nombres", "Rosa", "apellidos", "Ccori",
+        "correo", "rccori@perueduca.pe", "rol", "ESTUDIANTE", "especialidad", "Ignorada",
+        "correoRecuperacion", "rosa.ccori@example.com", "idIdiomaPref", 999999), 422);
+    ok("PUT", "/admin/usuarios/" + rosa, admin, mapa("nombres", "Rosa", "apellidos", "Ccori",
+        "correo", "rccori@perueduca.pe", "rol", "ESTUDIANTE", "especialidad", "Ignorada",
+        "correoRecuperacion", "rosa.ccori@example.com"), 200);
+    jdbc.update("insert into usuario(id_rol,correo,nombres,apellidos,password_hash,intentos_fallidos,estado,"
+        + "fecha_registro) values(?,?,?,?,?,0,'ACTIVO',CURRENT_TIMESTAMP)",
+        id("select id_rol from rol where codigo='ESTUDIANTE'"), "sinidioma@perueduca.pe", "Sin", "Idioma",
+        encoder.encode(password));
+    long sinIdioma = id("select id_usuario from usuario where correo='sinidioma@perueduca.pe'");
+    assertTrue(ok("GET", "/admin/usuarios/" + sinIdioma, admin, null, 200).body.get("idioma").isNull());
+    // Registro publico: idiomas que no existen y la opcion "Otro"
+    ok("POST", "/auth/registro", null, mapa("nombres", "A", "apellidos", "B", "correo", "reg1@perueduca.pe",
+        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "reg1.cv@example.com", "idIdiomaPref", 999999), 422);
+    ok("POST", "/auth/registro", null, mapa("nombres", "A", "apellidos", "B", "correo", "reg2@perueduca.pe",
+        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "reg2.cv@example.com", "idSegundaLengua", 999999), 422);
+    ok("POST", "/auth/registro", null, mapa("nombres", "A", "apellidos", "B", "correo", "reg3@perueduca.pe",
+        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "reg3.cv@example.com", "idiomaOtro", "123"), 201);
+    ok("POST", "/auth/registro", null, mapa("nombres", "A", "apellidos", "B", "correo", "reg4@perueduca.pe",
+        "password", password, "rol", "ESTUDIANTE", "correoRecuperacion", "reg4.cv@example.com", "idiomaOtro", "Ashaninkas"), 201);
+    ok("POST", "/auth/registro", null, mapa("nombres", "A", "apellidos", "B", "correo", "reg5@perueduca.pe",
+        "password", password, "rol", "ADMIN", "correoRecuperacion", "reg5.cv@example.com"), 403);
+  }
+
+  @Test
+  @Order(10)
+  void recuperarYCambiarContrasenaConCodigo() throws Exception {
+    // Recuperar la cuenta: sin correo configurado el codigo se muestra en pantalla (modo demostracion)
+    var pedido = ok("POST", "/auth/recuperacion", null, mapa("correo", "rccori@perueduca.pe"), 202);
+    String codigo = pedido.body.get("codigoDemo").asText();
+    assertEquals(6, codigo.length());
+    // Pedirlo otra vez enseguida responde igual, pero sin generar otro codigo
+    assertTrue(ok("POST", "/auth/recuperacion", null, mapa("correo", "rccori@perueduca.pe"), 202)
+        .body.get("codigoDemo").isNull());
+    ok("POST", "/auth/recuperacion", null, mapa("correo", "noexiste@perueduca.pe"), 202);
+    ok("POST", "/auth/verificar-codigo", null, mapa("correo", "rccori@perueduca.pe", "codigo", "000000"), 422);
+    ok("POST", "/auth/verificar-codigo", null, mapa("correo", "rccori@perueduca.pe", "codigo", codigo), 200);
+    ok("POST", "/auth/restablecer", null,
+        mapa("correo", "rccori@perueduca.pe", "codigo", codigo, "nueva", "Recuperada#2026"), 200);
+    ok("POST", "/auth/restablecer", null,
+        mapa("correo", "rccori@perueduca.pe", "codigo", codigo, "nueva", "Otra#Clave2026"), 422);
+    ok("POST", "/auth/login", null, mapa("correo", "rccori@perueduca.pe", "password", "Recuperada#2026"), 200);
+    // Cambiar la contraseña desde el perfil con el codigo del Gmail
+    ok("PUT", "/me", docente, mapa("nombres", "Docente", "apellidos", "Prueba",
+        "correoRecuperacion", "docente.prueba@example.com"), 200);
+    ok("POST", "/me/password/codigo", docente, null, 200);
+    jdbc.update("update codigo_recuperacion set codigo_hash=? where id_usuario=? and usado=0",
+        encoder.encode("123456"), idDocente);
+    ok("PUT", "/me/password", docente, mapa("actual", password, "nueva", "Docente#Nueva2026", "codigo", "123456"), 204);
+    ok("POST", "/auth/login", null, mapa("correo", "docente@minedu.gob.pe", "password", "Docente#Nueva2026"), 200);
   }
 }
